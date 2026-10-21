@@ -96,6 +96,9 @@ jobs:
           if [ -f "$out/reports/summary.md" ]; then
             { echo "> Updated $(date '+%d %b %Y %H:%M') IST by run [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}). Full page: \`reports/leaderboard.html\` (download and open in a browser)."; echo; cat "$out/reports/summary.md"; } > "$out/README.md"
           fi
+          # GitHub Pages: serve the leaderboard as the site's home page
+          [ -f "$out/reports/leaderboard.html" ] && cp "$out/reports/leaderboard.html" "$out/index.html"
+          touch "$out/.nojekyll"
           cd "$out"
           git init -q -b "$DATA_BRANCH"
           git add -A

@@ -278,9 +278,9 @@ def render(cfg: dict | None = None, con=None, log=print) -> dict:
     n_live = int((df["source"] == "live").sum()) if not df.empty else 0
     n_rep = int((df["source"] == "replay").sum()) if not df.empty else 0
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Scanner Leaderboard</title><style>{CSS}</style></head><body><main>
+<meta http-equiv="refresh" content="300"><title>Scanner Leaderboard</title><style>{CSS}</style></head><body><main>
 <h1>Scanner leaderboard</h1>
-<p class="sub">Updated {ist_now():%d %b %Y %H:%M} IST · {n_live} live signals · {n_rep} replay signals</p>
+<p class="sub">Updated {ist_now():%d %b %Y %H:%M} IST · {n_live} live signals · {n_rep} replay signals · page reloads every 5 min</p>
 <h2>Today's trade plan — latest session's fresh picks, ranked by their bucket's track record</h2>
 <div class="card">{_plan_table(plan)}</div>
 <div class="tabs">{tabs}</div>
