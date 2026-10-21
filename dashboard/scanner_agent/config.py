@@ -66,6 +66,8 @@ DEFAULTS: dict = {
     # ── Ranking ─────────────────────────────────────────────────────────────
     "min_signals_for_verdict": 20,
     "shrinkage_k": 30,                      # expectancy × n/(n+k)
+    "tuning_min_trades": 30,                # closed trades a bucket needs before tuning hints
+    "tuning_min_bin": 10,                   # minimum trades in a slice to report it
 
     # ── Replay (historical back-fill for daily scanners) ────────────────────
     "replay": {

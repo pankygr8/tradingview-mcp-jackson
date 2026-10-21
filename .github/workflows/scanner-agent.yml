@@ -16,10 +16,11 @@ on:
     - cron: "0,15 9 * * 1-5"        # 14:30, 14:45 IST intraday scans
     - cron: "20 10 * * 1-5"         # 15:50 IST  daily scanners (ATH, swing, fib, gann)
     - cron: "0 11 * * 1-5"          # 16:30 IST  validate + report
+    - cron: "20 11 * * 1-5"         # 16:50 IST  EOD scorecard (date-wise dashboard + tuning hints)
   workflow_dispatch:
     inputs:
       command:
-        description: "Agent command: cycle | replay | scan --group daily | scan --group intraday | validate | report"
+        description: "Agent command: cycle | eod | replay | scan --group daily | scan --group intraday | validate | report"
         default: "cycle"
         required: true
 
@@ -98,6 +99,7 @@ jobs:
           fi
           # GitHub Pages: serve the leaderboard as the site's home page
           [ -f "$out/reports/leaderboard.html" ] && cp "$out/reports/leaderboard.html" "$out/index.html"
+          [ -f "$out/reports/daily.html" ] && cp "$out/reports/daily.html" "$out/daily.html"
           touch "$out/.nojekyll"
           cd "$out"
           git init -q -b "$DATA_BRANCH"

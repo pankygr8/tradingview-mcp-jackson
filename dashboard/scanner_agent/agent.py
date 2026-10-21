@@ -5,6 +5,7 @@ Commands (run from the dashboard folder):
   python -m scanner_agent scan     [--group daily|intraday|all] [--only ath,swing]
   python -m scanner_agent validate
   python -m scanner_agent report
+  python -m scanner_agent eod      # validate + date-wise dashboard (success/failed per day) + tuning hints
   python -m scanner_agent replay   [--days 365] [--step 5] [--universe nifty100] [--only ath,swing]
   python -m scanner_agent cycle    # do whatever is due now (for Windows Task Scheduler, every 15 min)
   python -m scanner_agent daemon   # same as cycle, in a loop (leave a window open)
@@ -30,7 +31,7 @@ import time
 import traceback
 from datetime import datetime
 
-from . import config, report, store, validator
+from . import config, eod, report, store, validator
 from .adapters import ADAPTERS, ist_now, trading_session
 
 STATE_PATH = os.path.join(config.AGENT_DIR, "state.json")
@@ -185,7 +186,8 @@ def cycle(cfg: dict | None = None) -> list[str]:
         st["last_report"] = today
         _save_state(st)
         report.render(cfg=cfg, log=log)
-        did.append("report")
+        eod.render(cfg=cfg, log=log)
+        did.append("report+eod")
 
     _save_state(st)
     return did
@@ -257,6 +259,7 @@ def main(argv=None) -> None:
     p.add_argument("--only", default="")
     sub.add_parser("validate")
     sub.add_parser("report")
+    sub.add_parser("eod", help="validate, then build the date-wise EOD dashboard + tuning hints")
     p = sub.add_parser("replay")
     p.add_argument("--days", type=int)
     p.add_argument("--step", type=int)
@@ -276,12 +279,18 @@ def main(argv=None) -> None:
         validator.validate(log=log)
     elif a.cmd == "report":
         report.render(log=log)
+        eod.render(log=log)
+    elif a.cmd == "eod":
+        validator.validate(log=log)
+        report.render(log=log)
+        eod.render(log=log)
     elif a.cmd == "replay":
         from . import replay as rp
         res = rp.replay(only, a.days, a.step, a.universe, fresh=not a.keep, log=log)
         log(f"replay: stored {res['signals']} signals over {res['dates']} dates — validating")
         validator.validate(log=log)
         report.render(log=log)
+        eod.render(log=log)
     elif a.cmd == "cycle":
         did = cycle()
         log(f"cycle: {', '.join(did) if did else 'nothing due'}")
