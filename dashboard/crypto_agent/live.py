@@ -133,7 +133,7 @@ def render(cfg: dict | None = None, log=print) -> str:
     cost = (cfg["fee_per_side"] + cfg["slippage_per_side"]) * 200
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="refresh" content="300"><title>Crypto Swing Trading</title><style>{CSS}</style></head><body><main>
-<nav><a href="../index.html">Leaderboard</a><a href="../daily.html">Daily results</a><a href="index.html">Crypto</a></nav>
+<nav><a href="../index.html">Leaderboard</a><a href="../daily.html">Daily results</a><a href="index.html">Crypto</a><a href="../commodity/index.html">Commodities</a></nav>
 <h1>BTC / ETH — swing paper trades</h1>
 <p class="sub">Updated {pd.Timestamp.now(tz=IST):%d %b %Y %H:%M} IST · Hyperliquid prices · fees+slippage {cost:.2f}% round trip ·
 signals only, no orders sent</p>

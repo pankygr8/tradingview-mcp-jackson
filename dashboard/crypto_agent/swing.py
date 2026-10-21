@@ -104,11 +104,11 @@ def sig_bos(df5: pd.DataFrame, pullback: bool):
 # ── execution ────────────────────────────────────────────────────────────────
 
 def run_signals(sigs, h1: pd.DataFrame, tgt_frac: pd.Series, stop_frac: pd.Series, cost: float,
-                include_open: bool = False) -> list[dict]:
+                include_open: bool = False, bars_per_day: int = 24) -> list[dict]:
     idx = h1.index
     O, H, L, C = (h1[c].to_numpy(float) for c in ("Open", "High", "Low", "Close"))
     tf, sf = tgt_frac.to_numpy(float), stop_frac.to_numpy(float)
-    max_bars = MAX_HOLD_DAYS * 24
+    max_bars = MAX_HOLD_DAYS * bars_per_day
     out, busy_until = [], None
     for known, side, kind, level in sorted(sigs, key=lambda s: s[0]):
         if busy_until is not None and known < busy_until:

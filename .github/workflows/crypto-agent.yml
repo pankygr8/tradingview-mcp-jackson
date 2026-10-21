@@ -18,6 +18,10 @@ on:
         description: "live | swing --months 36 | report | test-alert"
         default: "live"
         required: true
+      commodity_command:
+        description: "Commodity agent: live | backtest | report"
+        default: "live"
+        required: true
 
 permissions:
   contents: write
@@ -34,7 +38,7 @@ env:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
@@ -61,6 +65,17 @@ jobs:
             echo "no crypto state yet - run once with command 'backtest'"
           fi
 
+      - name: Restore commodity state from the data branch
+        run: |
+          mkdir -p dashboard/commodity_agent/state
+          if git rev-parse -q --verify "origin/$DATA_BRANCH" >/dev/null && \
+             git ls-tree -d "origin/$DATA_BRANCH" commodity | grep -q commodity; then
+            tmp=$(mktemp -d)
+            git archive "origin/$DATA_BRANCH" commodity | tar -x -C "$tmp"
+            cp -r "$tmp/commodity/." dashboard/commodity_agent/state/
+            rm -f dashboard/commodity_agent/state/index.html
+          fi
+
       - name: Run crypto agent
         working-directory: dashboard
         env:
@@ -69,6 +84,16 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           CRYPTO_PAGE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/crypto/
         run: python -m crypto_agent $CMD
+
+      - name: Run commodity agent
+        continue-on-error: true
+        working-directory: dashboard
+        env:
+          CMD: ${{ github.event.inputs.commodity_command || 'live' }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          COMMODITY_PAGE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/commodity/
+        run: python -m commodity_agent $CMD
 
       - name: Save crypto state to the data branch
         if: always()
@@ -84,6 +109,11 @@ jobs:
           mkdir -p "$out/crypto"
           cp -r "$STATE/." "$out/crypto/"
           [ -f "$STATE/reports/crypto.html" ] && cp "$STATE/reports/crypto.html" "$out/crypto/index.html"
+          if [ -d dashboard/commodity_agent/state ]; then
+            rm -rf "$out/commodity"; mkdir -p "$out/commodity"
+            cp -r dashboard/commodity_agent/state/. "$out/commodity/"
+            [ -f "$out/commodity/reports/commodity.html" ] && cp "$out/commodity/reports/commodity.html" "$out/commodity/index.html"
+          fi
           touch "$out/.nojekyll"
           cd "$out"
           git init -q -b "$DATA_BRANCH"
