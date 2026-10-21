@@ -103,7 +103,8 @@ def sig_bos(df5: pd.DataFrame, pullback: bool):
 
 # ── execution ────────────────────────────────────────────────────────────────
 
-def run_signals(sigs, h1: pd.DataFrame, tgt_frac: pd.Series, stop_frac: pd.Series, cost: float) -> list[dict]:
+def run_signals(sigs, h1: pd.DataFrame, tgt_frac: pd.Series, stop_frac: pd.Series, cost: float,
+                include_open: bool = False) -> list[dict]:
     idx = h1.index
     O, H, L, C = (h1[c].to_numpy(float) for c in ("Open", "High", "Low", "Close"))
     tf, sf = tgt_frac.to_numpy(float), stop_frac.to_numpy(float)
@@ -132,11 +133,19 @@ def run_signals(sigs, h1: pd.DataFrame, tgt_frac: pd.Series, stop_frac: pd.Serie
         else:
             outcome, px, xi = levels._exit(O, H, L, C, i if kind == "market" else i + 1, side, fill, stop, tgt, max_bars)
         if outcome == "open":
+            if include_open:
+                last = C[-1]
+                out.append({"entry_ts": idx[i], "day": idx[i].floor("D"), "side": side, "entry": fill,
+                            "status": "open", "stop": stop, "target": tgt, "last": last, "stop_pts": stop_pts,
+                            "target_pts": tgt_pts, "unreal_pts": sgn * (last - fill),
+                            "unreal_R": sgn * (last - fill) / stop_pts,
+                            "time_stop": idx[i] + pd.Timedelta(days=MAX_HOLD_DAYS)})
             break
         busy_until = idx[xi]
         gross = sgn * (px - fill)
         c = (fill + px) * cost
         out.append({"entry_ts": idx[i], "day": idx[i].floor("D"), "side": side, "entry": fill, "exit_ts": idx[xi],
+                    "stop": stop, "target": tgt,
                     "exit": px, "outcome": outcome, "status": "closed", "stop_pts": stop_pts, "target_pts": tgt_pts,
                     "gross_pts": gross, "cost_pts": c, "net_pts": gross - c, "R": (gross - c) / stop_pts,
                     "hold_d": (idx[xi] - idx[i]).total_seconds() / 86400})

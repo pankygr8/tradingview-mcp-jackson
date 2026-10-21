@@ -47,7 +47,14 @@ def main():
             tr.to_csv(os.path.join(config.REPORT_DIR, "swing_trades.csv.gz"), index=False, compression="gzip")
         print(res.head(25).to_string())
     elif a.cmd == "live":
-        live.update()
+        from . import config, data, swing_live
+        cfg = config.load()
+        frames = {c: data.history(c, cfg, live_only=True) for c in cfg["coins"]}
+        live.update(frames=frames)
+        try:
+            swing_live.update(frames, cfg)
+        except Exception as e:                      # never let the swing tracker break the intraday run
+            print(f"swing live failed: {type(e).__name__}: {e}")
     live.render()
 
 

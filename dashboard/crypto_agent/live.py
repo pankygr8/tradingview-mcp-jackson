@@ -217,13 +217,14 @@ def render(cfg: dict | None = None, log=print) -> str:
     no_rec = "" if rec else ("<p class='note'><b>No combination passed the robustness test yet</b> (profitable after fees in both halves "
                              "of the backtest). The table below shows every strategy instead — treat none of them as a trade plan.</p>")
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="refresh" content="300"><title>Crypto Intraday</title><style>{CSS}</style></head><body><main>
+<meta http-equiv="refresh" content="300"><title>Crypto Paper Trading</title><style>{CSS}</style></head><body><main>
 <nav><a href="../index.html">Leaderboard</a><a href="../daily.html">Daily results</a><a href="index.html">Crypto</a></nav>
-<h1>BTC / ETH intraday — paper trades</h1>
-<p class="sub">Updated {pd.Timestamp.now(tz=IST):%d %b %Y %H:%M} IST · target {cfg['btc_target_pts']} BTC pts (ETH same %) ·
+<h1>BTC / ETH — paper trades</h1>
+<p class="sub">Updated {pd.Timestamp.now(tz=IST):%d %b %Y %H:%M} IST · intraday target {cfg["btc_target_pts"]} BTC pts (ETH same %) ·
 fees+slippage {(cfg['fee_per_side'] + cfg['slippage_per_side']) * 200:.2f}% round trip · day = UTC day (05:30 → 05:30 IST) · signals only, no orders sent</p>
 <div class="kpis">{kp}</div>
-<h2>Today</h2>{no_rec}
+{_swing_live()}
+<h2>Intraday — today</h2>{no_rec}
 <div class="card">{_table(["Coin", "Strategy", "Stop (BTC pts)", "Status", "Side", "Levels", "Entry time (IST)", "P&L"], today_rows, 6)}</div>
 <h2>Live paper results by day{' — recommended combos' if rec else ' — all combos'}</h2>
 <div class="card">{_table(["UTC day", "Trades", "Success", "Failed", "Success %", "Total R", "Avg R"], day_rows)}</div>
@@ -277,3 +278,11 @@ def _swing_section() -> str:
             "per strategy, fees included. Robust edge = profitable in both halves, ≥ 20 trades, t ≥ 2.</p>"
             "<div class='card'>" + _table(["Coin", "Strategy", "Target", "Stop", "Trades", "Per month", "Success %", "Exp R",
                                            "1st half", "2nd half", "t", "Avg hold (days)", "Verdict"], rows, 2) + "</div>")
+
+
+def _swing_live() -> str:
+    try:
+        from . import swing_live
+        return swing_live.section()
+    except Exception as e:
+        return f"<p class='note'>Swing tracker unavailable: {html.escape(str(e))}</p>"
