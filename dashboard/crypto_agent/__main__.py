@@ -2,6 +2,7 @@
 python -m crypto_agent live                 fetch fresh candles, update swing paper trades, rebuild page (every 15 min)
 python -m crypto_agent swing [--months 36]  multi-day swing backtest: 3000/5000-pt targets, up to 10-day holds
 python -m crypto_agent report               rebuild the page only
+python -m crypto_agent test-alert           send a test Telegram message
 """
 
 import argparse
@@ -24,13 +25,17 @@ def main():
             pass
     ap = argparse.ArgumentParser(prog="crypto_agent", description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["live", "swing", "report"])
+    ap.add_argument("cmd", choices=["live", "swing", "report", "test-alert"])
     ap.add_argument("--months", type=int)
     a = ap.parse_args()
     cfg = config.load()
     for rel in OBSOLETE:
         for p in glob.glob(os.path.join(config.STATE_DIR, rel)):
             os.remove(p)
+    if a.cmd == "test-alert":
+        from . import notify
+        notify.test()
+        return
     if a.cmd in ("live", "swing"):
         from . import data, swing_live
         months = (a.months or cfg["backtest_months"]) if a.cmd == "swing" else None

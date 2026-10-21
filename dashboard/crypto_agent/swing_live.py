@@ -118,6 +118,11 @@ def update(frames: dict, cfg: dict | None = None, log=print) -> None:
     with open(STATUS, "w") as f:
         json.dump({"start": start.isoformat(), "updated": pd.Timestamp.now(tz="UTC").isoformat(),
                    "status": status}, f, default=str)
+    try:
+        from . import notify
+        notify.check(status, rows, log=log)
+    except Exception as e:                      # alerts must never break the tracker
+        log(f"alerts failed: {type(e).__name__}: {e}")
     n_open = sum(1 for s in status if s["position"])
     log(f"swing live: {len(CANDIDATES)} strategies, {n_open} open, "
         f"{sum(s['closed'] for s in status)} closed since {start:%Y-%m-%d %H:%M} UTC")
