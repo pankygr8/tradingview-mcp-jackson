@@ -1,0 +1,366 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Trading Dashboard — style.css
+   Dark professional theme, zero external framework dependencies.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
+
+:root {
+  --bg-app:       #0d1117;
+  --bg-header:    #161b22;
+  --bg-pane:      #0d1117;
+  --bg-ctrl:      #1c2128;
+  --bg-ctrl-h:    #22272e;
+
+  --border:       #30363d;
+  --border-light: #21262d;
+
+  --text-1:   #e6edf3;
+  --text-2:   #8b949e;
+  --text-3:   #484f58;
+
+  --accent:   #2f81f7;
+  --green:    #3fb950;
+  --red:      #f85149;
+  --green-bg: rgba(63, 185, 80,  0.18);
+  --red-bg:   rgba(248, 81, 73, 0.18);
+
+  --header-h: 50px;
+  --pane-hdr: 38px;
+  --gap:       2px;
+
+  --radius:   4px;
+  --font:     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+  --mono:     'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+}
+
+/* ── Reset ─────────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-app);
+  color: var(--text-1);
+  font-family: var(--font);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── App shell ─────────────────────────────────────────────────────────────── */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ── Top header ────────────────────────────────────────────────────────────── */
+
+.topbar {
+  height: var(--header-h);
+  flex-shrink: 0;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 20px;
+  z-index: 200;
+  user-select: none;
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+  color: var(--text-1);
+}
+
+.brand svg { flex-shrink: 0; }
+
+/* Chart-count controls */
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ctrl-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.count-buttons {
+  display: flex;
+  gap: 3px;
+}
+
+.count-btn {
+  min-width: 30px;
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-2);
+  font: 600 12px/1 var(--font);
+  cursor: pointer;
+  transition: color 80ms, border-color 80ms, background 80ms;
+}
+
+.count-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(47,129,247,0.08);
+}
+
+.count-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* Divider between control groups */
+.divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* Screener nav link */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;           /* push everything right from here */
+  padding: 4px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-2);
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: color 100ms, border-color 100ms, background 100ms;
+}
+.nav-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(47,129,247,0.08);
+}
+
+/* Connection status */
+.status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-3);
+  transition: background 300ms;
+}
+
+.status-dot.connected    { background: var(--green); box-shadow: 0 0 5px var(--green); }
+.status-dot.disconnected { background: var(--red);   box-shadow: 0 0 5px var(--red); }
+
+/* ── CSS Grid container ────────────────────────────────────────────────────── */
+
+.grid-container {
+  flex: 1 1 0;
+  display: grid;
+  gap: var(--gap);
+  background: var(--border-light);   /* gap colour */
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Layout presets — cleanest arrangement for each count */
+.grid-1 { grid-template-columns: 1fr;                   grid-template-rows: 1fr;    }
+.grid-2 { grid-template-columns: 1fr 1fr;               grid-template-rows: 1fr;    }
+.grid-4 { grid-template-columns: 1fr 1fr;               grid-template-rows: 1fr 1fr;}
+.grid-6 { grid-template-columns: 1fr 1fr 1fr;           grid-template-rows: 1fr 1fr;}
+.grid-8 { grid-template-columns: 1fr 1fr 1fr 1fr;       grid-template-rows: 1fr 1fr;}
+
+/* ── Chart pane ────────────────────────────────────────────────────────────── */
+
+.chart-pane {
+  background: var(--bg-pane);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* Pane header row */
+.pane-header {
+  height: var(--pane-hdr);
+  flex-shrink: 0;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  gap: 6px;
+  overflow: hidden;
+}
+
+/* Controls (market + symbol + timeframe selects) */
+.pane-controls {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+select {
+  height: 24px;
+  padding: 0 5px;
+  background: var(--bg-ctrl);
+  color: var(--text-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font: 11px var(--font);
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 100ms;
+  /* Custom arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238b949e'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 5px center;
+  padding-right: 18px;
+}
+
+select:focus  { border-color: var(--accent); }
+select:hover  { border-color: var(--text-2); }
+
+.sel-market { max-width: 84px;  }
+.sel-symbol { max-width: 140px; }
+.sel-tf     { max-width: 52px;  }
+
+/* ── Ticker bar ────────────────────────────────────────────────────────────── */
+
+.ticker {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  font: 600 11.5px var(--mono);
+  white-space: nowrap;
+  overflow: hidden;
+  transition: background 60ms;
+}
+
+.t-sym   { color: var(--text-2); font-weight: 600; }
+.t-price { color: var(--text-1); }
+.t-chg   { font-size: 10.5px; }
+.t-chg.up   { color: var(--green); }
+.t-chg.down { color: var(--red); }
+
+/* Flash animations — pure CSS, no JS class juggling after animationend */
+
+@keyframes flashUp {
+  0%   { background: transparent; }
+  15%  { background: var(--green-bg); }
+  100% { background: transparent; }
+}
+
+@keyframes flashDown {
+  0%   { background: transparent; }
+  15%  { background: var(--red-bg); }
+  100% { background: transparent; }
+}
+
+.ticker.flash-up   { animation: flashUp   0.65s ease-out forwards; }
+.ticker.flash-down { animation: flashDown 0.65s ease-out forwards; }
+
+/* ── Chart area ────────────────────────────────────────────────────────────── */
+
+.chart-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Overlay (loading / error) ─────────────────────────────────────────────── */
+
+.pane-overlay {
+  position: absolute;
+  inset: var(--pane-hdr) 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(13, 17, 23, 0.88);
+  z-index: 50;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 26px;
+  height: 26px;
+  border: 2.5px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.overlay-msg {
+  font-size: 12px;
+  color: var(--red);
+  text-align: center;
+  padding: 0 12px;
+  max-width: 260px;
+  line-height: 1.4;
+}
+
+/* ── Scrollbar (subtle dark) ───────────────────────────────────────────────── */
+
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ── Responsive adjustments ────────────────────────────────────────────────── */
+
+/* On narrow viewports collapse the 4-col and 3-col layouts */
+@media (max-width: 1100px) {
+  .grid-8 { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4, 1fr); }
+}
+
+@media (max-width: 760px) {
+  .grid-4,
+  .grid-6,
+  .grid-8 { grid-template-columns: 1fr; grid-template-rows: none; }
+  .grid-2 { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+}

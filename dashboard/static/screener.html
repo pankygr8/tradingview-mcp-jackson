@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NSE ATH Screener</title>
+  <link rel="stylesheet" href="screener.css" />
+</head>
+<body>
+
+  <!-- ── Top bar ────────────────────────────────────────────────────────────── -->
+  <header class="topbar">
+    <div class="brand">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <rect width="20" height="20" rx="4" fill="#2f81f7" opacity=".15"/>
+        <polyline points="2,15 7,9 11,12 18,5" stroke="#2f81f7"
+                  stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" fill="none"/>
+      </svg>
+      NSE ATH Screener
+    </div>
+
+    <!-- TradingView Desktop status -->
+    <div class="tv-badge" id="tvBadge">
+      <div class="tv-badge-dot"></div>
+      <span id="tvBadgeText">Checking TV…</span>
+    </div>
+
+    <a class="back-link" href="/signals">📡 Signals</a>
+    <a class="back-link" href="/">← Dashboard</a>
+  </header>
+
+  <!-- ── Page body ──────────────────────────────────────────────────────────── -->
+  <div class="page">
+
+    <!-- Scan controls -->
+    <div class="scan-bar">
+      <h1>All-Time High Scanner <small>NSE Equities · Daily Timeframe</small></h1>
+
+      <div class="universe-btns" id="universeBtns" role="group" aria-label="Stock universe">
+        <button class="uni-btn active" data-universe="nifty50">Nifty 50</button>
+        <button class="uni-btn"        data-universe="nifty100">Nifty 100</button>
+        <button class="uni-btn"        data-universe="nifty200">Nifty 200</button>
+        <button class="uni-btn"        data-universe="fno">NSE FnO</button>
+        <button class="uni-btn"        data-universe="nifty500">Full List</button>
+      </div>
+
+      <button class="run-btn" id="runBtn" onclick="runScan()">▶ Run Scan</button>
+      <button class="btn" id="forceBtn" onclick="runScan(true)"
+              title="Bypass the 6-hour cache and fetch fresh data for every symbol, even if a recent scan is cached">🔄 Force Refresh</button>
+
+      <!-- Progress bar (shown while scanning) -->
+      <div class="progress-wrap" id="progressWrap">
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <span class="progress-label" id="progressLabel">0 / 0</span>
+      </div>
+    </div>
+
+    <!-- Summary cards -->
+    <div class="cards" id="summaryCards" style="display:none">
+      <div class="card">
+        <div class="card-label">Stocks scanned</div>
+        <div class="card-value accent" id="cardTotal">—</div>
+      </div>
+      <div class="card" title="Symbols that failed to fetch — hover the number for details, or check the CSV/console">
+        <div class="card-label">Failed to fetch</div>
+        <div class="card-value" id="cardFailed" style="color:var(--red,#e74c3c)">—</div>
+      </div>
+      <div class="card">
+        <div class="card-label">ATH in 90 days</div>
+        <div class="card-value green" id="cardAth">—</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Near 50 % of ATH</div>
+        <div class="card-value orange" id="cardAlert">—</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Scanned at</div>
+        <div class="card-value" id="cardTime" style="font-size:13px">—</div>
+        <div style="font-size:10px;color:var(--text-2)" id="cardCacheNote"></div>
+      </div>
+    </div>
+
+    <!-- Failed-to-fetch details (hidden until a scan reports failures) -->
+    <details id="failedPanel" style="display:none;margin-bottom:10px;font-size:11px;color:var(--text-2)">
+      <summary style="cursor:pointer">⚠ <span id="failedSummaryText">0 symbols failed to fetch</span> — click to see which and why</summary>
+      <div id="failedList" style="margin-top:6px;max-height:160px;overflow:auto"></div>
+    </details>
+
+    <!-- Results: two-column -->
+    <div class="results-grid">
+
+      <!-- Panel 1: ATH Watchlist -->
+      <div class="panel" id="athPanel">
+        <div class="panel-head">
+          <div class="panel-title">
+            🏆 ATH Stocks (last 90 days)
+            <span class="badge green" id="athCount">0</span>
+          </div>
+          <div class="panel-actions">
+            <button class="btn" id="selectAllAth" onclick="selectAll('ath')">Select All</button>
+            <button class="btn success" id="addWatchlistBtn" disabled
+                    onclick="bulkAddWatchlist('ath')">+ TV Watchlist</button>
+            <button class="btn" onclick="exportCSV('ath')">⬇ CSV</button>
+          </div>
+        </div>
+        <div class="table-wrap" id="athTableWrap">
+          <div class="empty-state">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            Run scan to see results
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2: 50% ATH Alerts -->
+      <div class="panel" id="alertPanel">
+        <div class="panel-head">
+          <div class="panel-title">
+            🔔 Near 50 % of ATH — Alert Zone
+            <span class="badge orange" id="alertCount">0</span>
+          </div>
+          <div class="panel-actions">
+            <button class="btn" id="selectAllAlert" onclick="selectAll('alert')">Select All</button>
+            <button class="btn danger" id="createAlertsBtn" disabled
+                    onclick="bulkCreateAlerts()">🔔 Create TV Alerts</button>
+            <button class="btn" onclick="exportCSV('alert')">⬇ CSV</button>
+          </div>
+        </div>
+        <div class="table-wrap" id="alertTableWrap">
+          <div class="empty-state">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            Run scan to see results
+          </div>
+        </div>
+      </div>
+
+    </div><!-- .results-grid -->
+
+    <!-- TradingView Desktop integration panel -->
+    <div class="tv-panel">
+      <div class="tv-panel-head">
+        <h2>🖥 TradingView Desktop Integration</h2>
+        <button class="btn" id="refreshTvBtn" onclick="refreshTvStatus()">↺ Refresh</button>
+        <button class="btn" id="syncStudiesBtn" onclick="syncStudies()" disabled>Sync Studies</button>
+      </div>
+
+      <div id="tvConnectedView" style="display:none">
+        <p style="font-size:12px; color:var(--text-2); margin-bottom:10px">
+          Connected to TradingView Desktop. Active studies on current chart:
+        </p>
+        <div class="studies-list" id="studiesList">
+          <span style="color:var(--text-3); font-size:11px">No studies detected</span>
+        </div>
+      </div>
+
+      <div id="tvDisconnectedView" class="tv-not-connected">
+        <strong>TradingView Desktop is not running</strong> (or CDP port 9222 is not open).<br><br>
+        To enable watchlist &amp; alert creation, launch TradingView Desktop with the debug port:<br><br>
+        &nbsp;• <strong>Windows:</strong> <code>scripts\launch_tv_debug.bat</code><br>
+        &nbsp;• <strong>Mac:</strong> <code>./scripts/launch_tv_debug_mac.sh</code><br><br>
+        Once connected you can push ATH stocks to your TV watchlist and create
+        50 % ATH price alerts with one click.
+      </div>
+    </div>
+
+  </div><!-- .page -->
+
+  <!-- Toast area -->
+  <div id="toastArea"></div>
+
+  <script src="js/screener.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+agent.db
+agent.db-journal
+agent.log
+state.json
+scheduler.out
+.deps_ok
+cache/
+reports/
+__pycache__/
+config.json

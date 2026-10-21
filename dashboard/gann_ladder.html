@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gann Ladder Board — Intraday Movers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101418;
+    --panel:#1A2026;
+    --panel-2:#151B20;
+    --grid:#232C33;
+    --amber:#E8A33D;
+    --amber-dim:#8A6524;
+    --up:#34C77B;
+    --dn:#F05D5D;
+    --txt:#D7DEE4;
+    --mut:#7C8A94;
+    --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+    --disp:'Barlow Condensed',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--ink)}
+  body{
+    font-family:var(--mono);color:var(--txt);font-size:13px;
+    background:
+      linear-gradient(var(--grid) 1px,transparent 1px) 0 0/100% 44px,
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/44px 100%,
+      var(--ink);
+    background-attachment:fixed;
+    min-height:100vh;padding:0 20px 60px;
+  }
+  header{
+    display:flex;flex-wrap:wrap;align-items:baseline;gap:18px;
+    padding:22px 4px 14px;border-bottom:2px solid var(--amber);
+    margin-bottom:6px;
+  }
+  h1{
+    font-family:var(--disp);font-weight:700;font-size:30px;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--txt);
+  }
+  h1 em{color:var(--amber);font-style:normal}
+  #clock{font-size:13px;color:var(--mut)}
+  #clock b{color:var(--txt);font-weight:500}
+  #window-flag{
+    display:none;padding:2px 10px;border:1px solid var(--amber);
+    color:var(--amber);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    animation:pulse 2s infinite;
+  }
+  #window-flag.on{display:inline-block}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+  .controls{
+    display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+    padding:12px 4px;position:sticky;top:0;z-index:5;
+    background:linear-gradient(var(--ink) 85%,transparent);
+  }
+  select,button{
+    font-family:var(--mono);font-size:12px;color:var(--txt);
+    background:var(--panel);border:1px solid var(--grid);padding:7px 12px;cursor:pointer;
+  }
+  select:focus-visible,button:focus-visible,.tab:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
+  button.primary{border-color:var(--amber);color:var(--amber);font-weight:600}
+  button.primary:hover{background:var(--amber);color:var(--ink)}
+  button:disabled{opacity:.4;cursor:default}
+  .tabs{display:flex;gap:2px;margin-left:auto}
+  .tab{
+    font-family:var(--disp);font-size:15px;letter-spacing:.05em;text-transform:uppercase;
+    background:none;border:none;border-bottom:2px solid transparent;
+    color:var(--mut);padding:7px 12px;cursor:pointer;
+  }
+  .tab.on{color:var(--amber);border-bottom-color:var(--amber)}
+  #progress{flex-basis:100%;height:3px;background:var(--grid);display:none}
+  #progress i{display:block;height:100%;background:var(--amber);width:0%;transition:width .4s}
+  #status-line{color:var(--mut);font-size:12px}
+
+  #board{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;margin-top:14px}
+  .card{
+    background:var(--panel);border:1px solid var(--grid);padding:14px 14px 10px;
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .card.confluence{border-color:var(--amber)}
+  .card-top{display:flex;align-items:baseline;gap:10px}
+  .sym{font-family:var(--disp);font-size:22px;font-weight:600;letter-spacing:.03em}
+  .nm{color:var(--mut);font-size:11px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .px{font-size:16px;font-weight:600}
+  .chg.up{color:var(--up)} .chg.dn{color:var(--dn)}
+  .badges{display:flex;flex-wrap:wrap;gap:6px;font-size:10.5px}
+  .b{padding:2px 7px;border:1px solid var(--grid);color:var(--mut)}
+  .b.hot{border-color:var(--amber-dim);color:var(--amber)}
+  .b.up{border-color:var(--up);color:var(--up)}
+  .b.dn{border-color:var(--dn);color:var(--dn)}
+  .ladder{width:100%;height:auto;display:block}
+  .foot{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--mut);border-top:1px solid var(--grid);padding-top:7px}
+  .foot b{color:var(--txt);font-weight:500}
+  #empty{color:var(--mut);padding:60px 4px;font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Gann <em>Ladder</em> Board</h1>
+  <span id="clock">—</span>
+  <span id="window-flag"></span>
+</header>
+
+<div class="controls">
+  <select id="universe" aria-label="Universe">
+    <optgroup label="NSE equities">
+      <option value="fno" selected>F&amp;O</option>
+      <option value="nifty50">Nifty 50</option>
+      <option value="nifty100">Nifty 100</option>
+      <option value="nifty500">Full NSE list</option>
+    </optgroup>
+    <optgroup label="Commodities / Crypto">
+      <option value="mcx">MCX — Crude &amp; NatGas</option>
+      <option value="crypto">Crypto — BTC &amp; ETH</option>
+    </optgroup>
+  </select>
+  <button class="primary" id="scan-btn" onclick="startScan()">Scan now</button>
+  <label style="color:var(--mut);font-size:12px;display:flex;align-items:center;gap:6px">
+    <input type="checkbox" id="auto" checked> auto-refresh 3 min
+  </label>
+  <span id="status-line"></span>
+  <button id="copy-btn" onclick="copySymbols()" title="Copy the current tab's symbols as TradingView tickers">Copy symbols</button>
+  <button id="dl-btn" onclick="downloadSymbols()" title="Download a .txt list TradingView can import">Export .txt</button>
+  <button id="tv-btn" onclick="pushToTV()" title="Send to TradingView Desktop via the local bridge">→ TV watchlist</button>
+  <button id="arm-btn" onclick="armAlerts()" title="Create TradingView alerts at each trigger level — fires on LIVE price, not this delayed feed">⚡ Arm TV alerts</button>
+  <label style="color:var(--mut);font-size:12px;display:flex;align-items:center;gap:6px">
+    <input type="checkbox" id="notify"> alert me
+  </label>
+  <nav class="tabs" aria-label="Views">
+    <button class="tab on" data-view="actionable">Actionable</button>
+    <button class="tab" data-view="arming">Arming</button>
+    <button class="tab" data-view="movers">Top movers</button>
+    <button class="tab" data-view="late">Late</button>
+    <button class="tab" data-view="missed">Missed</button>
+    <button class="tab" data-view="churn">Churn</button>
+    <button class="tab" data-view="confluence">Confluence</button>
+  </nav>
+  <div id="progress"><i></i></div>
+</div>
+
+<div id="board"></div>
+<div id="empty" hidden>No results yet. Run a scan — best after 9:30 IST once the opening range is set.</div>
+
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+let DATA=null, VIEW="actionable", pollTimer=null, autoTimer=null;
+
+/* Clock + reversal-window flag adapt to the selected universe's timezone. */
+const UNIV_TZ={mcx:"America/New_York",crypto:"UTC"};   // default → IST
+const TZ_LABEL={"Asia/Kolkata":"IST","UTC":"UTC","America/New_York":"ET"};
+const WINDOW_SETS={
+  nse:[["09:15","09:45","Initial balance"],["10:35","10:55","Mid-morning"],
+       ["12:20","12:40","Midday"],["13:35","13:55","Early afternoon"],
+       ["14:20","14:40","Closing drive"]],
+  crypto:[["00:00","00:30","UTC open"],["07:45","08:15","London"],
+          ["13:15","13:45","US open"],["19:45","20:15","US close"]],
+  mcx:[["09:00","09:20","Session open"],["10:25","10:45","EIA report"],
+       ["14:20","14:40","Settlement drive"]],
+};
+function univKind(u){return u==="crypto"?"crypto":u==="mcx"?"mcx":"nse";}
+function tzTime(tz){
+  const p=new Intl.DateTimeFormat("en-GB",{timeZone:tz,hour:"2-digit",minute:"2-digit",
+          second:"2-digit",hour12:false}).formatToParts(new Date());
+  const o={};p.forEach(x=>o[x.type]=x.value);return o.hour+":"+o.minute+":"+o.second;
+}
+function tickClock(){
+  const u=$("#universe").value, tz=UNIV_TZ[u]||"Asia/Kolkata";
+  const hms=tzTime(tz), hm=hms.slice(0,5);
+  $("#clock").innerHTML=(TZ_LABEL[tz]||tz)+" <b>"+hms+"</b>";
+  const w=WINDOW_SETS[univKind(u)].find(([a,b])=>hm>=a&&hm<=b);
+  const f=$("#window-flag");
+  if(w){f.textContent="⏱ "+w[2]+" window";f.classList.add("on");}
+  else f.classList.remove("on");
+}
+setInterval(tickClock,1000);tickClock();
+$("#universe").addEventListener("change",tickClock);
+
+async function startScan(){
+  $("#scan-btn").disabled=true;
+  $("#status-line").textContent="starting…";
+  try{
+    const u=$("#universe").value;
+    const r=await fetch(`/api/intraday/scan?universe=${u}`);
+    const {job_id}=await r.json();
+    $("#progress").style.display="block";
+    poll(job_id);
+  }catch(e){
+    $("#status-line").textContent="scan failed to start — is the dashboard service running?";
+    $("#scan-btn").disabled=false;
+  }
+}
+function poll(id){
+  clearInterval(pollTimer);
+  pollTimer=setInterval(async()=>{
+    try{
+      const r=await fetch(`/api/intraday/status/${id}`);
+      const s=await r.json();
+      if(s.status==="not_found"){stopPoll("job lost — scan again");return;}
+      const pct=s.total?Math.round(s.progress/s.total*100):0;
+      $("#progress i").style.width=pct+"%";
+      $("#status-line").textContent=`scanning ${s.progress}/${s.total}`;
+      if(s.status==="done"){
+        DATA=s.results;stopPoll("scanned "+new Date().toTimeString().slice(0,5));
+        checkAlerts(DATA); render();
+      }
+    }catch(e){stopPoll("connection lost");}
+  },1200);
+}
+function stopPoll(msg){
+  clearInterval(pollTimer);pollTimer=null;
+  $("#progress").style.display="none";$("#progress i").style.width="0%";
+  $("#scan-btn").disabled=false;$("#status-line").textContent=msg;
+}
+$("#auto").addEventListener("change",setAuto);
+function setAuto(){
+  clearInterval(autoTimer);
+  if($("#auto").checked) autoTimer=setInterval(()=>{if(!pollTimer)startScan();},180000);
+}
+setAuto();
+
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+  t.classList.add("on");VIEW=t.dataset.view;render();
+}));
+
+function fmt(n){return n==null?"—":Number(n).toLocaleString("en-IN",{maximumFractionDigits:2});}
+function render(){
+  const board=$("#board");board.innerHTML="";
+  const rows=(DATA&&DATA[VIEW])||[];
+  $("#empty").hidden=rows.length>0;
+  if(DATA&&!rows.length){
+    $("#empty").textContent = VIEW==="actionable"
+      ? "No actionable setups right now — nothing is sitting on a clean opening-range break with time left to reach TP1. Try the Movers or Late tabs."
+      : "Nothing in this bucket.";
+  }
+  rows.forEach(r=>{ try{ board.appendChild(card(r)); }catch(e){ console.error(r.symbol,e); } });
+}
+function card(r){
+  const el=document.createElement("div");
+  const p=r.plan||{}; const a=r.arming||{};
+  const good = p.status==="actionable" && p.tp1_feasible && r.trending;
+  el.className="card"+(good||r.confluence?" confluence":"");
+  const dir=r.day_change_pct>=0?"up":"dn";
+  el.innerHTML=`
+    <div class="card-top">
+      <span class="sym">${r.symbol.replace(".NS","")}</span>
+      <span class="nm">${r.name}</span>
+      <span class="px">${fmt(r.current_price)}</span>
+      <span class="chg ${dir}">${r.day_change_pct>=0?"+":""}${fmt(r.day_change_pct)}%</span>
+    </div>
+    <div class="badges">
+      <span class="b ${r.rvol>=2?"hot":""}">RVOL ${fmt(r.rvol)}×</span>
+      ${r.gap_pct==null
+        ? `<span class="b" title="24/7 instrument: change over the rolling anchor window">${r.rolling?`Δ${r.anchor_hrs}h`:"Δ"} ${r.day_change_pct>=0?"+":""}${fmt(r.day_change_pct)}%</span>`
+        : `<span class="b ${Math.abs(r.gap_pct)>=1?"hot":""}">gap ${r.gap_pct>=0?"+":""}${fmt(r.gap_pct)}%</span>`}
+      <span class="b ${r.range_expansion>=1?"hot":""}">range ${fmt(r.range_expansion)}×</span>
+      <span class="b ${r.or_state==="above"?"up":r.or_state==="below"?"dn":""}">OR ${r.or_state}</span>
+      ${r.rolling?`<span class="b cy" title="rolling ${r.range_hrs}h range, anchored ${r.anchor_hrs}h ago">rolling ${r.range_hrs}h</span>`:""}
+      ${r.confluence?'<span class="b hot">⏱ price×time</span>':""}
+      ${p.bias&&p.bias!=="none"?`<span class="b ${p.bias==="long"?"up":"dn"}">${p.bias}</span>`:""}
+      ${p.status?`<span class="b ${p.status==="actionable"?"hot":"dn"}">${p.status}</span>`:""}
+      ${a.armed?`<span class="b hot">⚡ armed ${a.direction} @ ${fmt(a.trigger)} (${fmt(a.dist_to_trigger_pct)}%)</span>`:""}
+      ${r.trending===false?'<span class="b dn">churn</span>':""}
+      ${p.tp1_feasible===false?'<span class="b dn">no time</span>':""}
+      ${p.risk_too_wide?'<span class="b dn">wide stop</span>':""}
+      ${p.risk_too_tight?'<span class="b dn">stop in noise</span>':""}
+      ${p.or_unreliable?'<span class="b dn">OR too narrow</span>':""}
+      ${r.proxy?`<span class="b dn" title="${r.proxy_note||''}">proxy — not tradeable levels</span>`:""}
+      <span class="b">score ${fmt(r.mover_score)}</span>
+    </div>
+    ${ladderSVG(r)}
+    <div class="foot">
+      ${p.bias&&p.bias!=="none"
+        ? `<span>${p.bias==="long"?"buy":"sell"} <b>${fmt(p.entry)}</b> · SL <b>${fmt(p.stop)}</b> (${fmt(p.risk_pct)}%)</span>
+           <span>TP1 <b>${fmt(p.tp1)}</b> / TP2 <b>${fmt(p.tp2)}</b></span>`
+        : `<span>${p.note||"no directional setup"}</span>`}
+    </div>
+    <div class="foot" style="border:none;padding-top:2px">
+      <span>ext ${fmt(p.extension_or)}× OR</span>
+      <span>TP1 ${fmt(p.dist_tp1_pct)}% · left ${fmt(p.exp_remaining_pct)}%</span>
+      <span>data ${r.stale_minutes==null?"—":r.stale_minutes+"m old"}</span>
+    </div>`;
+  return el;
+}
+
+/* Push a set of label y-positions apart so none overlap.
+   Cascade down, then clamp back up if the stack overflows the bottom. */
+function declutter(items, minGap, top, bottom){
+  items.sort((a,b)=>a.y-b.y);
+  for(let i=1;i<items.length;i++){
+    if(items[i].y - items[i-1].y < minGap) items[i].y = items[i-1].y + minGap;
+  }
+  const overflow = items.length ? items[items.length-1].y - bottom : 0;
+  if(overflow>0){
+    for(let i=items.length-1;i>=0;i--){
+      items[i].y -= overflow;
+      if(i>0 && items[i].y - items[i-1].y >= minGap) break;
+    }
+  }
+  items.forEach(it=>{ if(it.y<top) it.y=top; });
+  return items;
+}
+
+/* ── Signature: vertical Sq9 ladder with a de-cluttered right gutter ── */
+function ladderSVG(r){
+  const W=340,H=240,PAD=16;
+  const RAIL=120;            // rail x-position
+  const TAGX=RAIL+34;        // buy>/sell< tags hug the rail
+  const GUTX=W-PAD;          // right gutter (right-aligned reference labels)
+  const px=r.current_price;
+
+  const rungs=(r.gann_ladder||[]).slice();
+  const above=rungs.filter(l=>l>px).slice(0,4);
+  const below=rungs.filter(l=>l<px).slice(-4);
+  const shown=[...below,...above];
+  if(!shown.length) return "";
+
+  const pp=r.plan||{};
+  const extras=[r.prev_high,r.prev_low,r.gann_midpoint,r.or_high,r.or_low,px,
+                pp.stop,pp.tp1,pp.tp2].filter(v=>v!=null);
+  const lo=Math.min(...shown,...extras), hi=Math.max(...shown,...extras);
+  const span=(hi-lo)||1;
+  const y=v=>PAD+(1-(v-lo)/span)*(H-2*PAD);
+
+  let s=`<svg class="ladder" viewBox="0 0 ${W} ${H}" role="img" aria-label="Gann ladder for ${r.symbol}">`;
+
+  // Opening-range band + small corner tag (kept clear of the rungs)
+  if(r.or_high&&r.or_low){
+    const yt=y(r.or_high), yb=y(r.or_low);
+    s+=`<rect x="${RAIL-42}" y="${yt}" width="84" height="${Math.max(yb-yt,2)}" fill="#7C8A94" opacity="0.12"/>`;
+    s+=`<text x="${RAIL-40}" y="${yt-2}" fill="var(--mut)" font-size="8.5">OR</text>`;
+  }
+
+  // Gann 50% midpoint — dashed full-width (label lives in the gutter stack)
+  if(r.gann_midpoint!=null){
+    const yy=y(r.gann_midpoint);
+    s+=`<line x1="${PAD}" x2="${W-PAD}" y1="${yy}" y2="${yy}" stroke="var(--amber-dim)" stroke-width="1" stroke-dasharray="5 4"/>`;
+  }
+
+  // PDH / PDL faint reference lines (labels live in the gutter stack)
+  [[r.prev_high],[r.prev_low]].forEach(([v])=>{
+    if(v==null)return;const yy=y(v);
+    s+=`<line x1="${RAIL-46}" x2="${GUTX}" y1="${yy}" y2="${yy}" stroke="var(--mut)" stroke-width="1" opacity="0.4"/>`;
+  });
+
+  // rail
+  s+=`<line x1="${RAIL}" y1="${PAD}" x2="${RAIL}" y2="${H-PAD}" stroke="var(--grid)" stroke-width="2"/>`;
+
+  // Sq9 rungs — price label on the LEFT, buy/sell tag hugs the rail on the RIGHT
+  shown.forEach(l=>{
+    const yy=y(l), near=Math.abs(px-l)/px*100<=0.25;
+    s+=`<line x1="${RAIL-30}" x2="${RAIL+30}" y1="${yy}" y2="${yy}" stroke="var(--amber)" stroke-width="${near?2.5:1.5}"${near?' class="pulse-rung"':''}/>
+        <text x="${RAIL-36}" y="${yy+3.5}" fill="var(--amber)" font-size="10" text-anchor="end" font-weight="${near?600:400}">${fmt(l)}</text>`;
+    const pl=r.plan||{};
+    if(l===pl.tp1)  s+=`<text x="${TAGX}" y="${yy+3.5}" fill="var(--up)" font-size="9">TP1</text>`;
+    if(l===pl.tp2)  s+=`<text x="${TAGX}" y="${yy+3.5}" fill="var(--up)" font-size="9">TP2</text>`;
+    if(l===pl.stop) s+=`<text x="${TAGX}" y="${yy+3.5}" fill="var(--dn)" font-size="9">SL</text>`;
+  });
+
+  // current price marker (arrow at rail + faint cross-line)
+  const yp=y(px), col=r.day_change_pct>=0?"var(--up)":"var(--dn)";
+  s+=`<line x1="${PAD}" x2="${W-PAD}" y1="${yp}" y2="${yp}" stroke="${col}" stroke-width="1" opacity="0.30"/>
+      <polygon points="${RAIL-6},${yp} ${RAIL-16},${yp-6} ${RAIL-16},${yp+6}" fill="${col}"/>`;
+
+  // ── Right gutter: collect all reference labels, de-collide, then draw ──
+  const gutter=[];
+  if(r.prev_high!=null)     gutter.push({y:y(r.prev_high),    text:"PDH "+fmt(r.prev_high),     fill:"var(--mut)",       bold:false});
+  if(r.prev_low!=null)      gutter.push({y:y(r.prev_low),     text:"PDL "+fmt(r.prev_low),      fill:"var(--mut)",       bold:false});
+  if(r.gann_midpoint!=null) gutter.push({y:y(r.gann_midpoint),text:"50% "+fmt(r.gann_midpoint),fill:"var(--amber-dim)", bold:false});
+  gutter.push({y:yp, text:fmt(px), fill:col, bold:true});   // current price
+  declutter(gutter, 13, PAD+4, H-PAD-2);
+  gutter.forEach(g=>{
+    s+=`<text x="${GUTX}" y="${g.y+3}" fill="${g.fill}" font-size="9.5" text-anchor="end" font-weight="${g.bold?600:400}">${g.text}</text>`;
+  });
+
+  s+=`<style>.pulse-rung{animation:pulse 1.6s infinite}</style></svg>`;
+  return s;
+}
+
+/* ── Alerting ──────────────────────────────────────────────────────────────
+   Two layers, because this feed is ~15 min delayed:
+   1. Browser alert — tells you the SCREENER just saw a name arm or turn
+      actionable. Useful, but inherently late by the feed delay.
+   2. TradingView alerts (⚡ Arm) — placed AT the trigger level. TradingView has
+      the live tick, so IT fires at the real price at the real moment.
+   Layer 2 is how you don't miss the entry. Layer 1 just tells you to look.   */
+let seen = {arming:new Set(), actionable:new Set()};
+let audioCtx=null;
+function beep(freq=880,ms=140){
+  try{
+    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value=freq; o.type="sine";
+    g.gain.setValueAtTime(0.001,audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.25,audioCtx.currentTime+0.01);
+    g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+ms/1000);
+    o.start(); o.stop(audioCtx.currentTime+ms/1000);
+  }catch(e){}
+}
+$("#notify").addEventListener("change",e=>{
+  if(e.target.checked && "Notification" in window && Notification.permission==="default")
+    Notification.requestPermission();
+  if(e.target.checked) beep(660,90);
+});
+function notify(title,body){
+  if(!$("#notify").checked) return;
+  beep(); setTimeout(()=>beep(1100,120),160);
+  if("Notification" in window && Notification.permission==="granted")
+    new Notification(title,{body,tag:title});
+}
+function checkAlerts(data){
+  if(!data) return;
+  (data.arming||[]).forEach(r=>{
+    if(seen.arming.has(r.symbol)) return;
+    seen.arming.add(r.symbol);
+    const a=r.arming||{};
+    notify(`⚡ ${r.symbol.replace(".NS","")} arming ${a.direction}`,
+           `trigger ${a.trigger} · ${a.dist_to_trigger_pct}% away · RVOL ${r.rvol}x`);
+  });
+  (data.actionable||[]).forEach(r=>{
+    if(seen.actionable.has(r.symbol)) return;
+    seen.actionable.add(r.symbol);
+    const p=r.plan||{};
+    notify(`▲ ${r.symbol.replace(".NS","")} ACTIONABLE ${p.bias}`,
+           `entry ${p.entry} · SL ${p.stop} · TP1 ${p.tp1} · data ${r.stale_minutes}m old`);
+  });
+}
+
+/* Push alerts to TradingView AT THE TRIGGER LEVEL — armed names first, then
+   actionable ones (whose entry has already printed). */
+async function armAlerts(){
+  if(!DATA){flash("run a scan first");return;}
+  const list=[];
+  // ARMING first — this is the capture mechanism. The break hasn't happened yet,
+  // so a crossing alert AT the trigger, placed on TradingView's LIVE feed, fires
+  // at the exact break price — bypassing this screener's 3-min delayed scan.
+  // Names flagged armed:true (coiled against the edge) go first; then the rest of
+  // the arming bucket, so a name that coils later this session is still covered.
+  const armingRows=(DATA.arming||[]).slice().sort((x,y)=>
+    (y.arming?.armed?1:0)-(x.arming?.armed?1:0));
+  armingRows.forEach(r=>{
+    const a=r.arming||{};
+    if(!a.trigger) return;
+    const plan = a.fwd_tp1
+      ? `SL ${fmt(a.fwd_stop)} TP1 ${fmt(a.fwd_tp1)} TP2 ${fmt(a.fwd_tp2)} risk ${fmt(a.fwd_risk_pct)}%`
+      : "";
+    list.push({symbol:r.symbol, price:a.trigger, condition:"crossing",
+      message:`GANN BREAK ${a.direction} ${r.symbol.replace(".NS","")} @ ${a.trigger} ${plan}`});
+  });
+  // then any names ALREADY actionable (break just printed) — entry alert
+  (DATA.actionable||[]).forEach(r=>{
+    const p=r.plan||{};
+    if(p.entry) list.push({symbol:r.symbol, price:p.entry, condition:"crossing",
+      message:`GANN ENTRY ${p.bias} ${r.symbol.replace(".NS","")} @ ${p.entry} SL ${fmt(p.stop)} TP1 ${fmt(p.tp1)}`});
+  });
+  if(!list.length){flash("nothing to arm — check the Arming tab");return;}
+  // The bridge switches the TV chart to each symbol in turn (~1.5s each), so this
+  // is slow and takes over the chart. Confirm, then poll rather than block.
+  if(!confirm(`Arm ${Math.min(list.length,12)} TradingView alerts?\n\n`+
+              `TradingView will flip through each symbol (~${Math.round(Math.min(list.length,12)*1.5)}s).\n`+
+              `Don't touch the chart until it finishes.`)) return;
+  $("#arm-btn").disabled=true;
+  try{
+    const r=await fetch("/api/tv/alerts",{method:"POST",
+      headers:{"Content-Type":"application/json"}, body:JSON.stringify({alerts:list})});
+    const j=await r.json();
+    if(!r.ok||!j.ok) throw new Error(j.message||"HTTP "+r.status);
+    flash(`arming ${j.count} alerts (~${j.eta_seconds}s) — leave the chart alone`);
+    const t=setInterval(async()=>{
+      try{
+        const st=await(await fetch(`/api/tv/alerts/status/${j.job_id}`)).json();
+        if(st.status==="done"){
+          clearInterval(t); $("#arm-btn").disabled=false;
+          const res=st.result||{};
+          flash(`armed ${res.created||0}, failed ${res.failed||0}`);
+          if(res.failed) console.warn("alert failures:", res.detail);
+          beep(1200,120);
+        }else if(st.status==="error"||st.status==="not_found"){
+          clearInterval(t); $("#arm-btn").disabled=false;
+          flash("arming failed — see server console");
+        }
+      }catch(e){ clearInterval(t); $("#arm-btn").disabled=false; flash("lost the arming job"); }
+    },1500);
+  }catch(e){ flash(String(e.message||e)); $("#arm-btn").disabled=false; }
+}
+
+/* ── TradingView export ───────────────────────────────────────────────────
+   TradingView expects EXCHANGE:TICKER. The scanner speaks yfinance, so map:
+     RELIANCE.NS -> NSE:RELIANCE      CL=F -> NYMEX:CL1!      NG=F -> NYMEX:NG1!
+     BTC-USD     -> BINANCE:BTCUSDT   ETH-USD -> BINANCE:ETHUSDT              */
+const TV_MAP={"CL=F":"NYMEX:CL1!","NG=F":"NYMEX:NG1!",
+              "BTC-USD":"BINANCE:BTCUSDT","ETH-USD":"BINANCE:ETHUSDT"};
+function tvSymbol(sym){
+  if(TV_MAP[sym]) return TV_MAP[sym];
+  if(sym.endsWith(".NS")) return "NSE:"+sym.slice(0,-3);
+  if(sym.endsWith("=X"))  return "FX:"+sym.slice(0,-2);
+  return sym;
+}
+function currentSymbols(){
+  const rows=(DATA&&DATA[VIEW])||[];
+  return rows.map(r=>tvSymbol(r.symbol));
+}
+function flash(msg){
+  const el=$("#status-line"); const old=el.textContent;
+  el.textContent=msg; setTimeout(()=>{el.textContent=old;},2500);
+}
+async function copySymbols(){
+  const syms=currentSymbols();
+  if(!syms.length){flash("nothing in this tab to copy");return;}
+  const text=syms.join(",");
+  try{ await navigator.clipboard.writeText(text); flash(`copied ${syms.length} symbols`); }
+  catch(e){ window.prompt("Copy these into TradingView:", text); }
+}
+function downloadSymbols(){
+  const syms=currentSymbols();
+  if(!syms.length){flash("nothing in this tab to export");return;}
+  // TradingView's watchlist import reads one symbol per line
+  const blob=new Blob([syms.join("\n")],{type:"text/plain"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=`gann_${VIEW}_${new Date().toISOString().slice(0,10)}.txt`;
+  a.click(); URL.revokeObjectURL(a.href);
+  flash(`exported ${syms.length} symbols`);
+}
+async function pushToTV(){
+  // Send RAW yfinance symbols — tv_bridge._nse_to_tv() owns the mapping to
+  // TradingView's EXCHANGE:TICKER convention. Mapping here too would double it.
+  const rows=(DATA&&DATA[VIEW])||[];
+  const syms=rows.map(r=>r.symbol);
+  if(!syms.length){flash("nothing in this tab to send");return;}
+  $("#tv-btn").disabled=true;
+  try{
+    const r=await fetch("/api/tv/watchlist",{
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({symbols:syms, name:`Gann ${VIEW}`})
+    });
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    const j=await r.json();
+    flash(j.message || `sent ${syms.length} to TradingView`);
+  }catch(e){
+    flash("bridge unavailable — use Copy symbols instead");
+  }finally{ $("#tv-btn").disabled=false; }
+}
+</script>
+</body>
+</html>

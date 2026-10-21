@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swing Board — Gann 5–7 Day</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101418; --panel:#1A2026; --grid:#232C33;
+    --amber:#E8A33D; --amber-dim:#8A6524;
+    --up:#34C77B; --dn:#F05D5D; --cyan:#4FB6C4;
+    --txt:#D7DEE4; --mut:#7C8A94;
+    --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+    --disp:'Barlow Condensed',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--ink)}
+  body{
+    font-family:var(--mono);color:var(--txt);font-size:13px;
+    background:
+      linear-gradient(var(--grid) 1px,transparent 1px) 0 0/100% 44px,
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/44px 100%,
+      var(--ink);
+    background-attachment:fixed;min-height:100vh;padding:0 20px 60px;
+  }
+  header{display:flex;flex-wrap:wrap;align-items:baseline;gap:18px;
+    padding:22px 4px 14px;border-bottom:2px solid var(--amber);margin-bottom:6px}
+  h1{font-family:var(--disp);font-weight:700;font-size:30px;letter-spacing:.04em;
+    text-transform:uppercase}
+  h1 em{color:var(--amber);font-style:normal}
+  .sub{font-size:12px;color:var(--mut)}
+  .bench{font-size:12px;color:var(--mut)}
+  .bench b{color:var(--txt);font-weight:500}
+
+  .controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 4px;
+    position:sticky;top:0;z-index:5;background:linear-gradient(var(--ink) 85%,transparent)}
+  select,button{font-family:var(--mono);font-size:12px;color:var(--txt);
+    background:var(--panel);border:1px solid var(--grid);padding:7px 12px;cursor:pointer}
+  select:focus-visible,button:focus-visible,.tab:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
+  button.primary{border-color:var(--amber);color:var(--amber);font-weight:600}
+  button.primary:hover{background:var(--amber);color:var(--ink)}
+  button:disabled{opacity:.4;cursor:default}
+  .tabs{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+  .tab{font-family:var(--disp);font-size:15px;letter-spacing:.05em;text-transform:uppercase;
+    background:none;border:none;border-bottom:2px solid transparent;color:var(--mut);
+    padding:7px 11px;cursor:pointer}
+  .tab.on{color:var(--amber);border-bottom-color:var(--amber)}
+  #progress{flex-basis:100%;height:3px;background:var(--grid);display:none}
+  #progress i{display:block;height:100%;background:var(--amber);width:0%;transition:width .4s}
+  #status-line{color:var(--mut);font-size:12px}
+
+  #board{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px;margin-top:14px}
+  .card{background:var(--panel);border:1px solid var(--grid);padding:14px 14px 10px;
+    display:flex;flex-direction:column;gap:8px}
+  .card.hot{border-color:var(--amber)}
+  .card-top{display:flex;align-items:baseline;gap:9px}
+  .sym{font-family:var(--disp);font-size:22px;font-weight:600;letter-spacing:.03em}
+  .nm{color:var(--mut);font-size:11px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .px{font-size:16px;font-weight:600}
+  .chg.up{color:var(--up)} .chg.dn{color:var(--dn)}
+  .setup{font-family:var(--disp);font-size:14px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--amber);border-left:2px solid var(--amber);padding-left:8px}
+  .setup.short{color:var(--dn);border-color:var(--dn)}
+  .badges{display:flex;flex-wrap:wrap;gap:6px;font-size:10.5px}
+  .b{padding:2px 7px;border:1px solid var(--grid);color:var(--mut)}
+  .b.hot{border-color:var(--amber-dim);color:var(--amber)}
+  .b.up{border-color:var(--up);color:var(--up)}
+  .b.dn{border-color:var(--dn);color:var(--dn)}
+  .b.cy{border-color:var(--cyan);color:var(--cyan)}
+  .chart{width:100%;height:auto;display:block}
+  .geo{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;border-top:1px solid var(--grid);
+    padding-top:8px;font-size:11px}
+  .geo div{display:flex;flex-direction:column;gap:2px}
+  .geo span{color:var(--mut);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase}
+  .geo b{font-weight:600;font-size:12px}
+  .g-e{color:var(--txt)} .g-t{color:var(--up)} .g-s{color:var(--dn)} .g-r{color:var(--amber)}
+  #empty{color:var(--mut);padding:60px 4px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Swing <em>Board</em></h1>
+  <span class="sub">Gann · 5–7 day horizon · daily bars</span>
+  <span class="bench" id="bench"></span>
+</header>
+
+<div class="controls">
+  <select id="universe" aria-label="Universe">
+    <option value="nifty500" selected>Nifty 500 (full list)</option>
+    <option value="fno">F&amp;O</option>
+    <option value="nifty100">Nifty 100</option>
+    <option value="nifty50">Nifty 50</option>
+  </select>
+  <button class="primary" id="scan-btn" onclick="startScan()">Run swing scan</button>
+  <span id="status-line">Scans take 2–5 min on the full list.</span>
+  <nav class="tabs" aria-label="Views">
+    <button class="tab on" data-view="tradeable">Tradeable</button>
+    <button class="tab" data-view="candidates">All ranked</button>
+    <button class="tab" data-view="coiled">Coiled</button>
+    <button class="tab" data-view="breakouts">Breakouts</button>
+    <button class="tab" data-view="time_cycle">Time cycle</button>
+    <button class="tab" data-view="leaders">Leaders</button>
+  </nav>
+  <div id="progress"><i></i></div>
+</div>
+
+<div id="board"></div>
+<div id="empty" hidden>No results yet — run a scan. Best run pre-open or after 15:30 IST, on a completed daily bar.</div>
+
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+let DATA=null, VIEW="tradeable", pollTimer=null;
+
+async function startScan(){
+  $("#scan-btn").disabled=true;$("#status-line").textContent="starting…";
+  try{
+    const r=await fetch(`/api/swing/scan?universe=${$("#universe").value}`);
+    const {job_id}=await r.json();
+    $("#progress").style.display="block";poll(job_id);
+  }catch(e){
+    $("#status-line").textContent="could not start — is the server running?";
+    $("#scan-btn").disabled=false;
+  }
+}
+function poll(id){
+  clearInterval(pollTimer);
+  pollTimer=setInterval(async()=>{
+    try{
+      const s=await(await fetch(`/api/swing/status/${id}`)).json();
+      if(s.status==="not_found"){stop("job lost — scan again");return;}
+      const pct=s.total?Math.round(s.progress/s.total*100):0;
+      $("#progress i").style.width=pct+"%";
+      $("#status-line").textContent=`scanning ${s.progress}/${s.total}`;
+      if(s.status==="done"){DATA=s.results;stop("scanned "+new Date().toTimeString().slice(0,5));render();}
+    }catch(e){stop("connection lost");}
+  },1500);
+}
+function stop(msg){
+  clearInterval(pollTimer);pollTimer=null;
+  $("#progress").style.display="none";$("#progress i").style.width="0%";
+  $("#scan-btn").disabled=false;$("#status-line").textContent=msg;
+}
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+  t.classList.add("on");VIEW=t.dataset.view;render();
+}));
+
+const fmt=n=>n==null?"—":Number(n).toLocaleString("en-IN",{maximumFractionDigits:2});
+const sgn=n=>n==null?"—":(n>=0?"+":"")+fmt(n);
+
+function render(){
+  const b=$("#board");b.innerHTML="";
+  if(DATA&&DATA.benchmark){
+    const k=DATA.benchmark;
+    $("#bench").innerHTML=`NIFTY 21d <b>${sgn(k.ret_21d)}%</b> · 63d <b>${sgn(k.ret_63d)}%</b>`;
+  }
+  const rows=(DATA&&DATA[VIEW])||[];
+  $("#empty").hidden=rows.length>0;
+  rows.forEach(r=>b.appendChild(card(r)));
+}
+
+function card(r){
+  const el=document.createElement("div");
+  const good = r.rr>=1.5 && !r.stop_too_wide;
+  el.className="card"+(good?" hot":"");
+  const dir=r.day_change_pct>=0?"up":"dn";
+  const isShort=r.direction==="short";
+  el.innerHTML=`
+    <div class="card-top">
+      <span class="sym">${r.symbol.replace(".NS","")}</span>
+      <span class="nm">${r.name}</span>
+      <span class="px">${fmt(r.close)}</span>
+      <span class="chg ${dir}">${sgn(r.day_change_pct)}%</span>
+    </div>
+    <div class="setup ${isShort?"short":""}">${r.setup.replace(/_/g," ")}</div>
+    <div class="badges">
+      <span class="b ${r.rs_63d>0?"hot":""}">RS 63d ${sgn(r.rs_63d)}%</span>
+      <span class="b ${r.rs_21d>0?"hot":""}">RS 21d ${sgn(r.rs_21d)}%</span>
+      <span class="b ${r.coil_ratio<0.40?"hot":""}">coil ${fmt(r.coil_ratio)}</span>
+      ${r.quiet_base?'<span class="b hot">dry-up</span>':""}
+      ${r.nr7?'<span class="b hot">NR7</span>':""}
+      ${r.inside_day?'<span class="b">inside</span>':""}
+      ${r.gann_time_cycle?`<span class="b cy">⏱ ${r.gann_time_cycle.replace("cycle_","")}-bar</span>`:""}
+      <span class="b">ADR ${fmt(r.adr_pct)}%</span>
+      <span class="b">₹${fmt(r.turnover_cr)}Cr</span>
+      ${r.stop_too_wide?'<span class="b dn">wide stop</span>':""}
+      <span class="b">score ${fmt(r.swing_score)}</span>
+    </div>
+    ${chart(r)}
+    <div class="geo">
+      <div><span>entry</span><b class="g-e">${fmt(r.entry)}</b></div>
+      <div><span>stop</span><b class="g-s">${fmt(r.stop)}</b></div>
+      <div><span>target</span><b class="g-t">${fmt(r.target)}</b></div>
+      <div><span>R:R</span><b class="g-r">${fmt(r.rr)}</b></div>
+    </div>
+    <div class="geo" style="border:none;padding-top:2px">
+      <div><span>to entry</span><b>${sgn(r.dist_to_entry_pct)}%</b></div>
+      <div><span>risk</span><b>${fmt(r.risk_pct)}%</b></div>
+      <div><span>6d move</span><b>${fmt(r.expected_move_pct)}%</b></div>
+      <div><span>52wh</span><b>${fmt(r.pct_from_52w_high)}%</b></div>
+    </div>`;
+  return el;
+}
+
+/* Pivot box + Sq9 rungs + coil wedge + entry/stop/target rails */
+function chart(r){
+  const W=360,H=250,PADT=14,PADB=14,LEFT=64,RIGHT=W-72;
+  const vals=[r.pivot_high,r.pivot_low,r.close,r.entry,r.stop,r.target,
+              r.coil_high,r.coil_low,r.swing_midpoint].filter(v=>v!=null);
+  const rungs=(r.gann_ladder||[]).filter(l=>l>=Math.min(...vals)*0.99 && l<=Math.max(...vals)*1.01);
+  const lo=Math.min(...vals,...rungs), hi=Math.max(...vals,...rungs);
+  const span=(hi-lo)||1;
+  const y=v=>PADT+(1-(v-lo)/span)*(H-PADT-PADB);
+
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Swing structure for ${r.symbol}">`;
+
+  // pivot box: the swing the market is working inside
+  const yph=y(r.pivot_high), ypl=y(r.pivot_low);
+  s+=`<rect x="${LEFT}" y="${yph}" width="${RIGHT-LEFT}" height="${Math.max(ypl-yph,2)}"
+        fill="none" stroke="var(--grid)" stroke-width="1"/>`;
+  s+=`<text x="${LEFT-4}" y="${yph+3}" fill="var(--mut)" font-size="9" text-anchor="end">PH ${fmt(r.pivot_high)}</text>`;
+  s+=`<text x="${LEFT-4}" y="${ypl+3}" fill="var(--mut)" font-size="9" text-anchor="end">PL ${fmt(r.pivot_low)}</text>`;
+
+  // Sq9 rungs inside the box
+  rungs.forEach(l=>{
+    const yy=y(l);
+    s+=`<line x1="${LEFT}" x2="${RIGHT}" y1="${yy}" y2="${yy}" stroke="var(--amber)"
+          stroke-width="0.8" opacity="0.35"/>`;
+  });
+
+  // Gann 50% midpoint of the swing
+  const ym=y(r.swing_midpoint);
+  s+=`<line x1="${LEFT}" x2="${RIGHT}" y1="${ym}" y2="${ym}" stroke="var(--amber-dim)"
+        stroke-width="1" stroke-dasharray="5 4"/>
+      <text x="${LEFT-4}" y="${ym+3}" fill="var(--amber-dim)" font-size="8.5" text-anchor="end">50%</text>`;
+
+  // coil wedge — the base narrowing into the present (right edge)
+  const ych=y(r.coil_high), ycl=y(r.coil_low);
+  const x0=LEFT+(RIGHT-LEFT)*0.42, x1=RIGHT;
+  const openTop=y(r.pivot_high)+(ych-y(r.pivot_high))*0.15;
+  const openBot=y(r.pivot_low) -(y(r.pivot_low)-ycl)*0.15;
+  s+=`<polygon points="${x0},${openTop} ${x1},${ych} ${x1},${ycl} ${x0},${openBot}"
+        fill="var(--cyan)" opacity="0.10"/>
+      <line x1="${x0}" y1="${openTop}" x2="${x1}" y2="${ych}" stroke="var(--cyan)" stroke-width="1" opacity="0.55"/>
+      <line x1="${x0}" y1="${openBot}" x2="${x1}" y2="${ycl}" stroke="var(--cyan)" stroke-width="1" opacity="0.55"/>`;
+
+  // entry / stop / target rails
+  const rail=(v,col,lab,dash)=>{
+    if(v==null)return"";
+    const yy=y(v);
+    return `<line x1="${LEFT-8}" x2="${RIGHT+4}" y1="${yy}" y2="${yy}" stroke="${col}"
+              stroke-width="1.5"${dash?' stroke-dasharray="4 3"':''}/>
+            <text x="${RIGHT+8}" y="${yy+3}" fill="${col}" font-size="9">${lab}</text>`;
+  };
+  s+=rail(r.target,"var(--up)","T "+fmt(r.target),true);
+  s+=rail(r.entry,"var(--txt)","E "+fmt(r.entry),false);
+  s+=rail(r.stop,"var(--dn)","S "+fmt(r.stop),true);
+
+  // current price marker
+  const yc=y(r.close), col=r.day_change_pct>=0?"var(--up)":"var(--dn)";
+  s+=`<polygon points="${RIGHT},${yc} ${RIGHT+9},${yc-5} ${RIGHT+9},${yc+5}" fill="${col}" opacity="0"/>
+      <circle cx="${RIGHT}" cy="${yc}" r="3.5" fill="${col}"/>`;
+
+  // bars-since-pivot / Gann cycle marker along the bottom
+  const bars = r.bars_since_pivot_low ?? r.bars_since_pivot_high;
+  if(bars!=null){
+    s+=`<text x="${LEFT}" y="${H-3}" fill="var(--mut)" font-size="9">${bars} bars from pivot</text>`;
+    if(r.gann_time_cycle)
+      s+=`<text x="${RIGHT+4}" y="${H-3}" fill="var(--cyan)" font-size="9" text-anchor="end">⏱ ${r.gann_time_cycle.replace("cycle_","")}-bar cycle</text>`;
+  }
+  s+=`</svg>`;
+  return s;
+}
+</script>
+</body>
+</html>

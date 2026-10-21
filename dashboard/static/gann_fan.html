@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Gann Fan Level Scanner</title>
+  <link rel="stylesheet" href="screener.css"/>
+  <style>
+    /* ── Progress bar (not in screener.css) ── */
+    .tf-progress-wrap {
+      display: none; align-items: center; gap: 8px;
+      padding: 6px 16px;
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .tf-progress-wrap.show { display: flex; }
+
+    /* ── Top bar ── */
+    .gf-bar {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 12px 20px;
+    }
+    .gf-bar h1 { font-size: 15px; font-weight: 700; margin-right: auto; }
+    .gf-bar h1 small { font-size: 11px; font-weight: 400; color: var(--text-2); margin-left: 8px; }
+
+    /* ── Controls row ── */
+    .ctrl-row {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 10px 16px;
+    }
+    .tf-toggle {
+      display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+    }
+    .tf-toggle button {
+      padding: 5px 14px; background: transparent; border: none;
+      color: var(--text-2); font: 600 11px var(--font); cursor: pointer;
+      transition: all 100ms;
+    }
+    .tf-toggle button.active { background: var(--accent); color: #fff; }
+
+    /* ── Summary cards ── */
+    .summary-cards {
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+    .s-card {
+      flex: 1 1 120px; background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 10px 14px; min-width: 100px;
+    }
+    .s-card-label { font-size: 10px; color: var(--text-2); }
+    .s-card-value { font-size: 20px; font-weight: 700; font-family: var(--mono); }
+
+    /* ── Filter tabs ── */
+    .filter-tabs {
+      display: flex; gap: 6px; align-items: center;
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 8px 16px;
+    }
+    .filter-tabs span { font-size: 10px; color: var(--text-2); }
+    .ftab {
+      padding: 4px 12px; border: 1px solid var(--border); border-radius: 10px;
+      background: transparent; color: var(--text-2);
+      font: 600 11px var(--font); cursor: pointer; transition: all 100ms;
+    }
+    .ftab:hover { border-color: var(--accent); color: var(--accent); }
+    .ftab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .ftab.buy-active  { background: var(--green); border-color: var(--green); color: #fff; }
+    .ftab.sell-active { background: var(--red);   border-color: var(--red);   color: #fff; }
+
+    /* ── Run button ── */
+    .run-gann-btn {
+      padding: 7px 20px;
+      background: linear-gradient(135deg, #e67e22, #8e44ad);
+      border: none; border-radius: var(--radius);
+      color: #fff; font: 700 12px var(--font);
+      cursor: pointer; transition: opacity 100ms; white-space: nowrap;
+    }
+    .run-gann-btn:hover:not(:disabled) { opacity: .88; }
+    .run-gann-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* ── Level badges ── */
+    .lv-badge {
+      display: inline-block; padding: 1px 6px;
+      border-radius: 4px; font: 600 10px var(--mono);
+    }
+    .lv-h-a { background: rgba(52,152,219,.15); color: #3498db; }
+    .lv-h-b { background: rgba(52,152,219,.08); color: #5dade2; }
+    .lv-l-a { background: rgba(39,174,96,.15);  color: #27ae60; }
+    .lv-l-b { background: rgba(39,174,96,.08);  color: #58d68d; }
+
+    /* ── Signal pill ── */
+    .sig-buy  { color: var(--green); background: var(--green-dim); border: 1px solid var(--green); border-radius: 8px; padding: 2px 8px; font: 700 10px var(--mono); }
+    .sig-sell { color: var(--red);   background: var(--red-dim);   border: 1px solid var(--red);   border-radius: 8px; padding: 2px 8px; font: 700 10px var(--mono); }
+    .sig-both { color: #f39c12; background: rgba(243,156,18,.12); border: 1px solid #f39c12; border-radius: 8px; padding: 2px 8px; font: 700 10px var(--mono); }
+
+    /* ── Near pill ── */
+    .near-pill {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 2px 7px; border-radius: 6px; font: 600 10px var(--mono);
+      background: rgba(155,89,182,.12); color: #9b59b6; border: 1px solid rgba(155,89,182,.3);
+    }
+
+    /* ── Angle visualiser ── */
+    .angle-viz {
+      display: inline-flex; flex-direction: column; gap: 1px;
+      font-size: 9px; color: var(--text-2); font-family: var(--mono);
+    }
+
+    /* ── Dist bar ── */
+    .dist-bar-wrap { width: 60px; height: 4px; background: var(--bg-3); border-radius: 2px; display: inline-block; }
+    .dist-bar-fill { height: 100%; border-radius: 2px; background: #9b59b6; }
+    .dist-close   { background: var(--green); }
+    .dist-medium  { background: #f39c12; }
+    .dist-far     { background: var(--red); }
+
+    /* ── Source indicator ── */
+    .src-high { color: var(--red);   font-size: 10px; }
+    .src-low  { color: var(--green); font-size: 10px; }
+
+    /* Row accents */
+    .tr-buy  td:first-child { border-left: 3px solid var(--green); }
+    .tr-sell td:first-child { border-left: 3px solid var(--red); }
+    .tr-both td:first-child { border-left: 3px solid #f39c12; }
+
+    /* Table font override */
+    .table-wrap table { font-size: 11px; }
+    .table-wrap td    { padding: 7px 10px; }
+    .table-wrap thead th { padding: 7px 10px; font-size: 10px; }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"
+                  stroke="#e67e22" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Gann Fan Scanner
+    </div>
+    <div class="tv-badge" id="tvBadge">
+      <div class="tv-badge-dot"></div>
+      <span id="tvBadgeText">Checking…</span>
+    </div>
+    <a class="back-link" href="/signals">Swing Fib Signals</a>
+    <a class="back-link" href="/screener">ATH Screener</a>
+    <a class="back-link" href="/">← Dashboard</a>
+  </header>
+
+  <div class="page">
+
+    <!-- Title bar -->
+    <div class="gf-bar">
+      <h1>Gann Fan Angle Levels
+        <small>θ computed per swing · θ/2 &amp; θ/4 halving fan · Stocks near key intersection levels</small>
+      </h1>
+
+      <!-- Universe buttons -->
+      <div class="universe-btns" id="universeBtns" role="group" aria-label="Universe">
+        <button class="uni-btn active" data-universe="nifty50">Nifty 50</button>
+        <button class="uni-btn"        data-universe="nifty100">Nifty 100</button>
+        <button class="uni-btn"        data-universe="nifty200">Nifty 200</button>
+        <button class="uni-btn"        data-universe="fno">NSE FnO</button>
+        <button class="uni-btn"        data-universe="nifty500">Full List</button>
+        <button class="uni-btn"        data-universe="crypto">₿ Crypto</button>
+        <button class="uni-btn"        data-universe="mcx">🛢 MCX</button>
+        <button class="uni-btn"        data-universe="forex">💱 Forex</button>
+      </div>
+
+      <!-- Timeframe toggle -->
+      <div class="tf-toggle" id="tfToggle">
+        <button data-tf="1d"  class="active">Daily</button>
+        <button data-tf="15m">15-min</button>
+      </div>
+
+      <button class="run-gann-btn" id="runBtn" onclick="runScan()">▶ Run Scan</button>
+    </div>
+
+    <!-- Progress -->
+    <div class="tf-progress-wrap" id="progressWrap">
+      <div class="progress-bar-track" style="flex:1">
+        <div class="progress-bar-fill" id="progressFill" style="background:linear-gradient(90deg,#e67e22,#8e44ad)"></div>
+      </div>
+      <span class="progress-label" id="progressLabel">0 / 0</span>
+    </div>
+
+    <!-- Summary cards -->
+    <div class="summary-cards" id="summaryCards" style="display:none">
+      <div class="s-card">
+        <div class="s-card-label">Scanned</div>
+        <div class="s-card-value accent" id="cTotal">—</div>
+      </div>
+      <div class="s-card">
+        <div class="s-card-label">Near Levels</div>
+        <div class="s-card-value" id="cNear" style="color:#9b59b6">—</div>
+      </div>
+      <div class="s-card" title="Levels that were actually touched and reacted to — not just currently sitting close by">
+        <div class="s-card-label">Confirmed</div>
+        <div class="s-card-value" id="cConfirmed" style="color:#27ae60">—</div>
+      </div>
+      <div class="s-card">
+        <div class="s-card-label">BUY zones</div>
+        <div class="s-card-value green" id="cBuy">—</div>
+      </div>
+      <div class="s-card">
+        <div class="s-card-label">SELL zones</div>
+        <div class="s-card-value red" id="cSell">—</div>
+      </div>
+      <div class="s-card">
+        <div class="s-card-label">Within ±</div>
+        <div class="s-card-value" id="cPct" style="color:#e67e22">1%</div>
+      </div>
+      <div class="s-card">
+        <div class="s-card-label">Scanned at</div>
+        <div class="s-card-value" id="cTime" style="font-size:11px">—</div>
+      </div>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="filter-tabs" id="filterTabs" style="display:none">
+      <span>Show:</span>
+      <button class="ftab active" data-f="near">Near Levels</button>
+      <button class="ftab"        data-f="confirmed"
+              title="Only show levels price actually touched and reacted to within the last few bars — not ones it's merely drifting past right now">✔ Confirmed</button>
+      <button class="ftab"        data-f="all">All Scanned</button>
+      <button class="ftab"        data-f="buy">▲ BUY zones</button>
+      <button class="ftab"        data-f="sell">▼ SELL zones</button>
+      <button class="ftab"        data-f="both">↕ Both zones</button>
+      <span style="width:1px;background:var(--border);height:14px;margin:0 4px"></span>
+      <button class="btn" onclick="exportCSV()">⬇ CSV</button>
+    </div>
+
+    <!-- Legend -->
+    <div id="legend" style="display:none;padding:4px 0;font-size:10px;color:var(--text-2);line-height:1.8">
+      <b>Angle θ</b> = arctan(swing range ÷ ATR ÷ bars) — actual geometry of each swing, unique per stock &nbsp;|&nbsp;
+      <span class="lv-badge lv-h-a">H-A</span> High-fan <b>θ/2</b> line → support &nbsp;
+      <span class="lv-badge lv-h-b">H-B</span> High-fan <b>θ/4</b> line → deeper support &nbsp;
+      <span class="lv-badge lv-l-a">L-A</span> Low-fan <b>θ/2</b> line → resistance &nbsp;
+      <span class="lv-badge lv-l-b">L-B</span> Low-fan <b>θ/4</b> line → deeper resistance
+      <br/>
+      <b>✔ / ⏳ / ✘</b> on a level = price actually touched it and reacted / still waiting to see a reaction / touched but never reacted (or broke back through) —
+      "Near" alone just means current price happens to be close to the level right now, which on 15m bars can just be price drifting through without any real bounce.
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap" id="tableWrap">
+      <div class="empty-state">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.5">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+          <polyline points="2 17 12 22 22 17"/>
+          <polyline points="2 12 12 17 22 12"/>
+        </svg>
+        Select a universe and run the scan to find stocks near Gann Fan levels
+      </div>
+    </div>
+
+  </div><!-- .page -->
+
+  <div id="toastArea"></div>
+  <script src="js/gann_fan.js?v=2"></script>
+</body>
+</html>

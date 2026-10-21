@@ -1,0 +1,105 @@
+# Runs the dashboard scanner agent on GitHub's servers, so it works while the
+# laptop is asleep or off.
+#
+# State (agent.db, state.json, log) and the reports live on the `agent-data`
+# branch, which is overwritten on every run (one commit, no history bloat).
+# Open that branch on GitHub to see the latest summary and today's picks.
+#
+# Times are UTC (IST = UTC + 5:30). GitHub may start scheduled runs 5-15 min late.
+name: scanner-agent
+
+on:
+  schedule:
+    - cron: "15 3 * * 1-5"          # 08:45 IST  validate yesterday's daily picks
+    - cron: "15,30,45 4 * * 1-5"    # 09:45-10:15 IST  intraday scans
+    - cron: "*/15 5-8 * * 1-5"      # 10:30-14:15 IST  intraday scans
+    - cron: "0,15 9 * * 1-5"        # 14:30, 14:45 IST intraday scans
+    - cron: "20 10 * * 1-5"         # 15:50 IST  daily scanners (ATH, swing, fib, gann)
+    - cron: "0 11 * * 1-5"          # 16:30 IST  validate + report
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "Agent command: cycle | replay | scan --group daily | scan --group intraday | validate | report"
+        default: "cycle"
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scanner-agent
+  cancel-in-progress: false
+
+env:
+  TZ: Asia/Kolkata
+  DATA_BRANCH: agent-data
+  AGENT_DIR: dashboard/scanner_agent
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: dashboard/scanner_agent/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r $AGENT_DIR/requirements.txt
+
+      - name: Restore agent state from the data branch
+        run: |
+          if git fetch --depth 1 origin "$DATA_BRANCH" 2>/dev/null; then
+            for f in agent.db state.json agent.log; do
+              git show "origin/$DATA_BRANCH:$f" > "$AGENT_DIR/$f" 2>/dev/null || rm -f "$AGENT_DIR/$f"
+            done
+            echo "restored state from $DATA_BRANCH"
+          else
+            echo "no $DATA_BRANCH branch yet - starting fresh (run the workflow once with command 'replay')"
+          fi
+
+      - name: Today's date (cache key)
+        id: day
+        run: echo "day=$(date +%F)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore daily price cache
+        uses: actions/cache@v4
+        with:
+          path: dashboard/scanner_agent/cache
+          key: daily-prices-${{ steps.day.outputs.day }}
+          restore-keys: daily-prices-
+
+      - name: Run agent
+        working-directory: dashboard
+        env:
+          CMD: ${{ github.event.inputs.command || 'cycle' }}
+        run: python -m scanner_agent $CMD
+
+      - name: Rebuild report
+        if: always()
+        working-directory: dashboard
+        run: python -m scanner_agent report || true
+
+      - name: Save state + reports to the data branch
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          out=$(mktemp -d)
+          for f in agent.db state.json; do [ -f "$AGENT_DIR/$f" ] && cp "$AGENT_DIR/$f" "$out/"; done
+          [ -f "$AGENT_DIR/agent.log" ] && tail -n 3000 "$AGENT_DIR/agent.log" > "$out/agent.log"
+          [ -d "$AGENT_DIR/reports" ] && cp -r "$AGENT_DIR/reports" "$out/"
+          if [ -f "$out/reports/summary.md" ]; then
+            { echo "> Updated $(date '+%d %b %Y %H:%M') IST by run [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}). Full page: \`reports/leaderboard.html\` (download and open in a browser)."; echo; cat "$out/reports/summary.md"; } > "$out/README.md"
+          fi
+          cd "$out"
+          git init -q -b "$DATA_BRANCH"
+          git add -A
+          git -c user.name="scanner-agent" -c user.email="actions@users.noreply.github.com" \
+              commit -qm "agent run ${{ github.run_number }} $(date '+%Y-%m-%d %H:%M IST')"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" "$DATA_BRANCH"
+          echo "saved to $DATA_BRANCH"

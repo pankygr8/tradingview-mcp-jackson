@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Swing Fib Signals</title>
+  <link rel="stylesheet" href="screener.css"/>
+  <style>
+    /* ── Two-column timeframe layout ── */
+    .tf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 1000px) { .tf-grid { grid-template-columns: 1fr; } }
+
+    /* ── Timeframe panel ── */
+    .tf-panel {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 420px;
+    }
+
+    .tf-panel-head {
+      padding: 12px 16px 10px;
+      border-bottom: 1px solid var(--border-2);
+      flex-shrink: 0;
+    }
+
+    .tf-title-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 10px; flex-wrap: wrap;
+    }
+
+    .tf-label {
+      font-size: 14px; font-weight: 700;
+    }
+
+    .tf-subtitle {
+      font-size: 10px; color: var(--text-2); font-weight: 400;
+    }
+
+    .tf-controls {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+
+    /* ── Mini stat cards inside each panel ── */
+    .mini-cards {
+      display: flex; gap: 8px; padding: 10px 16px;
+      border-bottom: 1px solid var(--border-2);
+      flex-shrink: 0;
+    }
+    .mini-card {
+      flex: 1; background: var(--bg-3);
+      border: 1px solid var(--border-2);
+      border-radius: var(--radius);
+      padding: 8px 12px;
+    }
+    .mini-card-label { font-size: 10px; color: var(--text-2); }
+    .mini-card-value { font-size: 18px; font-weight: 700; font-family: var(--mono); }
+
+    /* ── Progress inside panel ── */
+    .tf-progress-wrap {
+      display: none; align-items: center; gap: 8px;
+      padding: 6px 16px;
+      border-bottom: 1px solid var(--border-2);
+    }
+    .tf-progress-wrap.show { display: flex; }
+
+    /* ── Filter row ── */
+    .filter-row {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--border-2);
+      flex-shrink: 0; flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 3px 10px;
+      border: 1px solid var(--border); border-radius: 10px;
+      background: transparent; color: var(--text-2);
+      font: 600 10px var(--font); cursor: pointer;
+      transition: all 100ms;
+    }
+    .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .filter-btn.buy-active  { background: var(--green); border-color: var(--green); color: #fff; }
+    .filter-btn.sell-active { background: var(--red);   border-color: var(--red);   color: #fff; }
+
+    /* ── Quality score badge ── */
+    .q-score {
+      display: inline-block;
+      padding: 2px 7px; border-radius: 8px;
+      font: 700 10px var(--mono);
+      white-space: nowrap;
+    }
+    .q-high   { background: rgba(39,174,96,.2);  color: #27ae60; border: 1px solid #27ae60; }
+    .q-mid    { background: rgba(241,196,15,.15); color: #f1c40f; border: 1px solid #f1c40f; }
+    .q-low    { background: rgba(231,76,60,.15);  color: #e74c3c; border: 1px solid #e74c3c; }
+    .q-na     { background: var(--bg-3); color: var(--text-2); border: 1px solid var(--border); }
+
+    /* ── Gann P/T Square badges (swing-based) ── */
+    .pt-square { background: rgba(231,76,60,.22);  color: #e74c3c; border: 1px solid #e74c3c; font-weight: 700; }
+    .pt-near   { background: rgba(241,196,15,.18); color: #d4ac0d; border: 1px solid #d4ac0d; font-weight: 700; }
+
+    /* ── Gann Intraday badges (today's time+price convergence) ── */
+    .gann-prime { background: rgba(155,89,182,.30); color: #bf8cf0; border: 1px solid #9b59b6; font-weight: 700; letter-spacing:.4px; }
+    .gann-setup { background: rgba(52,152,219,.20); color: #5dade2; border: 1px solid #3498db; font-weight: 700; }
+
+    /* ── Gann filter button — distinct purple accent ── */
+    .filter-btn.gann-btn { border-color: #9b59b6 !important; color: #9b59b6 !important; }
+    .filter-btn.gann-btn.active { background: #9b59b6 !important; color: #fff !important; }
+
+    /* ── Auto-poll button ── */
+    .auto-poll-btn {
+      border-color: #9b59b6 !important;
+      color: #9b59b6 !important;
+      transition: all 120ms;
+    }
+    .auto-poll-btn.on {
+      background: #9b59b6 !important;
+      color: #fff !important;
+      font-weight: 700;
+    }
+
+    /* ── Toggle button groups (BoS Mode / Swing Mode / Lookback Bars) ── */
+    .tf-toggle {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .tf-toggle button {
+      padding: 5px 13px;
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--border);
+      color: var(--text-2);
+      font: 600 11px var(--font);
+      cursor: pointer;
+      transition: background 120ms, color 120ms;
+      white-space: nowrap;
+    }
+    .tf-toggle button:last-child { border-right: none; }
+    .tf-toggle button:hover:not(.active) {
+      background: var(--bg-3);
+      color: var(--text);
+    }
+    /* Active state — bright accent fill, white text, clearly selected */
+    .tf-toggle button.active {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* ── Run btn variants ── */
+    .run-btn-sm {
+      padding: 5px 14px;
+      background: var(--accent); border: none;
+      border-radius: var(--radius); color: #fff;
+      font: 600 11px var(--font); cursor: pointer;
+      transition: opacity 100ms; white-space: nowrap;
+    }
+    .run-btn-sm:hover:not(:disabled) { opacity: .85; }
+    .run-btn-sm:disabled { opacity: .5; cursor: not-allowed; }
+    .run-btn-sm.intraday { background: #9b59b6; }
+
+    /* ── Signal pills ── */
+    .sig-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 8px; border-radius: 8px; border: 1px solid;
+      font: 700 10px var(--mono);
+    }
+    .sig-buy  { color: var(--green); background: var(--green-dim); border-color: var(--green); }
+    .sig-sell { color: var(--red);   background: var(--red-dim);   border-color: var(--red);   }
+
+    /* Row accent bars */
+    .tr-buy  td:first-child { border-left: 3px solid var(--green); }
+    .tr-sell td:first-child { border-left: 3px solid var(--red); }
+
+    /* Table overrides for compact intraday table */
+    .tf-panel table { font-size: 11px; }
+    .tf-panel td    { padding: 7px 10px; }
+    .tf-panel thead th { padding: 7px 10px; font-size: 10px; }
+
+    /* ── Top "Run Both" bar ── */
+    .both-bar {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 12px 20px; flex-wrap: wrap;
+    }
+    .both-bar h1 { font-size: 15px; font-weight: 700; margin-right: auto; }
+    .both-bar h1 small { font-size: 11px; font-weight: 400; color: var(--text-2); margin-left: 8px; }
+    .run-both-btn {
+      padding: 7px 20px;
+      background: linear-gradient(135deg, var(--accent), #9b59b6);
+      border: none; border-radius: var(--radius);
+      color: #fff; font: 700 12px var(--font);
+      cursor: pointer; transition: opacity 100ms;
+    }
+    .run-both-btn:hover { opacity: .88; }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"
+                  stroke="#2f81f7" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Swing Fib Signals
+    </div>
+    <div class="tv-badge" id="tvBadge">
+      <div class="tv-badge-dot"></div>
+      <span id="tvBadgeText">Checking…</span>
+    </div>
+    <a class="back-link" href="/gann">Gann Fan Levels</a>
+    <a class="back-link" href="/screener">ATH Screener</a>
+    <a class="back-link" href="/">← Dashboard</a>
+  </header>
+
+  <div class="page">
+
+    <!-- Universe + Run Both -->
+    <div class="both-bar">
+      <h1>Swing Fib Angle Signals <small>NSE Equities · Gann 1/8 &amp; 7/8 crossover</small></h1>
+
+      <div class="universe-btns" id="universeBtns" role="group" aria-label="Universe">
+        <button class="uni-btn active" data-universe="nifty50">Nifty 50</button>
+        <button class="uni-btn"        data-universe="nifty100">Nifty 100</button>
+        <button class="uni-btn"        data-universe="nifty200">Nifty 200</button>
+        <button class="uni-btn"        data-universe="fno">NSE FnO</button>
+        <button class="uni-btn"        data-universe="nifty500">Full List</button>
+        <span style="width:1px;background:var(--border);height:18px;margin:0 4px;align-self:center"></span>
+        <button class="uni-btn" data-universe="ath_90d"
+                style="color:#f1c40f"
+                title="Stocks that hit a new all-time high in the last 90 days — run ATH Screener first">🏆 ATH 90d</button>
+        <button class="uni-btn" data-universe="near_ath"
+                style="color:#e74c3c"
+                title="Stocks near 50 % of their all-time high (±5 %) — run ATH Screener first">⚡ Near ATH</button>
+        <span style="width:1px;background:var(--border);height:18px;margin:0 4px;align-self:center"></span>
+        <button class="uni-btn" data-universe="crypto" style="color:#f7931a">₿ Crypto</button>
+        <button class="uni-btn" data-universe="mcx"    style="color:#e5c84b">🛢 MCX</button>
+        <button class="uni-btn" data-universe="forex"  style="color:#27ae60">💱 Forex</button>
+      </div>
+
+      <!-- BoS Mode, Swing Mode & Lookback Bars selectors (match Pine Script v3.2 inputs) -->
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <span style="font-size:9px;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px">BoS Mode</span>
+          <div class="tf-toggle" id="bosModeToggle">
+            <button data-bos="Both"   class="active" title="Fib bounce + Gann angle confirmation (default)">Both</button>
+            <button data-bos="Simple" title="Fib bounce only — more signals, less filtered">Simple</button>
+            <button data-bos="Strict" title="Same as Both in v3.2">Strict</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <span style="font-size:9px;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px">Swing Mode</span>
+          <div class="tf-toggle" id="swingModeToggle">
+            <button data-swing="Largest Range" class="active" title="Biggest H-L swing in lookback (default)">Largest</button>
+            <button data-swing="Most Recent"   title="Latest confirmed pivot pair">Recent</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <span style="font-size:9px;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px"
+                title="How many bars back to search for the swing (Largest Range mode only). Smaller = tighter/faster swings; larger = longer/slower macro swings.">Lookback Bars ⓘ</span>
+          <div class="tf-toggle" id="lbBarsToggle">
+            <button data-lb="50"   title="Fast-trending stocks — swing in 20–50 bars">50</button>
+            <button data-lb="100"  title="Mid-speed stocks — swing in 50–100 bars">100</button>
+            <button data-lb="200"  class="active" title="Default — matches Pine Script v3.2 (200 bars)">200 ✓</button>
+            <button data-lb="300"  title="Slow/macro swings — positional trading">300</button>
+          </div>
+        </div>
+        <button class="run-both-btn" onclick="runBoth()" style="align-self:flex-end">▶▶ Run Both Timeframes</button>
+      </div>
+    </div>
+
+    <!-- Two-panel grid -->
+    <div class="tf-grid">
+
+      <!-- ── Daily panel ────────────────────────────────────────────────── -->
+      <div class="tf-panel" id="panel-1d">
+        <div class="tf-panel-head">
+          <div class="tf-title-row">
+            <span class="tf-label">📅 Daily Signals</span>
+            <span class="badge accent" id="count-1d">0</span>
+            <span class="tf-subtitle" id="subtitle-1d">Swing / Positional · Pivot 12 · LB 200</span>
+            <div style="margin-left:auto; display:flex; gap:6px; align-items:center">
+              <button class="btn" onclick="exportCSV('1d')">⬇ CSV</button>
+              <button class="run-btn-sm" id="runBtn-1d" onclick="runScan('1d')">▶ Run Daily</button>
+            </div>
+          </div>
+          <div class="tf-controls">
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="tf-progress-wrap" id="progress-1d">
+          <div class="progress-bar-track" style="flex:1">
+            <div class="progress-bar-fill" id="fill-1d"></div>
+          </div>
+          <span class="progress-label" id="label-1d">0 / 0</span>
+        </div>
+
+        <!-- Mini cards -->
+        <div class="mini-cards" id="cards-1d" style="display:none">
+          <div class="mini-card">
+            <div class="mini-card-label">Scanned</div>
+            <div class="mini-card-value accent" id="c1d-total">—</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-label">BUY signals</div>
+            <div class="mini-card-value green" id="c1d-buy">—</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-label">SELL signals</div>
+            <div class="mini-card-value red" id="c1d-sell">—</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-label">At</div>
+            <div class="mini-card-value" id="c1d-time" style="font-size:11px">—</div>
+          </div>
+        </div>
+
+        <!-- Filter -->
+        <div class="filter-row" id="filter-1d" style="display:none">
+          <span style="font-size:10px;color:var(--text-2)">Filter:</span>
+          <button class="filter-btn active" data-tf="1d" data-f="all">All</button>
+          <button class="filter-btn"        data-tf="1d" data-f="buy">▲ BUY</button>
+          <button class="filter-btn"        data-tf="1d" data-f="sell">▼ SELL</button>
+          <span style="width:1px;background:var(--border);height:14px;margin:0 2px"></span>
+          <button class="filter-btn"        data-tf="1d" data-f="valid" title="Hide ✘ false breakouts and ⚠ stale signals — show only live confirmed signals">✔ Confirmed</button>
+          <button class="filter-btn"        data-tf="1d" data-f="highscore"
+                  title="Only show stocks with Momentum Score ≥ 55 — fresh signal + EMA20/50 trend alignment + healthy RSI zone + above-average volume. Fib+Gann geometry alone doesn't check whether the move actually has momentum behind it — this does.">⭐ High Score</button>
+          <button class="filter-btn"        data-tf="1d" data-f="ptsquare"
+                  title="Gann Price/Time Square — show stocks where price and time are converging (P/T score ≥ 30). Momentum breakouts often follow these moments.">⧖ P=T</button>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrap" id="table-1d">
+          <div class="empty-state">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8"  y1="2" x2="8"  y2="6"/>
+              <line x1="3"  y1="10" x2="21" y2="10"/>
+            </svg>
+            Run scan to see daily signals
+          </div>
+        </div>
+      </div><!-- /daily panel -->
+
+      <!-- ── 15-min panel ───────────────────────────────────────────────── -->
+      <div class="tf-panel" id="panel-15m">
+        <div class="tf-panel-head">
+          <div class="tf-title-row">
+            <span class="tf-label" style="color:#9b59b6">⚡ 15-min Intraday Signals</span>
+            <span class="badge" id="count-15m" style="background:rgba(155,89,182,.15);color:#9b59b6">0</span>
+            <span class="tf-subtitle" id="subtitle-15m">Intraday · Pivot 12 · LB 200 bars</span>
+            <div style="margin-left:auto; display:flex; gap:6px; align-items:center">
+              <!-- Auto-poll toggle -->
+              <button class="btn auto-poll-btn" id="autoPollBtn"
+                      onclick="toggleAutoPoll15m()"
+                      title="Auto-refresh 15-min signals every 15 minutes with current settings">
+                ⏱ Auto
+              </button>
+              <span id="autoPollCountdown" style="font-size:10px;color:#9b59b6;min-width:52px;text-align:right;display:none"></span>
+              <button class="btn" onclick="exportCSV('15m')">⬇ CSV</button>
+              <button class="run-btn-sm intraday" id="runBtn-15m" onclick="runScan('15m')">▶ Run 15-min</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="tf-progress-wrap" id="progress-15m">
+          <div class="progress-bar-track" style="flex:1">
+            <div class="progress-bar-fill" id="fill-15m" style="background:#9b59b6"></div>
+          </div>
+          <span class="progress-label" id="label-15m">0 / 0</span>
+        </div>
+
+        <!-- Mini cards -->
+        <div class="mini-cards" id="cards-15m" style="display:none">
+          <div class="mini-card">
+            <div class="mini-card-label">Scanned</div>
+            <div class="mini-card-value accent" id="c15m-total">—</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-label">BUY signals</div>
+            <div class="mini-card-value green" id="c15m-buy">—</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-label">SELL signals</div>
+            <div class="mini-card-value red" id="c15m-sell">—</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-label">At</div>
+            <div class="mini-card-value" id="c15m-time" style="font-size:11px">—</div>
+          </div>
+        </div>
+
+        <!-- Filter -->
+        <div class="filter-row" id="filter-15m" style="display:none">
+          <span style="font-size:10px;color:var(--text-2)">Filter:</span>
+          <button class="filter-btn active" data-tf="15m" data-f="all">All</button>
+          <button class="filter-btn"        data-tf="15m" data-f="buy">▲ BUY</button>
+          <button class="filter-btn"        data-tf="15m" data-f="sell">▼ SELL</button>
+          <span style="width:1px;background:var(--border);height:14px;margin:0 2px"></span>
+          <button class="filter-btn"        data-tf="15m" data-f="valid" title="Hide ✘ false breakouts and ⚠ stale signals — show only live confirmed signals">✔ Confirmed</button>
+          <button class="filter-btn"        data-tf="15m" data-f="highscore"
+                  title="Only show stocks with Quality Score ≥ 55 — fresh signal + elevated volume + good ATR">⭐ High Score</button>
+          <button class="filter-btn gann-btn" data-tf="15m" data-f="gann"
+                  title="Gann Intraday Convergence (score ≥ 45) — today's price is near a Square-of-Nine harmonic from today's open AND the current bar is near a natural Gann time division (1/8–7/8 of the trading day). No historical lookback — pure price/time theory.">🔱 Gann</button>
+          <button class="filter-btn"        data-tf="15m" data-f="ptsquare"
+                  title="Gann Price/Time Square — show stocks where price and time are converging (P/T score ≥ 30). Momentum breakouts often follow these moments.">⧖ P=T</button>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrap" id="table-15m">
+          <div class="empty-state">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            Run scan to see intraday signals
+          </div>
+        </div>
+      </div><!-- /15m panel -->
+
+    </div><!-- .tf-grid -->
+
+  </div><!-- .page -->
+
+  <div id="toastArea"></div>
+  <script src="js/signals.js?v=14"></script>
+</body>
+</html>

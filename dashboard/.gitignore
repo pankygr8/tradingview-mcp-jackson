@@ -1,0 +1,10 @@
+# local-only files that should never go to GitHub
+__pycache__/
+*.pyc
+*.bak
+*.bak?
+cloudflared*.exe
+cloudflared-config.yml
+New folder/
+New Text Document.txt
+scan_logs/

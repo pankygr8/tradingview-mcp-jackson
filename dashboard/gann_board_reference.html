@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gann Ladder Board — Desk Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101418; --panel:#1A2026; --grid:#232C33;
+    --amber:#E8A33D; --amber-dim:#8A6524;
+    --up:#34C77B; --dn:#F05D5D; --cyan:#4FB6C4;
+    --txt:#D7DEE4; --mut:#7C8A94;
+    --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+    --disp:'Barlow Condensed',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--ink)}
+  body{
+    font-family:var(--mono);color:var(--txt);font-size:12.5px;line-height:1.5;
+    background:
+      linear-gradient(var(--grid) 1px,transparent 1px) 0 0/100% 44px,
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/44px 100%,
+      var(--ink);
+    background-attachment:fixed;
+    max-width:1100px;margin:0 auto;padding:0 24px 80px;
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+  header{padding:34px 0 16px;border-bottom:2px solid var(--amber);margin-bottom:26px}
+  h1{font-family:var(--disp);font-weight:700;font-size:38px;letter-spacing:.04em;
+     text-transform:uppercase;line-height:1}
+  h1 em{color:var(--amber);font-style:normal}
+  .tagline{color:var(--mut);margin-top:8px;font-size:12.5px}
+  .tagline b{color:var(--txt);font-weight:500}
+
+  h2{font-family:var(--disp);font-weight:600;font-size:20px;letter-spacing:.08em;
+     text-transform:uppercase;color:var(--amber);margin:34px 0 4px}
+  h2 .n{color:var(--mut);margin-right:10px;font-size:16px}
+  .lede{color:var(--mut);margin-bottom:16px;max-width:76ch}
+
+  /* ── Signature: the session decay timeline ── */
+  .timeline{background:var(--panel);border:1px solid var(--grid);padding:20px 18px 14px;margin-bottom:6px}
+  .tl-svg{width:100%;height:auto;display:block}
+  .tl-note{color:var(--mut);font-size:11px;margin-top:10px;padding-top:10px;border-top:1px solid var(--grid)}
+
+  /* ── Tabs table ── */
+  table{width:100%;border-collapse:collapse;margin-top:6px}
+  th{font-family:var(--disp);font-size:13px;letter-spacing:.07em;text-transform:uppercase;
+     color:var(--mut);text-align:left;font-weight:500;padding:8px 10px;border-bottom:1px solid var(--grid)}
+  td{padding:10px;border-bottom:1px solid var(--grid);vertical-align:top}
+  td:first-child{white-space:nowrap;width:1%}
+  .tab{font-family:var(--disp);font-size:15px;letter-spacing:.05em;text-transform:uppercase;
+       border-left:2px solid var(--grid);padding-left:9px}
+  .tab.go{border-color:var(--amber);color:var(--amber)}
+  .tab.warn{border-color:var(--dn);color:var(--dn)}
+  .tab.cy{border-color:var(--cyan);color:var(--cyan)}
+  .why{color:var(--mut)}
+
+  /* ── Card anatomy ── */
+  .anat{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+  @media(max-width:820px){.anat{grid-template-columns:1fr}}
+  .anat-svg{background:var(--panel);border:1px solid var(--grid);padding:14px}
+  .keys{display:flex;flex-direction:column;gap:0}
+  .key{display:grid;grid-template-columns:26px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--grid)}
+  .key b{font-family:var(--disp);font-size:15px;color:var(--amber);text-align:center;
+         border:1px solid var(--amber-dim);height:20px;line-height:19px}
+  .key span{color:var(--mut)}
+  .key span em{color:var(--txt);font-style:normal;font-weight:500}
+
+  /* ── Gate list ── */
+  .gates{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:6px}
+  @media(max-width:820px){.gates{grid-template-columns:1fr}}
+  .gate{background:var(--panel);border:1px solid var(--grid);border-left:2px solid var(--amber);padding:11px 13px}
+  .gate h3{font-family:var(--disp);font-size:15px;letter-spacing:.05em;text-transform:uppercase;
+           font-weight:600;margin-bottom:3px}
+  .gate p{color:var(--mut);font-size:11.5px}
+  .gate code{color:var(--cyan)}
+
+  /* ── Honest limits ── */
+  .limits{border:1px solid var(--dn);border-left-width:2px;padding:14px 16px;margin-top:8px}
+  .limits li{list-style:none;padding:7px 0;color:var(--mut)}
+  .limits li+li{border-top:1px solid var(--grid)}
+  .limits b{color:var(--txt);font-weight:500}
+
+  footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--grid);
+         color:var(--mut);font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  @media print{
+    html,body{background:#fff;color:#111}
+    body{max-width:none;padding:0}
+    h1,h2{color:#111} h1 em{color:#8A6524}
+    .timeline,.anat-svg,.gate{background:#fff;border-color:#bbb}
+    .limits{border-color:#999}
+    .tab.go{color:#8A6524}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Gann <em>Ladder</em> Board</h1>
+  <p class="tagline">
+    Intraday desk reference · NSE F&amp;O · Square-of-9 levels off the session open<br>
+    Every number here is <b>structure or coincident state</b> — opening range, relative volume,
+    range expansion, Gann rungs. <b>Nothing is smoothed. Nothing lags.</b>
+  </p>
+</header>
+
+<!-- ══ SIGNATURE: the decay timeline ══ -->
+<h2><span class="n">01</span>The one thing to understand</h2>
+<p class="lede">
+  A setup is not a permanent property of a stock. It <b>decays through the tabs as the session ages</b>.
+  The same name is Actionable at 9:35, Late by 10:30, and Missed by noon — not because it got worse,
+  but because the level it was sitting on is now behind it. This is the whole board in one picture.
+</p>
+
+<div class="timeline">
+<svg class="tl-svg" viewBox="0 0 1000 250" role="img" aria-label="How intraday setups decay from Actionable to Late to Missed across the NSE session">
+  <!-- axis -->
+  <line x1="60" y1="196" x2="960" y2="196" stroke="#232C33" stroke-width="2"/>
+  <!-- session ticks -->
+  <g font-family="IBM Plex Mono, monospace" font-size="10" fill="#7C8A94">
+    <line x1="60"  y1="190" x2="60"  y2="202" stroke="#232C33" stroke-width="2"/><text x="60"  y="218" text-anchor="middle">09:15</text>
+    <line x1="146" y1="190" x2="146" y2="202" stroke="#232C33" stroke-width="2"/><text x="146" y="218" text-anchor="middle">09:30</text>
+    <line x1="290" y1="190" x2="290" y2="202" stroke="#232C33" stroke-width="2"/><text x="290" y="218" text-anchor="middle">10:15</text>
+    <line x1="530" y1="190" x2="530" y2="202" stroke="#232C33" stroke-width="2"/><text x="530" y="218" text-anchor="middle">12:00</text>
+    <line x1="960" y1="190" x2="960" y2="202" stroke="#232C33" stroke-width="2"/><text x="960" y="218" text-anchor="middle">15:30</text>
+  </g>
+
+  <!-- opening range block -->
+  <rect x="60" y="60" width="86" height="136" fill="#7C8A94" opacity="0.12"/>
+  <text x="103" y="50" font-family="Barlow Condensed" font-size="14" fill="#7C8A94" text-anchor="middle" letter-spacing="1">OPENING RANGE</text>
+  <text x="103" y="126" font-family="IBM Plex Mono" font-size="9.5" fill="#7C8A94" text-anchor="middle">forming</text>
+  <text x="103" y="140" font-family="IBM Plex Mono" font-size="9.5" fill="#7C8A94" text-anchor="middle">don't scan</text>
+
+  <!-- the three phases -->
+  <rect x="146" y="86" width="144" height="110" fill="#E8A33D" opacity="0.16"/>
+  <rect x="290" y="112" width="240" height="84" fill="#E8A33D" opacity="0.07"/>
+  <rect x="530" y="150" width="430" height="46" fill="#F05D5D" opacity="0.06"/>
+
+  <!-- decay curve: extension_or rising -->
+  <path d="M146,178 C 220,150 260,120 290,104 C 360,74 450,58 530,50 C 660,40 820,36 960,34"
+        fill="none" stroke="#E8A33D" stroke-width="2"/>
+  <circle cx="200" cy="140" r="4" fill="#E8A33D"/>
+  <circle cx="400" cy="66"  r="4" fill="#E8A33D" opacity="0.6"/>
+  <circle cx="700" cy="38"  r="4" fill="#F05D5D" opacity="0.6"/>
+
+  <!-- phase labels -->
+  <g font-family="Barlow Condensed" font-size="16" letter-spacing="1.4">
+    <text x="218" y="106" fill="#E8A33D" text-anchor="middle">ACTIONABLE</text>
+    <text x="410" y="132" fill="#8A6524" text-anchor="middle">LATE</text>
+    <text x="745" y="170" fill="#F05D5D" text-anchor="middle">MISSED</text>
+  </g>
+  <g font-family="IBM Plex Mono" font-size="9.5" fill="#7C8A94">
+    <text x="218" y="122" text-anchor="middle">ext ≤ 0.35 × OR</text>
+    <text x="410" y="147" text-anchor="middle">0.35 – 1.2 × OR</text>
+    <text x="745" y="185" text-anchor="middle">&gt; 1.2 × OR — the move is spent</text>
+  </g>
+
+  <!-- y axis meaning -->
+  <text x="30" y="60" font-family="Barlow Condensed" font-size="13" fill="#7C8A94"
+        transform="rotate(-90 30 60)" letter-spacing="1">DISTANCE PAST THE BREAK</text>
+
+  <!-- scan marker -->
+  <line x1="152" y1="30" x2="152" y2="196" stroke="#4FB6C4" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="158" y="28" font-family="IBM Plex Mono" font-size="10" fill="#4FB6C4">first scan 09:32–09:35</text>
+
+  <!-- shrinking runway -->
+  <text x="960" y="238" font-family="IBM Plex Mono" font-size="9.5" fill="#7C8A94" text-anchor="end">
+    …and the runway to TP1 shrinks all day
+  </text>
+</svg>
+<p class="tl-note">
+  Two independent clocks close the window. <b style="color:var(--txt)">Extension</b> — price walks away
+  from its opening-range break, so the level you would have entered on is no longer there.
+  <b style="color:var(--txt)">Feasibility</b> — the session shortens, so there is less time for price to
+  travel to TP1. A name can fail on either. By noon most fail on both.
+</p>
+</div>
+
+<!-- ══ TABS ══ -->
+<h2><span class="n">02</span>What each tab holds</h2>
+<p class="lede">Trade from one tab. The rest exist so you can see what was filtered out, and why.</p>
+<table>
+  <thead><tr><th>Tab</th><th>Contains</th><th>What it's for</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="tab go">Actionable</span></td>
+      <td>Passed all four gates</td>
+      <td class="why">The only tab you place orders from. Empty is a valid answer — it means no stock is sitting on a clean break with time left to reach its target.</td>
+    </tr>
+    <tr>
+      <td><span class="tab">Top movers</span></td>
+      <td>Everything, ranked, ungated</td>
+      <td class="why">The day's character. Includes churn and spent moves. Read it to understand the tape, not to trade it.</td>
+    </tr>
+    <tr>
+      <td><span class="tab">Late</span></td>
+      <td>0.35–1.2 OR-widths past the break</td>
+      <td class="why">You're entering mid-move: the stop is further away and part of the reward is already gone. Reduced size, or skip.</td>
+    </tr>
+    <tr>
+      <td><span class="tab warn">Missed</span></td>
+      <td>&gt; 1.2 OR-widths extended</td>
+      <td class="why">The move happened. Only useful as a watchlist for a retest back to the opening range.</td>
+    </tr>
+    <tr>
+      <td><span class="tab warn">Churn</span></td>
+      <td>Range expansion &lt; 1.0×</td>
+      <td class="why">High volume, no range — heavy two-way trade going nowhere. The classic intraday trap: volume is not direction. These would top the board if score were additive.</td>
+    </tr>
+    <tr>
+      <td><span class="tab cy">Confluence</span></td>
+      <td>On a rung, inside a time window</td>
+      <td class="why">Price within 0.25% of a Square-of-9 level while the clock sits in a Gann reversal window. Flags where a <em>reaction</em> is likely — not which direction. Context, not a signal.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══ CARD ANATOMY ══ -->
+<h2><span class="n">03</span>Reading a card</h2>
+<p class="lede">The ladder is a price axis. Everything on it was computable at 9:30 — before the bars that follow.</p>
+
+<div class="anat">
+  <div class="anat-svg">
+  <svg viewBox="0 0 380 300" role="img" aria-label="Annotated anatomy of a Gann ladder card">
+    <!-- OR band -->
+    <rect x="78" y="120" width="150" height="42" fill="#7C8A94" opacity="0.12"/>
+    <text x="80" y="116" font-family="IBM Plex Mono" font-size="8.5" fill="#7C8A94">OR</text>
+    <!-- 50% -->
+    <line x1="20" y1="88" x2="360" y2="88" stroke="#8A6524" stroke-width="1" stroke-dasharray="5 4"/>
+    <!-- PDH/PDL -->
+    <line x1="60" y1="52" x2="330" y2="52" stroke="#7C8A94" stroke-width="1" opacity="0.4"/>
+    <line x1="60" y1="196" x2="330" y2="196" stroke="#7C8A94" stroke-width="1" opacity="0.4"/>
+    <!-- rail -->
+    <line x1="150" y1="20" x2="150" y2="280" stroke="#232C33" stroke-width="2"/>
+    <!-- rungs -->
+    <g stroke="#E8A33D" stroke-width="1.5">
+      <line x1="120" y1="66"  x2="180" y2="66"/>
+      <line x1="120" y1="100" x2="180" y2="100"/>
+      <line x1="120" y1="140" x2="180" y2="140" stroke-width="2.5"/>
+      <line x1="120" y1="180" x2="180" y2="180"/>
+      <line x1="120" y1="222" x2="180" y2="222"/>
+    </g>
+    <g font-family="IBM Plex Mono" font-size="9" fill="#E8A33D" text-anchor="end">
+      <text x="114" y="69">1,951.49</text><text x="114" y="103">1,940.12</text>
+      <text x="114" y="143" font-weight="600">1,931.50</text>
+      <text x="114" y="183">1,923.12</text><text x="114" y="225">1,913.41</text>
+    </g>
+    <!-- tags -->
+    <text x="188" y="69"  font-family="IBM Plex Mono" font-size="9" fill="#34C77B">TP1</text>
+    <text x="188" y="225" font-family="IBM Plex Mono" font-size="9" fill="#F05D5D">SL</text>
+    <!-- price marker -->
+    <line x1="20" y1="140" x2="360" y2="140" stroke="#34C77B" stroke-width="1" opacity="0.3"/>
+    <polygon points="144,140 134,134 134,146" fill="#34C77B"/>
+    <!-- gutter labels -->
+    <g font-family="IBM Plex Mono" font-size="9" text-anchor="end">
+      <text x="360" y="55" fill="#7C8A94">PDH 1,929.40</text>
+      <text x="360" y="85" fill="#8A6524">50% 1,902.30</text>
+      <text x="360" y="137" fill="#34C77B" font-weight="600">1,931.50</text>
+      <text x="360" y="199" fill="#7C8A94">PDL 1,875.20</text>
+    </g>
+    <!-- callout numbers -->
+    <g font-family="Barlow Condensed" font-size="13" fill="#101418">
+      <circle cx="92"  cy="140" r="9" fill="#E8A33D"/><text x="92"  y="145" text-anchor="middle">1</text>
+      <circle cx="203" cy="141" r="9" fill="#E8A33D"/><text x="203" y="146" text-anchor="middle">2</text>
+      <circle cx="60"  cy="141" r="9" fill="#E8A33D"/><text x="60"  y="146" text-anchor="middle">3</text>
+      <circle cx="30"  cy="88"  r="9" fill="#E8A33D"/><text x="30"  y="93"  text-anchor="middle">4</text>
+      <circle cx="245" cy="141" r="9" fill="#E8A33D"/><text x="245" y="146" text-anchor="middle">5</text>
+      <circle cx="30"  cy="196" r="9" fill="#E8A33D"/><text x="30"  y="201" text-anchor="middle">6</text>
+    </g>
+  </svg>
+  </div>
+
+  <div class="keys">
+    <div class="key"><b>1</b><span><em>Square-of-9 rungs</em> — computed from the day's open the moment it prints. Spacing adapts to each stock's own median daily range, so one rung ≈ one typical day's travel divided six ways.</span></div>
+    <div class="key"><b>2</b><span><em>SL · TP1 · TP2</em> — stop sits beyond the opening-range boundary, then targets are 1R and 2R snapped up to the next rung, so every exit lands on a Gann level.</span></div>
+    <div class="key"><b>3</b><span><em>Price marker</em> — the arrow riding the rail. When it comes within 0.25% of a rung, that rung thickens and pulses.</span></div>
+    <div class="key"><b>4</b><span><em>Gann 50% line</em> — the midpoint of yesterday's range. Gann's single most important intraday decision level.</span></div>
+    <div class="key"><b>5</b><span><em>Opening-range band</em> — 9:15–9:30 high and low. Direction comes from which side price is on; nothing else intraday is both structural and available this early.</span></div>
+    <div class="key"><b>6</b><span><em>PDH / PDL</em> — yesterday's high and low. Static, known before the bell, and where the day's decisions tend to happen.</span></div>
+  </div>
+</div>
+
+<!-- ══ GATES ══ -->
+<h2><span class="n">04</span>The four gates into Actionable</h2>
+<p class="lede">A name must clear all four. Each one exists because a specific real setup fooled the screener first.</p>
+<div class="gates">
+  <div class="gate">
+    <h3>Range is expanding</h3>
+    <p><code>range_expansion ≥ 1.0×</code> — today's range beats its own average. HDFCLIFE traded 7.27× normal volume on 0.80× range and ranked second on the board. Volume without range is a fight, not a trend.</p>
+  </div>
+  <div class="gate">
+    <h3>The level is still there</h3>
+    <p><code>extension_or ≤ 0.35</code> — price hasn't walked away from its break. DR REDDY was 6.48 OR-widths gone by the time the card rendered.</p>
+  </div>
+  <div class="gate">
+    <h3>Time to reach TP1</h3>
+    <p><code>tp1_feasible</code> — expected remaining travel is <code>ADR × √(session left)</code>. If TP1 is further than 70% of that, the trade needs a move the day no longer has room for.</p>
+  </div>
+  <div class="gate">
+    <h3>A sane stop</h3>
+    <p><code>0.15% ≤ risk ≤ 0.6 × ADR</code> — tighter than 0.15% is inside the noise and the round-trip cost. Wider is not an intraday risk profile.</p>
+  </div>
+</div>
+
+<!-- ══ LIMITS ══ -->
+<h2><span class="n">05</span>What this board cannot do</h2>
+<div class="limits">
+  <ul>
+    <li><b>The price is roughly 15 minutes old.</b> Yahoo's intraday feed for <code>.NS</code> symbols is delayed. Every card shows <code>stale_minutes</code>. Use the board to pick the name and the level; take the fill on live data through TradingView.</li>
+    <li><b>R:R at TP1 is ≈1.0 by construction.</b> TP1 <em>is</em> one unit of risk, so that ratio is a design choice, not evidence of edge. The gate that actually rejects trades is feasibility. Read <code>rr_tp2</code> if you want a number with content.</li>
+    <li><b>The Square-of-9 grid does not predict.</b> It generates levels ahead of price, which is why it can be traded without lag. That is a real advantage over any smoothed indicator, and it is not the same thing as knowing where price will go.</li>
+    <li><b>Score weights are reasoned, not backtested.</b> They rank a shortlist. They do not size a position, and they have never seen your fills.</li>
+  </ul>
+</div>
+
+<footer>
+  <span>Scan at 09:32–09:35 · auto-refresh every 3 min · the window is roughly 09:30–10:15</span>
+  <span>localhost:5000/gann</span>
+</footer>
+
+</body>
+</html>
