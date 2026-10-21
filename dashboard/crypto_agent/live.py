@@ -50,14 +50,13 @@ def _c(v):
         return ""
 
 
-def _ist(ts):
-    if not ts:
+def _ist(ts, year=False):
+    if not isinstance(ts, (str, pd.Timestamp)) or not str(ts) or str(ts) == "nan":
         return "–"
     try:
-        return pd.Timestamp(ts).tz_convert(IST).strftime("%d %b %H:%M")
+        return pd.Timestamp(ts).tz_convert(IST).strftime("%d %b %Y %H:%M" if year else "%d %b %H:%M")
     except Exception:
         return str(ts)
-
 
 def _table(head, rows, left=1):
     h = "".join(f"<th class='{'l' if i < left else ''}'>{x}</th>" for i, x in enumerate(head))
@@ -69,18 +68,51 @@ def _swing_section() -> str:
     if not os.path.isfile(p):
         return ""
     d = pd.read_csv(p).head(25)
+    tp = os.path.join(config.REPORT_DIR, "swing_trades.csv.gz")
+    trades = pd.read_csv(tp) if os.path.isfile(tp) else pd.DataFrame()
     rows = [f"<tr><td class='l'>{r.coin}</td><td class='l'>{html.escape(str(r.strategy))}</td><td>{int(r.btc_target)}</td>"
             f"<td>{int(r.btc_stop)}</td><td>{int(r.trades)}</td><td>{_f(r.trades_per_month, 1)}</td><td>{_f(r['success%'], 1)}</td>"
             f"<td class='{_c(r.exp_R)}'>{_f(r.exp_R, 3, True)}</td><td class='{_c(r.exp_R_h1)}'>{_f(r.exp_R_h1, 3, True)}</td>"
             f"<td class='{_c(r.exp_R_h2)}'>{_f(r.exp_R_h2, 3, True)}</td><td>{_f(r.t_stat, 2)}</td><td>{_f(r.avg_hold_d, 1)}</td>"
             f"<td class='l'><span class='chip {'rec' if r.verdict == 'robust edge' else ''}'>{r.verdict}</span></td></tr>"
             for _, r in d.iterrows()]
+    lists = []
+    if not trades.empty:
+        for _, r in d.iterrows():
+            t = trades[(trades.coin == r.coin) & (trades.strategy == r.strategy)
+                       & (trades.btc_target == r.btc_target) & (trades.btc_stop == r.btc_stop)]
+            if t.empty:
+                continue
+            t = t.sort_values("entry_ts", ascending=False)
+            body = []
+            for _, x in t.iterrows():
+                sgn = 1 if x.side == "long" else -1
+                stop = x.entry - sgn * x.stop_pts
+                tgt = x.entry + sgn * x.target_pts
+                body.append(
+                    f"<tr><td>{_ist(x.entry_ts, True)}</td><td class='l {'pos' if x.side == 'long' else 'neg'}'>{x.side}</td>"
+                    f"<td>{_f(x.entry)}</td><td>{_f(stop)}</td><td>{_f(tgt)}</td><td>{_ist(x.exit_ts, True)}</td><td>{_f(x.exit)}</td>"
+                    f"<td class='l'>{str(x.outcome).replace('_', ' ')}</td>"
+                    f"<td class='{_c(x.net_pts)}'>{_f(x.net_pts, 1, True)}</td><td class='{_c(x.R)}'>{_f(x.R, 2, True)}</td></tr>")
+            wins = int((t.net_pts > 0).sum())
+            lists.append(
+                f"<details><summary><b>{r.coin} {html.escape(str(r.strategy))} {int(r.btc_target)}/{int(r.btc_stop)}</b> — "
+                f"{len(t)} trades, {wins} profitable, total {_f(t.R.sum(), 1, True)}R ▸</summary>"
+                "<div class='card' style='margin:6px 0 12px'><table><tr><th>Entry (IST)</th><th class='l'>Side</th><th>Entry</th>"
+                "<th>Stop</th><th>Target</th><th>Exit (IST)</th><th>Exit</th><th class='l'>Result</th><th>Net pts</th><th>R</th></tr>"
+                + "".join(body) + "</table></div></details>")
+    trade_html = ("<h3 style='font-size:14px;margin:18px 0 6px'>Backtest trades — click a strategy to see every trade (daily signals enter at 05:30 IST, the open after the UTC daily close)</h3>"
+                  "<div style='font-size:13px'>" + "".join(lists) + "</div>") if lists else ""
     return ("<h2>Multi-day swing backtest " + html.escape(str(d['span'].iloc[0])) + "</h2>"
             "<p class='note'>Targets 3000 / 5000 BTC points (ETH same %), stops 1500 / 2500, max 10-day hold, one position at a time "
-            "per strategy, fees included. Robust edge = profitable in both halves, ≥ 20 trades, t ≥ 2.</p>"
+            "per strategy, fees included.<br><b>Robust edge</b> = passes all three checks: (1) profitable after fees in BOTH halves "
+            "of the 3 years, so it is not one lucky period; (2) at least 20 trades; (3) t-stat ≥ 2, i.e. roughly a 1-in-40 chance "
+            "or less that a strategy with no real edge would show a result this good. <b>Positive, not significant</b> = profitable "
+            "in both halves but luck cannot be ruled out yet. <b>Exp R</b> = average profit per trade in units of risk "
+            "(+0.46R with a 1500-point stop ≈ +690 BTC points per trade).</p>"
             "<div class='card'>" + _table(["Coin", "Strategy", "Target", "Stop", "Trades", "Per month", "Success %", "Exp R",
-                                           "1st half", "2nd half", "t", "Avg hold (days)", "Verdict"], rows, 2) + "</div>")
-
+                                           "1st half", "2nd half", "t", "Avg hold (days)", "Verdict"], rows, 2) + "</div>"
+            + trade_html)
 
 def _swing_live() -> str:
     try:
