@@ -234,9 +234,46 @@ fees+slippage {(cfg['fee_per_side'] + cfg['slippage_per_side']) * 200:.2f}% roun
 t-stat ≥ {cfg.get('min_t_stat', 2.0)}; ranked by the weaker half. Target-hit % = reached +{cfg['btc_target_pts']} pts; success % = closed with net profit (includes profitable time exits).</p>
 <div class="card">{_table(["Coin", "Strategy", "Stop", "R:R", "Trades", "Per day", "Target hit %", "Success %", "Exp R", "1st half", "2nd half",
                             "PF", "Max DD (R)", "Worst streak", "Cost pts", "t", "Verdict"], bt_rows, 2)}</div>
+{_swing_section()}
+{_levels_section()}
 </main></body></html>"""
     path = os.path.join(config.REPORT_DIR, "crypto.html")
     with open(path, "w", encoding="utf-8") as f:
         f.write(page)
     log(f"crypto page: {path}")
     return path
+
+
+def _levels_section() -> str:
+    p = os.path.join(config.REPORT_DIR, "levels_backtest.csv")
+    if not os.path.isfile(p):
+        return ""
+    d = pd.read_csv(p).head(20)
+    rows = [f"<tr><td class='l'>{r.coin}</td><td class='l'>{html.escape(str(r.family))}</td><td class='l'>{r.rule}</td>"
+            f"<td>{int(r.btc_stop)}</td><td>{int(r.trades)}</td><td>{_f(r.trades_per_month, 1)}</td><td>{_f(r['success%'], 1)}</td>"
+            f"<td class='{_c(r.exp_R)}'>{_f(r.exp_R, 3, True)}</td><td class='{_c(r.exp_R_h1)}'>{_f(r.exp_R_h1, 3, True)}</td>"
+            f"<td class='{_c(r.exp_R_h2)}'>{_f(r.exp_R_h2, 3, True)}</td><td>{_f(r.t_stat, 2)}</td>"
+            f"<td class='l'><span class='chip'>{r.verdict}</span></td></tr>" for _, r in d.iterrows()]
+    return ("<h2>Trade only at my level — price/time levels backtest " + html.escape(str(d['span'].iloc[0])) + "</h2>"
+            "<p class='note'>Levels from confirmed 6-hour swings: trendlines, Gann 1×1 / 1×2 timing lines, 1.5× / 2× projections, "
+            "pivot horizontals. Each level traded once, on its first touch (fade) or first retest after a break.</p>"
+            "<div class='card'>" + _table(["Coin", "Level family", "Rule", "Stop", "Trades", "Per month", "Success %", "Exp R",
+                                           "1st half", "2nd half", "t", "Verdict"], rows, 3) + "</div>")
+
+
+def _swing_section() -> str:
+    p = os.path.join(config.REPORT_DIR, "swing_backtest.csv")
+    if not os.path.isfile(p):
+        return ""
+    d = pd.read_csv(p).head(25)
+    rows = [f"<tr><td class='l'>{r.coin}</td><td class='l'>{html.escape(str(r.strategy))}</td><td>{int(r.btc_target)}</td>"
+            f"<td>{int(r.btc_stop)}</td><td>{int(r.trades)}</td><td>{_f(r.trades_per_month, 1)}</td><td>{_f(r['success%'], 1)}</td>"
+            f"<td class='{_c(r.exp_R)}'>{_f(r.exp_R, 3, True)}</td><td class='{_c(r.exp_R_h1)}'>{_f(r.exp_R_h1, 3, True)}</td>"
+            f"<td class='{_c(r.exp_R_h2)}'>{_f(r.exp_R_h2, 3, True)}</td><td>{_f(r.t_stat, 2)}</td><td>{_f(r.avg_hold_d, 1)}</td>"
+            f"<td class='l'><span class='chip {'rec' if r.verdict == 'robust edge' else ''}'>{r.verdict}</span></td></tr>"
+            for _, r in d.iterrows()]
+    return ("<h2>Multi-day swing backtest " + html.escape(str(d['span'].iloc[0])) + "</h2>"
+            "<p class='note'>Targets 3000 / 5000 BTC points (ETH same %), stops 1500 / 2500, max 10-day hold, one position at a time "
+            "per strategy, fees included. Robust edge = profitable in both halves, ≥ 20 trades, t ≥ 2.</p>"
+            "<div class='card'>" + _table(["Coin", "Strategy", "Target", "Stop", "Trades", "Per month", "Success %", "Exp R",
+                                           "1st half", "2nd half", "t", "Avg hold (days)", "Verdict"], rows, 2) + "</div>")

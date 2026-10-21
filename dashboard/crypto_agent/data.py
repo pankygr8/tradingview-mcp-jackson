@@ -117,7 +117,7 @@ def load_cache(coin: str) -> pd.DataFrame:
     return df
 
 
-def save_cache(coin: str, df: pd.DataFrame, keep_days: int = 400) -> None:
+def save_cache(coin: str, df: pd.DataFrame, keep_days: int = 1200) -> None:
     if df.empty:
         return
     df = df[df.index >= df.index[-1] - pd.Timedelta(days=keep_days)]
