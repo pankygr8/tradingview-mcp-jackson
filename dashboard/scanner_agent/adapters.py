@@ -126,7 +126,9 @@ class ATHAdapter:
 
 class SwingAdapter:
     name, horizon = "swing", "daily"
-    BUCKETS = ("tradeable", "pullback", "breakouts", "coiled")
+    # time_cycle       = any setup whose bar-count from the pivot sits on a Gann cycle
+    # tradeable_time   = fully tradeable setup that is ALSO on a Gann time cycle
+    BUCKETS = ("tradeable", "pullback", "breakouts", "coiled", "time_cycle", "tradeable_time")
 
     def run(self, universe, timeout):
         import swing_screener as m
@@ -136,6 +138,8 @@ class SwingAdapter:
 
     def normalize(self, payload, ctx):
         recs = []
+        payload = dict(payload)
+        payload["tradeable_time"] = [r for r in payload.get("tradeable", []) or [] if r.get("gann_time_cycle")]
         for b in self.BUCKETS:
             for r in payload.get(b, []) or []:
                 if not r.get("entry") or not r.get("stop"):
@@ -149,7 +153,8 @@ class SwingAdapter:
                     meta={"setup": r.get("setup"), "rr": r.get("rr"), "risk_pct": r.get("risk_pct"),
                           "rs_63d": r.get("rs_63d"), "coil_ratio": r.get("coil_ratio"),
                           "rvol_daily": r.get("rvol_daily"),
-                          "dist_to_entry_pct": r.get("dist_to_entry_pct")}))
+                          "dist_to_entry_pct": r.get("dist_to_entry_pct"),
+                          "time_cycle": bool(r.get("gann_time_cycle"))}))
         return recs, list(self.BUCKETS)
 
 
@@ -183,12 +188,16 @@ class FibAdapter:
                 if (s.get("bars_ago") or 0) > max_age:
                     continue
                 q = r.get("quality") or {}
-                recs.append(_rec(ctx, self.name, key, r, side, self.horizon, r.get("current_price"),
-                                 score=q.get("score") if isinstance(q, dict) else q,
-                                 meta={"bars_ago": s.get("bars_ago"), "f0125": s.get("f0125"),
-                                       "f0875": s.get("f0875"), "valid": s.get("valid"),
-                                       "trend": q.get("trend") if isinstance(q, dict) else None}))
-        return recs, ["buy", "sell"]
+                pt = (r.get("pt_square") or {}).get("score") or 0
+                meta = {"bars_ago": s.get("bars_ago"), "f0125": s.get("f0125"),
+                        "f0875": s.get("f0875"), "valid": s.get("valid"),
+                        "trend": q.get("trend") if isinstance(q, dict) else None,
+                        "pt_score": pt}
+                buckets = [key] + ([f"{key}_pt"] if pt >= 60 else [])   # fib signal ON a Gann time cycle
+                for b in buckets:
+                    recs.append(_rec(ctx, self.name, b, r, side, self.horizon, r.get("current_price"),
+                                     score=q.get("score") if isinstance(q, dict) else q, meta=meta))
+        return recs, ["buy", "sell", "buy_pt", "sell_pt"]
 
 
 # ═════════════════════════════════════════════════════════════════════════════
@@ -303,6 +312,36 @@ class MomentumAdapter:
         return recs, ["actionable", "arming"]
 
 
+# ═════════════════════════════════════════════════════════════════════════════
+# 7. Price = time square (scanner_agent/pricetime.py) — experimental
+# ═════════════════════════════════════════════════════════════════════════════
+
+class PriceTimeAdapter:
+    name, horizon = "price_time", "daily"
+
+    def run(self, universe, timeout):
+        from . import pricetime
+        from screener import UNIVERSES
+        return pricetime.scan(UNIVERSES.get(universe) or UNIVERSES["nifty200"])
+
+    def normalize(self, payload, ctx):
+        from screener import ALL_SYMBOLS
+        recs = []
+        for r in payload.get("square", []) or []:
+            r = {**r, "name": ALL_SYMBOLS.get(r["symbol"], r["symbol"])}
+            reversal = "long" if r["move"] == "down" else "short"
+            cont = "short" if reversal == "long" else "long"
+            meta = {k: r.get(k) for k in ("bars_from_pivot", "units_moved", "pt_ratio", "pt_gap",
+                                          "unit_pct", "move", "turned")}
+            score = -r["pt_gap"]
+            recs.append(_rec(ctx, self.name, "pt_reversal", r, reversal, "daily", r["close"], score=score, meta=meta))
+            if r["turned"]:
+                recs.append(_rec(ctx, self.name, "pt_reversal_confirmed", r, reversal, "daily", r["close"],
+                                 score=score, meta=meta))
+            recs.append(_rec(ctx, self.name, "pt_continuation", r, cont, "daily", r["close"], score=score, meta=meta))
+        return recs, ["pt_reversal", "pt_reversal_confirmed", "pt_continuation"]
+
+
 ADAPTERS = {
     "ath": ATHAdapter(),
     "swing": SwingAdapter(),
@@ -311,6 +350,7 @@ ADAPTERS = {
     "gann_fan_1d": GannFanAdapter(),
     "intraday": IntradayAdapter(),
     "momentum": MomentumAdapter(),
+    "price_time": PriceTimeAdapter(),
 }
 
 SCANNER_LABELS = {
@@ -321,4 +361,5 @@ SCANNER_LABELS = {
     "gann_fan_1d": "Gann Fan 1D (gann_fan_engine.py)",
     "intraday": "Intraday movers (intraday_screener.py)",
     "momentum": "Momentum (Momentum_scanner.py)",
+    "price_time": "Price = Time square (pricetime.py)",
 }

@@ -32,7 +32,7 @@ from .prices import PriceCache
 PERIOD_DAYS = {"max": None, "10y": 3653, "5y": 1827, "2y": 731, "1y": 366,
                "6mo": 183, "3mo": 92, "1mo": 31, "60d": 60, "5d": 7}
 
-REPLAYABLE = ("ath", "swing", "fib_1d", "gann_fan_1d")
+REPLAYABLE = ("ath", "swing", "fib_1d", "gann_fan_1d", "price_time")
 
 
 class _FakeTicker:
@@ -102,6 +102,9 @@ def _run_module_sync(scanner: str, symbols: list[str], universe: str) -> dict:
         from screener import ALL_SYMBOLS
         m._jobs[jid] = job
         m._run_scan_thread(jid, {s: ALL_SYMBOLS.get(s, s) for s in symbols}, "1d")
+    elif scanner == "price_time":
+        from . import pricetime
+        return pricetime.scan(symbols)
     else:
         raise ValueError(f"{scanner} is not replayable")
     res = m._jobs[jid].get("results") or {}
@@ -127,7 +130,8 @@ def replay(scanners: list[str] | None = None, lookback_days: int | None = None,
     import swing_screener
     import signal_engine
     import gann_fan_engine
-    modules = [screener, swing_screener, signal_engine, gann_fan_engine]
+    from . import pricetime
+    modules = [screener, swing_screener, signal_engine, gann_fan_engine, pricetime]
 
     # universe per scanner (the override keeps replay time sane)
     uni_of = {s: (universe or rc.get("universe_override") or cfg["scanners"][s]["universe"])

@@ -228,6 +228,8 @@ HEAD = ("<th>Signals</th><th>Trades</th><th>Success</th><th>Failed</th><th>Succe
 
 
 def _chart(by_day: pd.DataFrame) -> str:
+    if by_day.empty:
+        return ""
     d = by_day.sort_values("session").tail(60)
     if d.empty or d["trades"].sum() == 0:
         return ""

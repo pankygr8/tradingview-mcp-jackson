@@ -28,6 +28,7 @@ DEFAULTS: dict = {
         "swing":        {"enabled": True,  "group": "daily",    "universe": "nifty500"},
         "fib_1d":       {"enabled": True,  "group": "daily",    "universe": "nifty200"},
         "gann_fan_1d":  {"enabled": True,  "group": "daily",    "universe": "nifty200"},
+        "price_time":   {"enabled": True,  "group": "daily",    "universe": "nifty500"},
         "intraday":     {"enabled": True,  "group": "intraday", "universe": "fno"},
         "momentum":     {"enabled": True,  "group": "intraday", "universe": "fno"},
         "fib_15m":      {"enabled": False, "group": "intraday", "universe": "nifty100"},
@@ -71,7 +72,7 @@ DEFAULTS: dict = {
 
     # ── Replay (historical back-fill for daily scanners) ────────────────────
     "replay": {
-        "lookback_days": 365,
+        "lookback_days": 1095,              # 3 years — 1 year gave too few trades per bucket
         "step_days": 5,                     # run the scanners every N trading days
         "universe_override": "nifty100",    # smaller universe = faster replay
     },
