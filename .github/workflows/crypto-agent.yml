@@ -1,0 +1,91 @@
+# BTC / ETH intraday paper-trading agent (dashboard/crypto_agent).
+# Runs every 15 minutes, 24/7. Signals and paper trades only — never sends orders.
+#
+# State lives in the crypto/ folder of the shared `agent-data` branch and is
+# published at https://<user>.github.io/<repo>/crypto/
+#
+# GitHub's own scheduler is unreliable for this repo, so also add a second
+# cron-job.org job that POSTs to .../actions/workflows/crypto-agent.yml/dispatches
+# with body {"ref":"main"} every 15 minutes, every day.
+name: crypto-agent
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "live | backtest | report"
+        default: "live"
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: agent-data          # shared with scanner-agent.yml — both write the same data branch
+  cancel-in-progress: false
+
+env:
+  TZ: Asia/Kolkata
+  DATA_BRANCH: agent-data
+  STATE: dashboard/crypto_agent/state
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: dashboard/scanner_agent/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r dashboard/scanner_agent/requirements.txt
+
+      - name: Restore crypto state from the data branch
+        run: |
+          mkdir -p "$STATE"
+          if git fetch --depth 1 origin "$DATA_BRANCH" 2>/dev/null && \
+             git ls-tree -d "origin/$DATA_BRANCH" crypto | grep -q crypto; then
+            tmp=$(mktemp -d)
+            git archive "origin/$DATA_BRANCH" crypto | tar -x -C "$tmp"
+            cp -r "$tmp/crypto/." "$STATE/"
+            rm -f "$STATE/index.html"
+            echo "restored crypto state"
+          else
+            echo "no crypto state yet - run once with command 'backtest'"
+          fi
+
+      - name: Run crypto agent
+        working-directory: dashboard
+        env:
+          CMD: ${{ github.event.inputs.command || 'live' }}
+        run: python -m crypto_agent $CMD
+
+      - name: Save crypto state to the data branch
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          out=$(mktemp -d)
+          git fetch --depth 1 origin "$DATA_BRANCH" 2>/dev/null || true
+          if git rev-parse -q --verify "origin/$DATA_BRANCH" >/dev/null; then
+            git archive "origin/$DATA_BRANCH" | tar -x -C "$out"
+          fi
+          rm -rf "$out/crypto"
+          mkdir -p "$out/crypto"
+          cp -r "$STATE/." "$out/crypto/"
+          [ -f "$STATE/reports/crypto.html" ] && cp "$STATE/reports/crypto.html" "$out/crypto/index.html"
+          touch "$out/.nojekyll"
+          cd "$out"
+          git init -q -b "$DATA_BRANCH"
+          git add -A
+          git -c user.name="crypto-agent" -c user.email="actions@users.noreply.github.com" \
+              commit -qm "crypto run ${{ github.run_number }} $(date '+%Y-%m-%d %H:%M IST')"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" "$DATA_BRANCH"
+          echo "saved crypto/ to $DATA_BRANCH"

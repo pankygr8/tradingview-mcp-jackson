@@ -28,7 +28,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: scanner-agent
+  group: agent-data          # shared with crypto-agent.yml — both write the same data branch
   cancel-in-progress: false
 
 env:
@@ -91,6 +91,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           out=$(mktemp -d)
+          # keep everything else on the branch (e.g. crypto/ from crypto-agent.yml)
+          if git rev-parse -q --verify "origin/$DATA_BRANCH" >/dev/null; then
+            git archive "origin/$DATA_BRANCH" | tar -x -C "$out"
+            rm -rf "$out/reports"
+          fi
           for f in agent.db state.json; do [ -f "$AGENT_DIR/$f" ] && cp "$AGENT_DIR/$f" "$out/"; done
           [ -f "$AGENT_DIR/agent.log" ] && tail -n 3000 "$AGENT_DIR/agent.log" > "$out/agent.log"
           [ -d "$AGENT_DIR/reports" ] && cp -r "$AGENT_DIR/reports" "$out/"

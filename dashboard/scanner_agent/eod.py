@@ -371,7 +371,7 @@ def render(cfg: dict | None = None, log=print) -> dict:
 
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="refresh" content="300"><title>Daily Scanner Results</title><style>{report.CSS}{EXTRA_CSS}</style></head><body><main>
-<nav><a href="index.html">Leaderboard</a><a href="daily.html">Daily results</a></nav>
+<nav><a href="index.html">Leaderboard</a><a href="daily.html">Daily results</a><a href="crypto/index.html">Crypto</a></nav>
 <h1>Daily scanner results</h1>
 <p class="sub">Updated {ist_now():%d %b %Y %H:%M} IST · success = trade closed with R &gt; 0 · page reloads every 5 min</p>
 {kpis(latest, f"Latest session — {latest['session']}" if latest is not None else "")}
