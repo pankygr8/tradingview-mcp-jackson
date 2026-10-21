@@ -1,8 +1,10 @@
-# BTC / ETH intraday paper-trading agent (dashboard/crypto_agent).
+# BTC / ETH swing paper trading (dashboard/crypto_agent) and the Nifty 200
+# intraday + swing screener (dashboard/nifty_agent).
 # Runs every 15 minutes, 24/7. Signals and paper trades only — never sends orders.
 #
-# State lives in the crypto/ folder of the shared `agent-data` branch and is
-# published at https://<user>.github.io/<repo>/crypto/
+# State lives in the crypto/ and nifty200/ folders of the shared `agent-data`
+# branch, published at https://<user>.github.io/<repo>/crypto/ and /nifty200/
+# (the Nifty agent does nothing outside market hours except after 16:00 IST).
 #
 # GitHub's own scheduler is unreliable for this repo, so also add a second
 # cron-job.org job that POSTs to .../actions/workflows/crypto-agent.yml/dispatches
@@ -18,8 +20,8 @@ on:
         description: "live | swing --months 36 | report | test-alert"
         default: "live"
         required: true
-      commodity_command:
-        description: "Commodity agent: live | backtest | report"
+      nifty_command:
+        description: "Nifty 200 screener: live | backtest | report | test-alert"
         default: "live"
         required: true
 
@@ -38,7 +40,7 @@ env:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
 
@@ -65,15 +67,15 @@ jobs:
             echo "no crypto state yet - run once with command 'backtest'"
           fi
 
-      - name: Restore commodity state from the data branch
+      - name: Restore Nifty 200 state from the data branch
         run: |
-          mkdir -p dashboard/commodity_agent/state
+          mkdir -p dashboard/nifty_agent/state
           if git rev-parse -q --verify "origin/$DATA_BRANCH" >/dev/null && \
-             git ls-tree -d "origin/$DATA_BRANCH" commodity | grep -q commodity; then
+             git ls-tree -d "origin/$DATA_BRANCH" nifty200 | grep -q nifty200; then
             tmp=$(mktemp -d)
-            git archive "origin/$DATA_BRANCH" commodity | tar -x -C "$tmp"
-            cp -r "$tmp/commodity/." dashboard/commodity_agent/state/
-            rm -f dashboard/commodity_agent/state/index.html
+            git archive "origin/$DATA_BRANCH" nifty200 | tar -x -C "$tmp"
+            cp -r "$tmp/nifty200/." dashboard/nifty_agent/state/
+            rm -f dashboard/nifty_agent/state/index.html
           fi
 
       - name: Run crypto agent
@@ -85,15 +87,15 @@ jobs:
           CRYPTO_PAGE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/crypto/
         run: python -m crypto_agent $CMD
 
-      - name: Run commodity agent
+      - name: Run Nifty 200 screener
         continue-on-error: true
         working-directory: dashboard
         env:
-          CMD: ${{ github.event.inputs.commodity_command || 'live' }}
+          CMD: ${{ github.event.inputs.nifty_command || 'live' }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          COMMODITY_PAGE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/commodity/
-        run: python -m commodity_agent $CMD
+          NIFTY_PAGE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/nifty200/
+        run: python -m nifty_agent $CMD
 
       - name: Save crypto state to the data branch
         if: always()
@@ -109,10 +111,11 @@ jobs:
           mkdir -p "$out/crypto"
           cp -r "$STATE/." "$out/crypto/"
           [ -f "$STATE/reports/crypto.html" ] && cp "$STATE/reports/crypto.html" "$out/crypto/index.html"
-          if [ -d dashboard/commodity_agent/state ]; then
-            rm -rf "$out/commodity"; mkdir -p "$out/commodity"
-            cp -r dashboard/commodity_agent/state/. "$out/commodity/"
-            [ -f "$out/commodity/reports/commodity.html" ] && cp "$out/commodity/reports/commodity.html" "$out/commodity/index.html"
+          rm -rf "$out/commodity"          # commodities removed 22 Oct 2026
+          if [ -d dashboard/nifty_agent/state ]; then
+            rm -rf "$out/nifty200"; mkdir -p "$out/nifty200"
+            cp -r dashboard/nifty_agent/state/. "$out/nifty200/"
+            [ -f "$out/nifty200/reports/nifty200.html" ] && cp "$out/nifty200/reports/nifty200.html" "$out/nifty200/index.html"
           fi
           touch "$out/.nojekyll"
           cd "$out"
@@ -121,4 +124,4 @@ jobs:
           git -c user.name="crypto-agent" -c user.email="actions@users.noreply.github.com" \
               commit -qm "crypto run ${{ github.run_number }} $(date '+%Y-%m-%d %H:%M IST')"
           git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" "$DATA_BRANCH"
-          echo "saved crypto/ to $DATA_BRANCH"
+          echo "saved crypto/ and nifty200/ to $DATA_BRANCH"

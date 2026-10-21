@@ -279,7 +279,7 @@ def render(cfg: dict | None = None, con=None, log=print) -> dict:
     n_rep = int((df["source"] == "replay").sum()) if not df.empty else 0
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="refresh" content="300"><title>Scanner Leaderboard</title><style>{CSS}</style></head><body><main>
-<nav style="margin-bottom:10px"><a href="index.html" style="color:var(--acc);font-weight:600;text-decoration:none;margin-right:14px">Leaderboard</a><a href="daily.html" style="color:var(--acc);font-weight:600;text-decoration:none;margin-right:14px">Daily results</a><a href="crypto/index.html" style="color:var(--acc);font-weight:600;text-decoration:none;margin-right:14px">Crypto</a><a href="commodity/index.html" style="color:var(--acc);font-weight:600;text-decoration:none">Commodities</a></nav>
+<nav style="margin-bottom:10px"><a href="index.html" style="color:var(--acc);font-weight:600;text-decoration:none;margin-right:14px">Leaderboard</a><a href="daily.html" style="color:var(--acc);font-weight:600;text-decoration:none;margin-right:14px">Daily results</a><a href="nifty200/index.html" style="color:var(--acc);font-weight:600;text-decoration:none;margin-right:14px">Nifty 200</a><a href="crypto/index.html" style="color:var(--acc);font-weight:600;text-decoration:none">Crypto</a></nav>
 <h1>Scanner leaderboard</h1>
 <p class="sub">Updated {ist_now():%d %b %Y %H:%M} IST · {n_live} live signals · {n_rep} replay signals · page reloads every 5 min</p>
 <h2>Today's trade plan — latest session's fresh picks, ranked by their bucket's track record</h2>
