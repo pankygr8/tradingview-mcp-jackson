@@ -1,3 +1,3 @@
-"""BTC / ETH intraday paper-trading agent: backtests intraday ideas against a
-fixed 1000-point BTC target (ETH scaled to the same %), recommends the ones
-that hold up in both halves of the test period, and paper-trades them live."""
+"""BTC / ETH swing paper-trading agent: multi-day breakout strategies that held
+up in a 3-year backtest (3000/5000-point targets), tracked forward on live
+Hyperliquid prices. Signals only — no orders are sent."""

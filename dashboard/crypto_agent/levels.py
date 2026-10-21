@@ -1,6 +1,9 @@
 """
-levels.py — "trade only at my level": price/time levels derived by rule, traded
-only when price comes to them.
+levels.py — price/time levels derived by rule (library used by swing.py).
+
+The intraday "trade only at my level" backtest was removed on 21 Oct 2026
+(no edge after costs over 13 months, see claude/crypto-backtest-findings.md);
+the level construction and trade simulation remain for the daily-swing tests.
 
 This codifies a reading of the hand-drawn "invisible trendline" method
 (btc_invisible_trendlines.pine) so it can be backtested without hindsight.
@@ -32,7 +35,7 @@ Trade rules (on 5-minute bars)
                 first return to the level within 24 h → trade in the break's
                 direction at the level
   Exits: target 1000 BTC points (ETH same %), stop from the grid, time exit
-  after `max_hold_h`. Same conservative fill rules and costs as strategies.py.
+  after `max_hold_h`. Conservative fill rules: stop-first on ambiguous bars, gaps fill at the open.
 """
 
 from __future__ import annotations
@@ -218,49 +221,3 @@ def trade_lines(lines: list[Line], df5: pd.DataFrame, rule: str, tgt_frac: pd.Se
                     "cost_pts": cst, "net_pts": gross - cst, "R": (gross - cst) / stop_pts,
                     "hold_h": (idx[xi] - idx[i]).total_seconds() / 3600})
     return out
-
-
-# ── backtest driver ──────────────────────────────────────────────────────────
-
-def backtest(frames: dict, cfg: dict, wing: int = 3, log=print) -> tuple[pd.DataFrame, pd.DataFrame]:
-    from .backtest import _stats
-    btc = frames["BTC"]["Close"]
-    cost = cfg["fee_per_side"] + cfg["slippage_per_side"]
-    rows, trades = [], []
-    for coin, df in frames.items():
-        if df.empty:
-            continue
-        ref = btc.reindex(df.index, method="ffill").bfill()
-        piv = pivots(df, wing=wing)
-        lines = build_lines(piv)
-        days = sorted(set(df.index.floor("D")))
-        mid = days[len(days) // 2]
-        log(f"levels: {coin} {len(piv)} pivots, {len(lines)} levels, {days[0]:%Y-%m-%d} → {days[-1]:%Y-%m-%d}")
-        for rule in RULES:
-            for stop in cfg["btc_stop_grid"]:
-                tr = pd.DataFrame(trade_lines(lines, df, rule, cfg["btc_target_pts"] / ref, stop / ref, cost))
-                if tr.empty:
-                    continue
-                tr["coin"], tr["btc_stop"] = coin, stop
-                trades.append(tr)
-                for fam in ("ALL",) + FAMILIES:
-                    t = tr if fam == "ALL" else tr[tr.family == fam]
-                    if t.empty:
-                        continue
-                    s, h1, h2 = _stats(t), _stats(t[t.day < mid]), _stats(t[t.day >= mid])
-                    rows.append({"coin": coin, "family": fam, "rule": rule, "btc_stop": stop,
-                                 "trades_per_month": round(s.get("trades", 0) / (len(days) / 30.4), 1),
-                                 **s, "exp_R_h1": h1.get("exp_R"), "exp_R_h2": h2.get("exp_R"),
-                                 "avg_hold_h": round(float(t.hold_h.mean()), 1),
-                                 "span": f"{days[0]:%Y-%m-%d} → {days[-1]:%Y-%m-%d}"})
-    res = pd.DataFrame(rows)
-    if res.empty:
-        return res, pd.DataFrame()
-    ok = ((res.trades >= cfg["min_trades"]) & (res.exp_R_h1 > 0) & (res.exp_R_h2 > 0)
-          & (res.t_stat >= cfg.get("min_t_stat", 2.0)))
-    res["verdict"] = np.where(ok, "robust edge",
-                     np.where(res.trades < cfg["min_trades"], "too few trades",
-                     np.where((res.exp_R_h1 > 0) & (res.exp_R_h2 > 0), "positive, not significant",
-                     np.where(res.exp_R > 0, "unstable (one half only)", "no edge"))))
-    res = res.sort_values("exp_R", ascending=False).reset_index(drop=True)
-    return res, pd.concat(trades) if trades else pd.DataFrame()

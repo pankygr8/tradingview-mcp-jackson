@@ -113,6 +113,8 @@ def update(frames: dict, cfg: dict | None = None, log=print) -> None:
             "last_price": float(df["Close"].iloc[-1]),
         })
     pd.DataFrame(rows).to_csv(TRADES, index=False)
+    with open(os.path.join(config.STATE_DIR, "last_prices.json"), "w") as f:
+        json.dump({c: [float(df["Close"].iloc[-1]), str(df.index[-1])] for c, df in frames.items() if not df.empty}, f)
     with open(STATUS, "w") as f:
         json.dump({"start": start.isoformat(), "updated": pd.Timestamp.now(tz="UTC").isoformat(),
                    "status": status}, f, default=str)
@@ -168,13 +170,13 @@ def section() -> str:
         t = t[t.status == "closed"].sort_values("exit_ts", ascending=False) if not t.empty else t
         if not t.empty:
             tr = "".join(
-                f"<tr><td class='l'>{r.coin}</td><td class='l'>{html.escape(r.strategy)}</td><td class='l'>{r.side}</td>"
+                f"<tr><td class='l'>{r.coin}</td><td class='l'>{html.escape(r.strategy)}</td><td>{int(r.btc_target)}/{int(r.btc_stop)}</td><td class='l'>{r.side}</td>"
                 f"<td>{pd.Timestamp(r.entry_ts).tz_convert('Asia/Kolkata'):%d %b %H:%M}</td><td>{_f(r.entry)}</td>"
                 f"<td>{pd.Timestamp(r.exit_ts).tz_convert('Asia/Kolkata'):%d %b %H:%M}</td><td>{_f(r.exit)}</td>"
                 f"<td class='l'>{r.outcome.replace('_', ' ')}</td><td class='{_c(r.net_pts)}'>{_f(r.net_pts, 1, True)}</td>"
                 f"<td class='{_c(r.R)}'>{_f(r.R, 2, True)}</td></tr>" for _, r in t.head(50).iterrows())
             closed_html = ("<h3 style='font-size:14px;margin:16px 0 6px'>Closed swing trades</h3><div class='card'><table><tr>"
-                           "<th class='l'>Coin</th><th class='l'>Strategy</th><th class='l'>Side</th><th>Entry (IST)</th><th>Entry</th>"
+                           "<th class='l'>Coin</th><th class='l'>Strategy</th><th>Target/Stop</th><th class='l'>Side</th><th>Entry (IST)</th><th>Entry</th>"
                            "<th>Exit (IST)</th><th>Exit</th><th class='l'>Result</th><th>Net pts</th><th>R</th></tr>" + tr + "</table></div>")
     return (f"<h2>Swing paper trading — live since {start:%d %b %Y %H:%M} IST</h2>"
             "<p class='note'>Strategies that held up in the 3-year test (multi-day holds, max 10 days, one position at a time each). "

@@ -153,7 +153,7 @@ def run_signals(sigs, h1: pd.DataFrame, tgt_frac: pd.Series, stop_frac: pd.Serie
 
 
 def backtest(frames: dict, cfg: dict, log=print) -> tuple[pd.DataFrame, pd.DataFrame]:
-    from .backtest import _stats
+    from .stats import _stats
     cost = cfg["fee_per_side"] + cfg["slippage_per_side"]
     btc_close = _h1(frames["BTC"])["Close"]
     rows, trades = [], []
