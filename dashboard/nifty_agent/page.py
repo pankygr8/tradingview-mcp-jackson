@@ -81,10 +81,15 @@ def _verdict_chip(v):
 
 # ── intraday section ─────────────────────────────────────────────────────────
 def _intraday(sel, now) -> str:
+    if not sel.get("intraday"):
+        return ("<h2 id='intraday'>Intraday setups — switched off</h2>"
+                "<p class='note'><b>No intraday setup made money after costs</b> (opening-range breakouts, stocks in play, "
+                "yesterday's high/low breaks, gap-and-go, gap fade — long and short, 1R / 2R / hold to close). "
+                "Live tracking and alerts are off; the backtest is kept below for reference.</p>" + _backtest_intraday())
     tr = _read(live.INTRA_TR)
     picked = "".join(
         f"<li><b>{html.escape(intraday.LABEL.get(c['strategy'], c['strategy']))}</b> · {c['side']} · target {c['target']}"
-        f" — backtest {_f(c['backtest_R_1h'], 2, True)}R/trade (2 y, 1-hour bars), {_f(c.get('backtest_R_15m'), 2, True)}R (60 days, 15-min)"
+        f" — backtest {_f(c['backtest_R_1h'], 2, True)}R/trade (1-hour bars), {_f(c.get('backtest_R_15m'), 2, True)}R (60 days, 15-min)"
         f"{' · <span class=warn>experimental: no setup passed the checks</span>' if c['experimental'] else ''}</li>"
         for c in sel.get("intraday", []))
     out = ["<h2 id='intraday'>Intraday setups — 15-minute bars</h2>",
@@ -126,7 +131,7 @@ def _backtest_intraday() -> str:
         return ""
     res = res[res.side != "both"]
     parts = []
-    for tf, label in (("1h", "2 years, 1-hour bars (opening range = first hour)"), ("15m", "last 60 days, 15-minute bars")):
+    for tf, label in (("1h", "1-hour bars (opening range = first hour)"), ("15m", "last 60 days, 15-minute bars")):
         r = res[res.tf == tf].sort_values("exp_R", ascending=False).head(15)
         if r.empty:
             continue
@@ -199,7 +204,7 @@ def _backtest_swing() -> str:
 
 
 def render(cfg: dict | None = None, log=print) -> str:
-    sel = live.load_selection()
+    sel = live.load_selection(cfg)
     now = live.now_ist()
     st = {}
     if os.path.isfile(live.STATUS):

@@ -45,6 +45,9 @@ DEFAULTS: dict = {
     "min_edge_over_random": 0.10,              # R per trade above random entries with the same exits
 
     # Live paper trading
+    # Intraday tracking switched off 22 Oct 2026: no intraday setup made money after costs
+    # (backtest still runs and stays on the page for reference). Set true to re-enable.
+    "intraday_enabled": False,
     "risk_per_trade_inr": 1000,                # used only to show a suggested quantity in alerts
     "live_max_candidates": 4,                  # strategies tracked live per section
 }

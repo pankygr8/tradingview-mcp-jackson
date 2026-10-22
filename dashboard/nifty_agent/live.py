@@ -91,11 +91,14 @@ def select(intra_res: pd.DataFrame | None, swing_res: pd.DataFrame | None, cfg: 
     return sel
 
 
-def load_selection() -> dict:
+def load_selection(cfg: dict | None = None) -> dict:
+    sel = {"intraday": [], "swing": []}
     if os.path.isfile(SEL):
         with open(SEL) as f:
-            return json.load(f)
-    return {"intraday": [], "swing": []}
+            sel = json.load(f)
+    if not (cfg or config.load()).get("intraday_enabled", True):
+        sel["intraday"] = []
+    return sel
 
 
 # ── intraday ─────────────────────────────────────────────────────────────────
@@ -185,7 +188,7 @@ def _session_open(now: pd.Timestamp) -> bool:
 
 
 def update(cfg: dict, force: bool = False, log=print) -> None:
-    sel = load_selection()
+    sel = load_selection(cfg)
     if not sel["intraday"] and not sel["swing"]:
         log("nifty live: no selection yet — run `python -m nifty_agent backtest` first")
         return
@@ -202,7 +205,9 @@ def update(cfg: dict, force: bool = False, log=print) -> None:
     if need_daily and now.hour >= 16:
         stt["daily_for"] = str(now.date())
     # 15-minute bars: during the session only
-    if force or _session_open(now):
+    if not sel["intraday"]:
+        m15 = {}
+    elif force or _session_open(now):
         m15 = data.intraday(syms, "15m", "5d", "m15", log=log)
     else:
         m15 = data._load("m15", intraday=True)
