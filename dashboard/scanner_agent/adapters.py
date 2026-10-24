@@ -299,6 +299,10 @@ class MomentumAdapter:
                 continue
             if not r.get("entry") or not r.get("stop"):
                 continue
+            # Live 21-23 Oct 2026: arming with score >= 52 -> 26 trades, 19% win, -0.30R
+            # (rest of arming -0.02R). Weekly review 2026-10-24, change #1.
+            if b == "arming" and (r.get("score") or 0) >= 52:
+                continue
             r = {**r, "name": ALL_SYMBOLS.get(r["symbol"], r["symbol"])}
             recs.append(_rec(ctx, self.name, b, r, r["direction"], "intraday", r.get("price"),
                              entry=r["price"] if b == "actionable" else r["entry"],
