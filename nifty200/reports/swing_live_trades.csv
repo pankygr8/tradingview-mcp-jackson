@@ -1,0 +1,4 @@
+signal_ts,entry_ts,entry,stop,target_px,stop_pct,atr,exit_ts,exit,outcome,status,net_pct,R,sym,strategy,exit_rule,market_filter,experimental,last,side,qty
+2026-10-22,2026-10-23,3166.2,2968.7285714285713,3758.614285714286,6.236858965682162,98.7357142857143,2026-10-23,3157.7,open,open,-0.5284606152485629,-0.08473185270925268,DMART.NS,half_pullback,2/6 ATR,False,False,3157.7,long,5
+2026-10-23,,,309.5857142857143,399.0428571428571,,11.182142857142853,,,,pending,,,EXIDEIND.NS,half_pullback,2/6 ATR,False,False,331.95,long,44
+2026-10-23,,,113.30285714285715,141.57142857142858,,3.5335714285714306,,,,pending,,,PNB.NS,half_pullback,2/6 ATR,False,False,120.37,long,141

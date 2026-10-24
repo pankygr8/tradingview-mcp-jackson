@@ -1,0 +1,493 @@
+2026-10-21 13:49:00  scan: intraday     fno         0 in buckets,   0 new  (6s)
+2026-10-21 13:49:10  scan: momentum     fno        20 in buckets,  20 new  (10s)
+2026-10-21 13:49:15  validate: 20 signals → pending 20
+2026-10-21 13:49:15  cycle: intraday-scan, validate
+2026-10-21 13:49:15  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 15:01:10  cycle: nothing due
+2026-10-21 15:01:11  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 15:16:03  cycle: nothing due
+2026-10-21 15:16:03  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 15:20:46  replay: prefetching daily history for 100 symbols (first run downloads, later runs use the cache)
+2026-10-21 15:20:52  replay: 50 dates 2025-10-21 → 2026-10-21, scanners ['ath', 'swing', 'fib_1d', 'gann_fan_1d']
+2026-10-21 15:21:00  replay: 5/50 dates done, 266 signals, 8s elapsed, ~73s left
+2026-10-21 15:21:08  replay: 10/50 dates done, 538 signals, 16s elapsed, ~65s left
+2026-10-21 15:21:17  replay: 15/50 dates done, 790 signals, 25s elapsed, ~57s left
+2026-10-21 15:21:25  replay: 20/50 dates done, 1071 signals, 33s elapsed, ~49s left
+2026-10-21 15:21:33  replay: 25/50 dates done, 1330 signals, 41s elapsed, ~41s left
+2026-10-21 15:21:42  replay: 30/50 dates done, 1614 signals, 49s elapsed, ~33s left
+2026-10-21 15:21:50  replay: 35/50 dates done, 1875 signals, 58s elapsed, ~25s left
+2026-10-21 15:21:58  replay: 40/50 dates done, 2180 signals, 66s elapsed, ~17s left
+2026-10-21 15:22:06  replay: 45/50 dates done, 2451 signals, 74s elapsed, ~8s left
+2026-10-21 15:22:14  replay: 50/50 dates done, 2680 signals, 82s elapsed, ~0s left
+2026-10-21 15:22:14  replay: stored 2680 signals over 50 dates — validating
+2026-10-21 15:22:14  validate: fetching daily bars for 100 symbols
+2026-10-21 15:22:31  validate: 2700 signals → done 2506, partial 150, pending 44
+2026-10-21 15:22:31  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 15:22:32  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 15:31:40  cycle: nothing due
+2026-10-21 15:31:40  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 15:46:03  cycle: nothing due
+2026-10-21 15:46:03  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 16:01:59  scan: ath          nifty500  125 in buckets, 125 new  (21s)
+2026-10-21 16:02:09  scan: swing        nifty500   67 in buckets,  67 new  (10s)
+2026-10-21 16:02:15  scan: fib_1d       nifty200   10 in buckets,  10 new  (6s)
+2026-10-21 16:02:19  scan: gann_fan_1d  nifty200   16 in buckets,  16 new  (4s)
+2026-10-21 16:02:19  cycle: daily-scan
+2026-10-21 16:02:20  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 16:16:00  cycle: nothing due
+2026-10-21 16:16:00  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 16:31:41  validate: fetching daily bars for 219 symbols
+2026-10-21 16:31:56  validate: 412 signals → done 20, partial 130, pending 262
+2026-10-21 16:31:56  cycle: validate
+2026-10-21 16:31:57  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 16:40:48  validate: fetching daily bars for 219 symbols
+2026-10-21 16:40:59  validate: 392 signals → partial 130, pending 262
+2026-10-21 16:40:59  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 16:41:01  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 50 replay days, 11 tuning flags)
+2026-10-21 16:41:02  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 16:41:03  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 50 replay days, 11 tuning flags)
+2026-10-21 16:46:05  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 16:46:07  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 50 replay days, 11 tuning flags)
+2026-10-21 16:46:07  cycle: report+eod
+2026-10-21 16:46:08  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 16:46:09  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 50 replay days, 11 tuning flags)
+2026-10-21 17:01:25  cycle: nothing due
+2026-10-21 17:01:26  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 17:01:28  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 50 replay days, 11 tuning flags)
+2026-10-21 17:16:00  cycle: nothing due
+2026-10-21 17:16:00  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 17:16:01  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 50 replay days, 11 tuning flags)
+2026-10-21 17:31:41  cycle: nothing due
+2026-10-21 17:31:41  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 17:31:42  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 50 replay days, 11 tuning flags)
+2026-10-21 17:32:04  replay: prefetching daily history for 100 symbols (first run downloads, later runs use the cache)
+2026-10-21 17:32:09  replay: 148 dates 2023-10-23 → 2026-10-16, scanners ['ath', 'swing', 'fib_1d', 'gann_fan_1d', 'price_time']
+2026-10-21 17:32:16  replay: 5/148 dates done, 388 signals, 7s elapsed, ~198s left
+2026-10-21 17:32:21  replay: 10/148 dates done, 731 signals, 12s elapsed, ~168s left
+2026-10-21 17:32:26  replay: 15/148 dates done, 1064 signals, 17s elapsed, ~147s left
+2026-10-21 17:32:30  replay: 20/148 dates done, 1472 signals, 21s elapsed, ~135s left
+2026-10-21 17:32:35  replay: 25/148 dates done, 1880 signals, 26s elapsed, ~126s left
+2026-10-21 17:32:39  replay: 30/148 dates done, 2287 signals, 30s elapsed, ~119s left
+2026-10-21 17:32:44  replay: 35/148 dates done, 2687 signals, 35s elapsed, ~112s left
+2026-10-21 17:32:49  replay: 40/148 dates done, 3099 signals, 40s elapsed, ~107s left
+2026-10-21 17:32:53  replay: 45/148 dates done, 3502 signals, 44s elapsed, ~101s left
+2026-10-21 17:32:58  replay: 50/148 dates done, 3861 signals, 49s elapsed, ~96s left
+2026-10-21 17:33:03  replay: 55/148 dates done, 4262 signals, 53s elapsed, ~90s left
+2026-10-21 17:33:07  replay: 60/148 dates done, 4637 signals, 58s elapsed, ~85s left
+2026-10-21 17:33:12  replay: 65/148 dates done, 4973 signals, 62s elapsed, ~80s left
+2026-10-21 17:33:16  replay: 70/148 dates done, 5267 signals, 67s elapsed, ~75s left
+2026-10-21 17:33:21  replay: 75/148 dates done, 5580 signals, 72s elapsed, ~70s left
+2026-10-21 17:33:26  replay: 80/148 dates done, 5958 signals, 76s elapsed, ~65s left
+2026-10-21 17:33:30  replay: 85/148 dates done, 6285 signals, 81s elapsed, ~60s left
+2026-10-21 17:33:35  replay: 90/148 dates done, 6666 signals, 85s elapsed, ~55s left
+2026-10-21 17:33:39  replay: 95/148 dates done, 7043 signals, 90s elapsed, ~50s left
+2026-10-21 17:33:44  replay: 100/148 dates done, 7390 signals, 95s elapsed, ~45s left
+2026-10-21 17:33:49  replay: 105/148 dates done, 7775 signals, 99s elapsed, ~41s left
+2026-10-21 17:33:53  replay: 110/148 dates done, 8148 signals, 104s elapsed, ~36s left
+2026-10-21 17:33:58  replay: 115/148 dates done, 8509 signals, 108s elapsed, ~31s left
+2026-10-21 17:34:02  replay: 120/148 dates done, 8884 signals, 113s elapsed, ~26s left
+2026-10-21 17:34:07  replay: 125/148 dates done, 9260 signals, 118s elapsed, ~22s left
+2026-10-21 17:34:12  replay: 130/148 dates done, 9623 signals, 122s elapsed, ~17s left
+2026-10-21 17:34:16  replay: 135/148 dates done, 10005 signals, 127s elapsed, ~12s left
+2026-10-21 17:34:21  replay: 140/148 dates done, 10359 signals, 132s elapsed, ~8s left
+2026-10-21 17:34:26  replay: 145/148 dates done, 10745 signals, 136s elapsed, ~3s left
+2026-10-21 17:34:28  replay: 148/148 dates done, 10936 signals, 139s elapsed, ~0s left
+2026-10-21 17:34:28  replay: stored 10936 signals over 148 dates — validating
+2026-10-21 17:34:28  validate: fetching daily bars for 242 symbols
+2026-10-21 17:34:52  validate: 11154 signals → done 10667, partial 269, pending 218
+2026-10-21 17:34:52  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 17:34:54  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 17:34:55  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 17:34:57  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 17:46:08  cycle: nothing due
+2026-10-21 17:46:10  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 17:46:14  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 18:01:37  cycle: nothing due
+2026-10-21 18:01:38  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 18:01:41  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 18:16:08  cycle: nothing due
+2026-10-21 18:16:09  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 18:16:14  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 18:31:51  cycle: nothing due
+2026-10-21 18:31:52  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 18:31:56  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 18:46:04  cycle: nothing due
+2026-10-21 18:46:05  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 18:46:10  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 19:01:29  cycle: nothing due
+2026-10-21 19:01:30  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 19:01:35  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 19:16:06  cycle: nothing due
+2026-10-21 19:16:07  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 19:16:12  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 19:28:29  cycle: nothing due
+2026-10-21 19:28:31  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 19:28:35  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 19:31:42  cycle: nothing due
+2026-10-21 19:31:43  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 19:31:46  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 19:40:49  cycle: nothing due
+2026-10-21 19:40:51  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 19:40:54  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 19:46:13  cycle: nothing due
+2026-10-21 19:46:15  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 19:46:19  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 20:01:32  cycle: nothing due
+2026-10-21 20:01:33  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 20:01:36  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 20:16:03  cycle: nothing due
+2026-10-21 20:16:03  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 20:16:06  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 20:48:43  cycle: nothing due
+2026-10-21 20:48:44  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 20:48:49  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 21:16:20  cycle: nothing due
+2026-10-21 21:16:21  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 21:16:24  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-21 21:29:45  cycle: nothing due
+2026-10-21 21:29:46  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-21 21:29:49  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-22 08:02:07  cycle: nothing due
+2026-10-22 08:02:08  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 08:02:13  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-22 08:15:38  cycle: nothing due
+2026-10-22 08:15:39  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 08:15:43  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-22 08:32:13  cycle: nothing due
+2026-10-22 08:32:14  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 08:32:18  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-22 08:46:53  validate: fetching daily bars for 234 symbols
+2026-10-22 08:47:05  validate: 487 signals → partial 269, pending 218
+2026-10-22 08:47:05  cycle: validate
+2026-10-22 08:47:06  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 08:47:09  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-22 09:00:41  cycle: nothing due
+2026-10-22 09:00:42  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 09:00:44  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-22 09:15:37  cycle: nothing due
+2026-10-22 09:15:38  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 09:15:41  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-22 09:32:16  cycle: nothing due
+2026-10-22 09:32:17  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 09:32:21  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (1 live days, 148 replay days, 20 tuning flags)
+2026-10-22 09:46:50  scan: intraday     fno         0 in buckets,   0 new  (6s)
+2026-10-22 09:46:58  scan: momentum     fno        55 in buckets,  55 new  (8s)
+2026-10-22 09:46:58  cycle: intraday-scan
+2026-10-22 09:46:59  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 09:47:04  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 10:00:47  cycle: nothing due
+2026-10-22 10:00:48  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 10:00:51  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 10:15:47  scan: intraday     fno         0 in buckets,   0 new  (6s)
+2026-10-22 10:15:57  scan: momentum     fno        36 in buckets,  12 new  (10s)
+2026-10-22 10:15:57  cycle: intraday-scan
+2026-10-22 10:15:58  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 10:16:03  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 10:32:21  scan: intraday     fno         1 in buckets,   1 new  (7s)
+2026-10-22 10:33:10  scan: momentum     fno        28 in buckets,   4 new  (49s)
+2026-10-22 10:33:10  cycle: intraday-scan
+2026-10-22 10:33:11  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 10:33:14  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 10:47:04  scan: intraday     fno         1 in buckets,   1 new  (8s)
+2026-10-22 10:47:22  scan: momentum     fno        34 in buckets,   3 new  (18s)
+2026-10-22 10:47:22  cycle: intraday-scan
+2026-10-22 10:47:23  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 10:47:28  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 11:02:09  scan: intraday     fno         4 in buckets,   2 new  (6s)
+2026-10-22 11:02:20  scan: momentum     fno        28 in buckets,   1 new  (11s)
+2026-10-22 11:02:20  cycle: intraday-scan
+2026-10-22 11:02:22  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 11:02:26  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 11:15:41  cycle: nothing due
+2026-10-22 11:15:42  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 11:15:47  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 11:31:03  scan: intraday     fno         1 in buckets,   1 new  (7s)
+2026-10-22 11:31:15  scan: momentum     fno        25 in buckets,   5 new  (12s)
+2026-10-22 11:31:15  cycle: intraday-scan
+2026-10-22 11:31:16  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 11:31:21  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 11:45:52  scan: intraday     fno         3 in buckets,   1 new  (6s)
+2026-10-22 11:46:00  scan: momentum     fno        28 in buckets,   3 new  (8s)
+2026-10-22 11:46:00  cycle: intraday-scan
+2026-10-22 11:46:01  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 11:46:05  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 12:01:52  scan: intraday     fno         1 in buckets,   0 new  (8s)
+2026-10-22 12:02:08  scan: momentum     fno        32 in buckets,   1 new  (16s)
+2026-10-22 12:02:08  cycle: intraday-scan
+2026-10-22 12:02:09  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 12:02:11  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 12:16:52  scan: intraday     fno         1 in buckets,   0 new  (6s)
+2026-10-22 12:17:05  scan: momentum     fno        31 in buckets,   2 new  (13s)
+2026-10-22 12:17:05  cycle: intraday-scan
+2026-10-22 12:17:07  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 12:17:10  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 12:32:14  scan: intraday     fno         2 in buckets,   0 new  (6s)
+2026-10-22 12:32:29  scan: momentum     fno        22 in buckets,   0 new  (15s)
+2026-10-22 12:32:29  cycle: intraday-scan
+2026-10-22 12:32:29  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 12:32:32  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 12:46:37  cycle: nothing due
+2026-10-22 12:46:38  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 12:46:42  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 13:02:18  scan: intraday     fno         1 in buckets,   0 new  (7s)
+2026-10-22 13:02:27  scan: momentum     fno        16 in buckets,   0 new  (9s)
+2026-10-22 13:02:27  cycle: intraday-scan
+2026-10-22 13:02:29  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 13:02:33  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 13:15:40  cycle: nothing due
+2026-10-22 13:15:41  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 13:15:43  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 13:30:59  scan: intraday     fno         0 in buckets,   0 new  (7s)
+2026-10-22 13:31:15  scan: momentum     fno        18 in buckets,   0 new  (16s)
+2026-10-22 13:31:15  cycle: intraday-scan
+2026-10-22 13:31:16  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 13:31:18  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 13:47:05  scan: intraday     fno         0 in buckets,   0 new  (7s)
+2026-10-22 13:47:15  scan: momentum     fno        17 in buckets,   1 new  (11s)
+2026-10-22 13:47:15  cycle: intraday-scan
+2026-10-22 13:47:16  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 13:47:18  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 14:00:50  cycle: nothing due
+2026-10-22 14:00:51  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 14:00:56  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 14:03:31  scan: intraday     fno         0 in buckets,   0 new  (8s)
+2026-10-22 14:03:45  scan: momentum     fno        17 in buckets,   1 new  (14s)
+2026-10-22 14:03:45  cycle: intraday-scan
+2026-10-22 14:03:46  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 14:03:51  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 14:15:40  cycle: nothing due
+2026-10-22 14:15:41  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 14:15:43  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 14:31:04  scan: intraday     fno         0 in buckets,   0 new  (6s)
+2026-10-22 14:31:12  scan: momentum     fno        17 in buckets,   2 new  (8s)
+2026-10-22 14:31:12  cycle: intraday-scan
+2026-10-22 14:31:13  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 14:31:18  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 14:45:46  scan: intraday     fno         0 in buckets,   0 new  (6s)
+2026-10-22 14:46:01  scan: momentum     fno        18 in buckets,   0 new  (15s)
+2026-10-22 14:46:01  cycle: intraday-scan
+2026-10-22 14:46:02  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 14:46:04  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 14:55:00  cycle: nothing due
+2026-10-22 14:55:01  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 14:55:05  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 15:00:55  cycle: nothing due
+2026-10-22 15:00:57  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 15:01:01  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 15:13:11  cycle: nothing due
+2026-10-22 15:13:12  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 15:13:14  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 15:16:58  cycle: nothing due
+2026-10-22 15:16:59  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 15:17:03  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 15:31:00  cycle: nothing due
+2026-10-22 15:31:01  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 15:31:03  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 15:45:37  cycle: nothing due
+2026-10-22 15:45:38  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 15:45:40  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 16:01:14  scan: ath          nifty500  130 in buckets,   9 new  (19s)
+2026-10-22 16:01:24  scan: swing        nifty500   95 in buckets,  69 new  (10s)
+2026-10-22 16:01:28  scan: fib_1d       nifty200    6 in buckets,   1 new  (4s)
+2026-10-22 16:01:30  scan: gann_fan_1d  nifty200   13 in buckets,   7 new  (2s)
+2026-10-22 16:01:39  scan: price_time   nifty500    7 in buckets,   7 new  (9s)
+2026-10-22 16:01:39  cycle: daily-scan
+2026-10-22 16:01:40  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 16:01:43  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 16:16:25  cycle: nothing due
+2026-10-22 16:16:26  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 16:16:30  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 20 tuning flags)
+2026-10-22 16:31:02  validate: fetching daily bars for 265 symbols
+2026-10-22 16:31:35  validate: 676 signals → done 96, partial 486, pending 94
+2026-10-22 16:31:35  cycle: validate
+2026-10-22 16:31:37  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 16:31:40  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-22 16:46:52  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 16:46:55  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-22 16:46:55  cycle: report+eod
+2026-10-22 16:46:56  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 16:46:59  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-22 19:39:00  cycle: nothing due
+2026-10-22 19:39:00  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 19:39:02  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-22 20:49:42  cycle: nothing due
+2026-10-22 20:49:44  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 20:49:48  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-22 21:15:05  cycle: nothing due
+2026-10-22 21:15:06  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 21:15:10  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-22 21:25:32  cycle: nothing due
+2026-10-22 21:25:33  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-22 21:25:37  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-23 08:00:51  cycle: nothing due
+2026-10-23 08:00:52  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 08:00:56  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-23 08:16:52  cycle: nothing due
+2026-10-23 08:16:53  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 08:16:57  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-23 08:31:35  cycle: nothing due
+2026-10-23 08:31:35  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 08:31:38  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-23 08:46:32  validate: fetching daily bars for 265 symbols
+2026-10-23 08:46:47  validate: 580 signals → partial 380, pending 200
+2026-10-23 08:46:47  cycle: validate
+2026-10-23 08:46:48  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 08:46:53  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-23 09:00:51  cycle: nothing due
+2026-10-23 09:00:52  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 09:00:57  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-23 09:15:42  cycle: nothing due
+2026-10-23 09:15:43  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 09:15:47  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-23 09:31:44  cycle: nothing due
+2026-10-23 09:31:45  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 09:31:48  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (2 live days, 148 replay days, 21 tuning flags)
+2026-10-23 09:45:41  scan: intraday     fno         1 in buckets,   1 new  (6s)
+2026-10-23 09:45:58  scan: momentum     fno        41 in buckets,  41 new  (17s)
+2026-10-23 09:45:58  cycle: intraday-scan
+2026-10-23 09:45:59  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 09:46:01  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 10:01:54  scan: intraday     fno         0 in buckets,   0 new  (6s)
+2026-10-23 10:02:06  scan: momentum     fno        44 in buckets,  22 new  (12s)
+2026-10-23 10:02:06  cycle: intraday-scan
+2026-10-23 10:02:07  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 10:02:10  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 10:16:35  scan: intraday     fno         0 in buckets,   0 new  (6s)
+2026-10-23 10:16:46  scan: momentum     fno        36 in buckets,   8 new  (11s)
+2026-10-23 10:16:46  cycle: intraday-scan
+2026-10-23 10:16:48  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 10:16:52  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 10:30:54  cycle: nothing due
+2026-10-23 10:30:55  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 10:31:00  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 10:45:46  scan: intraday     fno         0 in buckets,   0 new  (6s)
+2026-10-23 10:45:57  scan: momentum     fno        38 in buckets,  11 new  (11s)
+2026-10-23 10:45:57  cycle: intraday-scan
+2026-10-23 10:45:58  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 10:46:03  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 11:01:57  scan: intraday     fno         1 in buckets,   1 new  (6s)
+2026-10-23 11:02:05  scan: momentum     fno        35 in buckets,   4 new  (8s)
+2026-10-23 11:02:05  cycle: intraday-scan
+2026-10-23 11:02:07  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 11:02:11  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 11:16:31  scan: intraday     fno         1 in buckets,   0 new  (6s)
+2026-10-23 11:16:41  scan: momentum     fno        34 in buckets,   1 new  (10s)
+2026-10-23 11:16:41  cycle: intraday-scan
+2026-10-23 11:16:43  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 11:16:47  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 11:30:52  cycle: nothing due
+2026-10-23 11:30:53  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 11:30:56  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 11:45:46  scan: intraday     fno         1 in buckets,   0 new  (6s)
+2026-10-23 11:45:58  scan: momentum     fno        32 in buckets,   4 new  (12s)
+2026-10-23 11:45:58  cycle: intraday-scan
+2026-10-23 11:45:59  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 11:46:04  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 12:01:59  scan: intraday     fno         0 in buckets,   0 new  (8s)
+2026-10-23 12:02:15  scan: momentum     fno        29 in buckets,   2 new  (16s)
+2026-10-23 12:02:15  cycle: intraday-scan
+2026-10-23 12:02:17  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 12:02:21  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 12:16:32  scan: intraday     fno         0 in buckets,   0 new  (7s)
+2026-10-23 12:16:42  scan: momentum     fno        27 in buckets,   1 new  (10s)
+2026-10-23 12:16:42  cycle: intraday-scan
+2026-10-23 12:16:43  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 12:16:45  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 12:32:13  scan: intraday     fno         0 in buckets,   0 new  (6s)
+2026-10-23 12:32:19  scan: momentum     fno        24 in buckets,   0 new  (6s)
+2026-10-23 12:32:19  cycle: intraday-scan
+2026-10-23 12:32:21  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 12:32:26  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 12:45:43  cycle: nothing due
+2026-10-23 12:45:45  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 12:45:49  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 13:02:08  scan: intraday     fno         0 in buckets,   0 new  (9s)
+2026-10-23 13:02:14  scan: momentum     fno        22 in buckets,   0 new  (6s)
+2026-10-23 13:02:14  cycle: intraday-scan
+2026-10-23 13:02:16  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 13:02:20  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 13:16:47  scan: intraday     fno         0 in buckets,   0 new  (6s)
+2026-10-23 13:17:03  scan: momentum     fno        23 in buckets,   0 new  (15s)
+2026-10-23 13:17:03  cycle: intraday-scan
+2026-10-23 13:17:04  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 13:17:06  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 13:31:50  scan: intraday     fno         0 in buckets,   0 new  (6s)
+2026-10-23 13:32:02  scan: momentum     fno        24 in buckets,   1 new  (12s)
+2026-10-23 13:32:02  cycle: intraday-scan
+2026-10-23 13:32:03  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 13:32:08  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 13:46:52  scan: intraday     fno         0 in buckets,   0 new  (7s)
+2026-10-23 13:46:58  scan: momentum     fno        31 in buckets,   6 new  (6s)
+2026-10-23 13:46:58  cycle: intraday-scan
+2026-10-23 13:46:59  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 13:47:04  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 13:59:17  cycle: nothing due
+2026-10-23 13:59:19  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 13:59:23  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 14:02:06  scan: intraday     fno         0 in buckets,   0 new  (6s)
+2026-10-23 14:02:14  scan: momentum     fno        30 in buckets,   0 new  (8s)
+2026-10-23 14:02:14  cycle: intraday-scan
+2026-10-23 14:02:16  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 14:02:20  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 14:15:39  cycle: nothing due
+2026-10-23 14:15:41  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 14:15:46  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 14:32:11  scan: intraday     fno         0 in buckets,   0 new  (7s)
+2026-10-23 14:32:18  scan: momentum     fno        27 in buckets,   2 new  (8s)
+2026-10-23 14:32:18  cycle: intraday-scan
+2026-10-23 14:32:20  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 14:32:25  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 14:46:43  cycle: nothing due
+2026-10-23 14:46:44  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 14:46:49  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 14:51:13  cycle: nothing due
+2026-10-23 14:51:14  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 14:51:19  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 15:01:36  cycle: nothing due
+2026-10-23 15:01:38  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 15:01:42  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 15:09:35  cycle: nothing due
+2026-10-23 15:09:36  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 15:09:38  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 15:15:45  cycle: nothing due
+2026-10-23 15:15:46  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 15:15:51  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 15:30:54  cycle: nothing due
+2026-10-23 15:30:55  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 15:30:57  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 15:45:39  cycle: nothing due
+2026-10-23 15:45:41  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 15:45:45  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 16:01:09  scan: ath          nifty500  128 in buckets,  22 new  (23s)
+2026-10-23 16:01:21  scan: swing        nifty500   91 in buckets,  60 new  (12s)
+2026-10-23 16:01:27  scan: fib_1d       nifty200    0 in buckets,   0 new  (6s)
+2026-10-23 16:01:33  scan: gann_fan_1d  nifty200   30 in buckets,  26 new  (6s)
+2026-10-23 16:01:48  scan: price_time   nifty500    2 in buckets,   0 new  (15s)
+2026-10-23 16:01:48  cycle: daily-scan
+2026-10-23 16:01:49  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 16:01:53  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 16:15:41  cycle: nothing due
+2026-10-23 16:15:42  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 16:15:45  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 16:30:56  validate: fetching daily bars for 290 symbols
+2026-10-23 16:31:20  validate: 793 signals → done 105, partial 580, pending 108
+2026-10-23 16:31:20  cycle: validate
+2026-10-23 16:31:21  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 16:31:24  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 16:45:39  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 16:45:42  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 16:45:42  cycle: report+eod
+2026-10-23 16:45:42  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 16:45:45  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 19:21:55  cycle: nothing due
+2026-10-23 19:21:56  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 19:21:58  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 20:38:08  cycle: nothing due
+2026-10-23 20:38:08  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 20:38:11  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 21:03:20  cycle: nothing due
+2026-10-23 21:03:21  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 21:03:26  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
+2026-10-23 21:22:47  cycle: nothing due
+2026-10-23 21:22:49  report: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/leaderboard.html
+2026-10-23 21:22:52  eod: /home/runner/work/tradingview-mcp-jackson/tradingview-mcp-jackson/dashboard/scanner_agent/reports/daily.html  (3 live days, 148 replay days, 21 tuning flags)
