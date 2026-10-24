@@ -303,6 +303,13 @@ class MomentumAdapter:
             # (rest of arming -0.02R). Weekly review 2026-10-24, change #1.
             if b == "arming" and (r.get("score") or 0) >= 52:
                 continue
+            # Actionable rows enter at the current price but keep the plan's stop; if price
+            # has already run through the stop the signal is stale (graded "bad_plan").
+            if b == "actionable":
+                px, stop = r.get("price"), r["stop"]
+                if px is None or (r["direction"] == "long" and px <= stop) or \
+                        (r["direction"] == "short" and px >= stop):
+                    continue
             r = {**r, "name": ALL_SYMBOLS.get(r["symbol"], r["symbol"])}
             recs.append(_rec(ctx, self.name, b, r, r["direction"], "intraday", r.get("price"),
                              entry=r["price"] if b == "actionable" else r["entry"],
