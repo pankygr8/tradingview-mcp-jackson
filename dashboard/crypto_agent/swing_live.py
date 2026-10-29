@@ -172,7 +172,12 @@ def section() -> str:
     closed_html = ""
     if os.path.isfile(TRADES) and os.path.getsize(TRADES) > 5:
         t = pd.read_csv(TRADES)
-        t = t[t.status == "closed"].sort_values("exit_ts", ascending=False) if not t.empty else t
+        # exit_ts only exists once a trade has closed; with only open trades the
+        # column is missing and sorting on it used to crash the whole section.
+        if "status" in t.columns and "exit_ts" in t.columns:
+            t = t[t.status == "closed"].sort_values("exit_ts", ascending=False)
+        else:
+            t = t.iloc[0:0]
         if not t.empty:
             tr = "".join(
                 f"<tr><td class='l'>{r.coin}</td><td class='l'>{html.escape(r.strategy)}</td><td>{int(r.btc_target)}/{int(r.btc_stop)}</td><td class='l'>{r.side}</td>"
