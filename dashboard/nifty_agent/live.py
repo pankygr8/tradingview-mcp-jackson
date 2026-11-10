@@ -3,8 +3,9 @@ live.py — forward paper trading of the selected intraday and swing setups.
 
 Forward-only: the clock starts at the first live run (state/live.json). Every
 run re-simulates both sections from that date on the cached prices, so a
-trade's state (pending → open → closed) is simply recomputed; nothing is sent
-to a broker.
+trade's state (pending → open) is simply recomputed; nothing is sent to a
+broker. Closed swing trades are final: once a run records one it is kept as
+recorded, so a later price revision cannot rewrite or erase live history.
 
 Which setups are tracked comes from the last backtest (state/selection.json):
   intraday  setups positive in both halves of the 2-year 1-hour test AND positive
@@ -169,6 +170,54 @@ def run_swing(daily: dict, sel: dict, cfg: dict, t0: pd.Timestamp):
     return pd.DataFrame(rows), pd.DataFrame(watch)
 
 
+TS_COLS = ("signal_ts", "entry_ts", "exit_ts")
+
+
+def freeze_closed(new: pd.DataFrame, path: str) -> pd.DataFrame:
+    """Keep every closed trade from the previous run exactly as recorded.
+
+    The swing section is re-simulated from prices each run. If the price history
+    is revised (e.g. a dividend re-adjustment), a closed trade could otherwise
+    move or disappear. Re-simulated rows for the same stock + setup whose life
+    (signal → exit) overlaps a frozen trade are dropped as duplicates of it.
+
+    Only rows written with frozen=True count. Files from before this rule have no
+    such column, so the first run re-simulates once on clean data (after the
+    daily-cache rebuild in data.py) and freezes from there.
+    """
+    def _mark(df):
+        if not df.empty:
+            df = df.copy()
+            df["frozen"] = df["status"].eq("closed")
+        return df
+    try:
+        old = pd.read_csv(path)
+    except (FileNotFoundError, pd.errors.EmptyDataError):
+        return _mark(new)
+    if old.empty or "status" not in old.columns or "frozen" not in old.columns:
+        return _mark(new)
+    old = old[(old["status"] == "closed") & old["frozen"].astype(str).str.lower().eq("true")].copy()
+    if old.empty:
+        return _mark(new)
+    for c in TS_COLS:
+        if c in old.columns:
+            old[c] = pd.to_datetime(old[c])
+    if new.empty:
+        return _mark(old.reset_index(drop=True))
+    new = new.copy()
+    for c in TS_COLS:
+        if c in new.columns:
+            new[c] = pd.to_datetime(new[c])
+    n_start = new["signal_ts"]
+    n_end = new["exit_ts"].fillna(new["signal_ts"]) if "exit_ts" in new.columns else n_start
+    dup = pd.Series(False, index=new.index)
+    for _, o in old.iterrows():
+        dup |= ((new["sym"] == o["sym"]) & (new["strategy"] == o["strategy"])
+                & (n_start <= o["exit_ts"]) & (n_end >= o["signal_ts"]))
+    out = _mark(pd.concat([old, new[~dup]], ignore_index=True))
+    return out.sort_values(["signal_ts", "sym", "strategy"], kind="stable").reset_index(drop=True)
+
+
 def _trigger(name, d, f):
     """Close needed tomorrow to fire the setup (for the 'within 2 %' watchlist)."""
     ath = float(d["High"].max())
@@ -216,6 +265,7 @@ def update(cfg: dict, force: bool = False, log=print) -> None:
         today = pd.Timestamp(now.date())
         daily = {s: d[d.index < today] for s, d in daily.items()}
     str_, watch = run_swing(daily, sel, cfg, t0) if sel["swing"] else (pd.DataFrame(), pd.DataFrame())
+    str_ = freeze_closed(str_, SWING_TR)
     itr.to_csv(INTRA_TR, index=False)
     str_.drop(columns=["exit_i"], errors="ignore").to_csv(SWING_TR, index=False)
     watch.to_csv(WATCH, index=False)
