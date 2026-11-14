@@ -1,0 +1,45 @@
+{
+ "intraday": [
+  {
+   "strategy": "orb_rvol",
+   "target": "eod",
+   "side": "short",
+   "experimental": true,
+   "verdict_1h": "no edge",
+   "backtest_R_1h": -0.011,
+   "backtest_R_15m": 0.029
+  },
+  {
+   "strategy": "orb_rvol",
+   "target": "2R",
+   "side": "short",
+   "experimental": true,
+   "verdict_1h": "no edge",
+   "backtest_R_1h": -0.013,
+   "backtest_R_15m": 0.024
+  }
+ ],
+ "swing": [
+  {
+   "strategy": "half_reclaim",
+   "market_filter": false,
+   "stop_atr": 2.0,
+   "target_atr": 6.0,
+   "exit": "2/6 ATR",
+   "experimental": false,
+   "verdict": "positive, not significant",
+   "backtest_R": 0.223
+  },
+  {
+   "strategy": "half_pullback",
+   "market_filter": false,
+   "stop_atr": 2.0,
+   "target_atr": 6.0,
+   "exit": "2/6 ATR",
+   "experimental": false,
+   "verdict": "robust edge",
+   "backtest_R": 0.136
+  }
+ ],
+ "made": "2026-10-22T03:27:37.818614+05:30"
+}

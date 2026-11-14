@@ -1,0 +1,151 @@
+session,signal_ts,scanner,bucket,symbol,name,side,ref_price,entry,stop,tp1,tp2,entry_type,score,edge_score,verdict,hist_win%
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,TITAN.NS,Titan Company,long,4844.8999,,,,,market,-0.014,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,LT.NS,Larsen & Toubro,long,4143.7998,,,,,market,-0.08,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,HDFCAMC.NS,HDFC Asset Management Company,long,2663.0,,,,,market,-0.467,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,ABB.NS,ABB India,long,7054.5,,,,,market,-0.498,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,INDIANB.NS,Indian Bank,long,932.85,,,,,market,-0.548,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,SHREECEM.NS,Shree Cement,long,24655.0,,,,,market,-0.617,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,BSE.NS,BSE,long,3937.7,,,,,market,-0.684,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,HINDPETRO.NS,Hindustan Petroleum Corporation,long,381.5,,,,,market,-0.721,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,PERSISTENT.NS,Persistent Systems,long,6003.0,,,,,market,-0.741,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,ULTRACEMCO.NS,UltraTech Cement,long,12100.0,,,,,market,-0.749,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,MPHASIS.NS,MphasiS,long,2455.0,,,,,market,-0.787,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,SBILIFE.NS,SBI Life Insurance Company,long,1789.9,,,,,market,-0.866,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,EICHERMOT.NS,Eicher Motors,long,7650.0,,,,,market,-0.896,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy,HCLTECH.NS,HCL Technologies,long,1378.0,,,,,market,-0.936,0.945,EDGE,66.7
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy_confirmed,BAJAJFINSV.NS,Bajaj Finserv,long,1865.0,,,,,market,-0.367,0.711,EDGE,72.0
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy_confirmed,JINDALSTEL.NS,Jindal Steel,long,1157.8,,,,,market,-0.449,0.711,EDGE,72.0
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy_confirmed,INDIANB.NS,Indian Bank,long,932.85,,,,,market,-0.548,0.711,EDGE,72.0
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy_confirmed,SHREECEM.NS,Shree Cement,long,24655.0,,,,,market,-0.617,0.711,EDGE,72.0
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy_confirmed,HINDPETRO.NS,Hindustan Petroleum Corporation,long,381.5,,,,,market,-0.721,0.711,EDGE,72.0
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy_confirmed,PERSISTENT.NS,Persistent Systems,long,6003.0,,,,,market,-0.741,0.711,EDGE,72.0
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy_confirmed,MPHASIS.NS,MphasiS,long,2455.0,,,,,market,-0.787,0.711,EDGE,72.0
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,buy_confirmed,HCLTECH.NS,HCL Technologies,long,1378.0,,,,,market,-0.936,0.711,EDGE,72.0
+2026-11-13,2026-11-13T16:02:25+05:30,fib_1d,buy,POLICYBZR.NS,PB Fintech,long,1105.0,,,,,market,70.0,0.488,EDGE,54.5
+2026-11-13,2026-11-13T16:01:55+05:30,ath,half_ath_below,TATATECH.NS,Tata Technologies,long,668.8,,,,,market,-0.52,0.332,EDGE,35.9
+2026-11-13,2026-11-13T16:01:55+05:30,ath,half_ath_below,BDL.NS,Bharat Dynamics,long,1030.0,,,,,market,-1.32,0.332,EDGE,35.9
+2026-11-13,2026-11-13T16:01:55+05:30,ath,half_ath_below,POLICYBZR.NS,PB Fintech,long,1105.0,,,,,market,-1.64,0.332,EDGE,35.9
+2026-11-13,2026-11-13T16:01:55+05:30,ath,half_ath_below,THERMAX.NS,Thermax,long,2776.2,,,,,market,-4.15,0.332,EDGE,35.9
+2026-11-13,2026-11-13T16:01:55+05:30,ath,half_ath_above,SUMICHEM.NS,Sumitomo Chemical India,long,346.6,,,,,market,-4.49,0.239,weak edge,34.7
+2026-11-13,2026-11-13T16:01:55+05:30,ath,half_ath_above,IGL.NS,Indraprastha Gas,long,142.33,,,,,market,-4.97,0.239,weak edge,34.7
+2026-11-13,2026-11-13T16:01:55+05:30,ath,half_ath_above,SUPREMEIND.NS,Supreme Industries,long,3307.5,,,,,market,-4.99,0.239,weak edge,34.7
+2026-11-13,2026-11-13T16:01:55+05:30,ath,ath_90d,PAYTM.NS,One 97 Communications,long,1939.9,,,,,market,0.0,0.189,weak edge,29.6
+2026-11-13,2026-11-13T12:15:50+05:30,intraday,arming,CDSL.NS,Central Depository Services (India),long,1450.9,1452.1,1438.65,1465.61,1479.19,trigger,1.64,0.127,weak edge,17.6
+2026-11-13,2026-11-13T12:45:37+05:30,intraday,arming,MFSL.NS,Max Financial Services,long,1365.5,1368.0,1356.06,1382.7,1396.12,trigger,-4.65,0.127,weak edge,17.6
+2026-11-13,2026-11-13T12:15:50+05:30,intraday,arming,PNB.NS,Punjab National Bank,long,143.36,143.67,142.08,145.3,147.25,trigger,-5.29,0.127,weak edge,17.6
+2026-11-13,2026-11-13T14:16:58+05:30,momentum,actionable,PAGEIND.NS,Page Industries,short,31385.0,31385.0,32480.0,30276.0,29241.0,market,85.0,0.115,EDGE,28.2
+2026-11-13,2026-11-13T13:02:47+05:30,momentum,actionable,JUBLFOOD.NS,Jubilant Foodworks,long,439.75,439.75,434.15,451.56,462.25,market,82.0,0.115,EDGE,28.2
+2026-11-13,2026-11-13T11:47:33+05:30,momentum,actionable,IRCTC.NS,Indian Railway Catering And Tourism Corporation,short,457.35,457.35,464.45,441.0,430.56,market,76.2,0.115,EDGE,28.2
+2026-11-13,2026-11-13T10:00:55+05:30,momentum,actionable,PNB.NS,Punjab National Bank,long,143.85,143.85,141.44,150.06,156.25,market,75.0,0.115,EDGE,28.2
+2026-11-13,2026-11-13T13:02:47+05:30,momentum,actionable,ALKEM.NS,Alkem Laboratories,short,5136.5,5136.5,5287.5,4970.25,4830.25,market,75.0,0.115,EDGE,28.2
+2026-11-13,2026-11-13T13:17:27+05:30,momentum,actionable,CUMMINSIND.NS,Cummins India,long,4343.2,4343.2,4246.3,4389.06,4422.25,market,72.0,0.115,EDGE,28.2
+2026-11-13,2026-11-13T12:15:58+05:30,momentum,actionable,PETRONET.NS,Petronet LNG,short,328.3,328.3,331.25,324.0,315.06,market,70.0,0.115,EDGE,28.2
+2026-11-13,2026-11-13T10:00:55+05:30,momentum,actionable,TATACOMM.NS,Tata Communications,long,1761.1,1761.1,1736.3,1785.06,1806.25,market,65.0,0.115,EDGE,28.2
+2026-11-13,2026-11-13T11:47:33+05:30,momentum,actionable,CDSL.NS,Central Depository Services (India),long,1461.0,1461.0,1441.2,1463.06,1482.25,market,64.9,0.115,EDGE,28.2
+2026-11-13,2026-11-13T10:00:55+05:30,momentum,actionable,ABB.NS,ABB India,long,7054.0,7054.0,6930.0,7140.25,7225.0,market,60.7,0.115,EDGE,28.2
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,actionable,EICHERMOT.NS,Eicher Motors,long,7549.5,7549.5,7458.5,7656.25,7744.0,market,59.9,0.115,EDGE,28.2
+2026-11-13,2026-11-13T10:32:06+05:30,momentum,actionable,TATAPOWER.NS,Tata Power Co.,short,353.5,353.5,357.15,351.56,342.25,market,58.0,0.115,EDGE,28.2
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,actionable,ABCAPITAL.NS,Aditya Birla Capital,short,409.5,409.5,414.35,400.0,390.06,market,57.0,0.115,EDGE,28.2
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,actionable,MCX.NS,Multi Commodity Exchange of India,long,3707.5,3707.5,3608.0,3782.25,3844.0,market,56.1,0.115,EDGE,28.2
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,actionable,BAJFINANCE.NS,Bajaj Finance,long,1106.2,1106.2,1091.75,1122.25,1139.06,market,51.2,0.115,EDGE,28.2
+2026-11-13,2026-11-13T10:00:55+05:30,momentum,actionable,GODREJPROP.NS,Godrej Properties,long,1876.0,1876.0,1850.7,1892.25,1914.06,market,50.3,0.115,EDGE,28.2
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,actionable,DLF.NS,DLF,long,763.6,763.6,757.95,770.06,784.0,market,48.3,0.115,EDGE,28.2
+2026-11-13,2026-11-13T16:02:33+05:30,price_time,pt_continuation,MUTHOOTFIN.NS,Muthoot Finance,long,2840.0,,,,,market,-0.08,0.083,weak edge,11.3
+2026-11-13,2026-11-13T16:02:33+05:30,price_time,pt_continuation,MGL.NS,Mahanagar Gas,long,1158.6,,,,,market,-0.35,0.083,weak edge,11.3
+2026-11-13,2026-11-13T12:31:03+05:30,intraday,actionable,CDSL.NS,Central Depository Services (India),long,1454.0,1454.0,1438.65,1472.39,1486.0,market,12.6,0.049,too few (3/20),0.0
+2026-11-13,2026-11-13T12:15:50+05:30,intraday,actionable,INDHOTEL.NS,Indian Hotels Co.,long,885.0,885.0,877.7,892.61,901.62,market,9.07,0.049,too few (3/20),0.0
+2026-11-13,2026-11-13T12:15:58+05:30,momentum,arming,NMDC.NS,NMDC,short,69.34,69.02,69.85,68.06,64.0,trigger,51.3,0.029,weak edge,21.7
+2026-11-13,2026-11-13T10:00:55+05:30,momentum,arming,IEX.NS,Indian Energy Exchange,long,116.9,116.0,114.2,121.0,126.56,trigger,49.4,0.029,weak edge,21.7
+2026-11-13,2026-11-13T12:45:43+05:30,momentum,arming,ABCAPITAL.NS,Aditya Birla Capital,short,409.5,410.1,414.35,400.0,390.06,trigger,49.3,0.029,weak edge,21.7
+2026-11-13,2026-11-13T11:16:37+05:30,momentum,arming,EICHERMOT.NS,Eicher Motors,long,7594.5,7545.5,7458.5,7656.25,7744.0,trigger,49.2,0.029,weak edge,21.7
+2026-11-13,2026-11-13T10:15:50+05:30,momentum,arming,HDFCLIFE.NS,HDFC Life Insurance Company,long,595.1,601.85,594.4,612.56,625.0,trigger,49.0,0.029,weak edge,21.7
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,arming,COFORGE.NS,Coforge,long,2061.6,2050.9,2030.0,2093.06,2116.0,trigger,48.6,0.029,weak edge,21.7
+2026-11-13,2026-11-13T10:46:45+05:30,momentum,arming,MPHASIS.NS,MphasiS,long,2459.4,2425.3,2385.9,2475.06,2525.06,trigger,48.6,0.029,weak edge,21.7
+2026-11-13,2026-11-13T10:32:06+05:30,momentum,arming,BAJFINANCE.NS,Bajaj Finance,long,1106.05,1105.75,1091.75,1122.25,1139.06,trigger,48.3,0.029,weak edge,21.7
+2026-11-13,2026-11-13T11:16:37+05:30,momentum,arming,SIEMENS.NS,Siemens,long,3725.2,3683.8,3635.1,3751.56,3782.25,trigger,47.4,0.029,weak edge,21.7
+2026-11-13,2026-11-13T12:15:58+05:30,momentum,arming,PIRAMALFIN.NS,Piramal Finance,short,2114.5,2132.4,2160.0,2093.06,2070.25,trigger,46.5,0.029,weak edge,21.7
+2026-11-13,2026-11-13T10:15:50+05:30,momentum,arming,OFSS.NS,Oracle Financial Services Software,long,10067.5,10023.5,9930.0,10150.56,10251.56,trigger,46.4,0.029,weak edge,21.7
+2026-11-13,2026-11-13T14:32:00+05:30,momentum,arming,JUBLFOOD.NS,Jubilant Foodworks,long,438.15,438.15,434.15,451.56,462.25,trigger,46.4,0.029,weak edge,21.7
+2026-11-13,2026-11-13T12:15:58+05:30,momentum,arming,MCX.NS,Multi Commodity Exchange of India,long,3677.5,3681.1,3608.0,3782.25,3844.0,trigger,46.3,0.029,weak edge,21.7
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,arming,TATACOMM.NS,Tata Communications,long,1764.0,1751.9,1736.3,1785.06,1806.25,trigger,44.4,0.029,weak edge,21.7
+2026-11-13,2026-11-13T12:15:58+05:30,momentum,arming,CDSL.NS,Central Depository Services (India),long,1451.0,1452.1,1441.2,1463.06,1482.25,trigger,42.2,0.029,weak edge,21.7
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,arming,ASHOKLEY.NS,Ashok Leyland,short,171.02,170.25,173.0,162.56,156.25,trigger,41.6,0.029,weak edge,21.7
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,arming,ADANIGREEN.NS,Adani Green Energy,long,1429.9,1441.5,1420.6,1463.06,1501.56,trigger,41.3,0.029,weak edge,21.7
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,arming,AUROPHARMA.NS,Aurobindo Pharma,long,1825.3,1831.2,1807.2,1870.56,1892.25,trigger,41.1,0.029,weak edge,21.7
+2026-11-13,2026-11-13T10:32:06+05:30,momentum,arming,UNIONBANK.NS,Union Bank of India,long,203.74,203.97,202.26,210.25,217.56,trigger,39.5,0.029,weak edge,21.7
+2026-11-13,2026-11-13T10:00:55+05:30,momentum,arming,DLF.NS,DLF,long,766.85,763.45,757.95,770.06,784.0,trigger,38.5,0.029,weak edge,21.7
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,arming,MFSL.NS,Max Financial Services,long,1373.4,1368.0,1353.1,1387.56,1406.25,trigger,37.7,0.029,weak edge,21.7
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,arming,HINDALCO.NS,Hindalco Industries,short,950.95,948.35,962.25,930.25,915.06,trigger,34.9,0.029,weak edge,21.7
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,arming,TATAPOWER.NS,Tata Power Co.,short,355.0,354.4,357.15,351.56,342.25,trigger,33.1,0.029,weak edge,21.7
+2026-11-13,2026-11-13T09:45:50+05:30,momentum,arming,PETRONET.NS,Petronet LNG,short,329.05,328.35,331.25,324.0,315.06,trigger,32.6,0.029,weak edge,21.7
+2026-11-13,2026-11-13T10:00:55+05:30,momentum,arming,CHOLAFIN.NS,Cholamandalam Investment and Finance Company,long,1841.6,1837.5,1824.0,1870.56,1892.25,trigger,30.5,0.029,weak edge,21.7
+2026-11-13,2026-11-13T16:02:33+05:30,price_time,pt_reversal,MUTHOOTFIN.NS,Muthoot Finance,short,2840.0,,,,,market,-0.08,0.011,weak edge,14.1
+2026-11-13,2026-11-13T16:02:33+05:30,price_time,pt_reversal,MGL.NS,Mahanagar Gas,short,1158.6,,,,,market,-0.35,0.011,weak edge,14.1
+2026-11-13,2026-11-13T16:02:17+05:30,swing,breakouts,NATCOPHARM.NS,NATCO Pharma,long,810.45,810.45,779.2,853.51,891.94,market,0.98,-0.008,no edge,26.0
+2026-11-13,2026-11-13T16:02:17+05:30,swing,breakouts,POLICYBZR.NS,PB Fintech,long,1105.0,1105.0,1029.22,1190.43,1256.56,market,-0.73,-0.008,no edge,26.0
+2026-11-13,2026-11-13T16:02:17+05:30,swing,breakouts,ZEEL.NS,Zee Entertainment Enterprises,long,72.15,72.15,65.54,81.54,85.37,market,-1.58,-0.008,no edge,26.0
+2026-11-13,2026-11-13T16:02:25+05:30,fib_1d,sell_pt,BAJAJHLDNG.NS,Bajaj Holdings & Investment,short,11096.0,,,,,market,65.0,-0.01,no edge,12.5
+2026-11-13,2026-11-13T16:02:33+05:30,price_time,pt_reversal_confirmed,MUTHOOTFIN.NS,Muthoot Finance,short,2840.0,,,,,market,-0.08,-0.082,too few (14/20),0.0
+2026-11-13,2026-11-13T16:02:25+05:30,fib_1d,sell,BAJAJHLDNG.NS,Bajaj Holdings & Investment,short,11096.0,,,,,market,65.0,-0.103,no edge,12.3
+2026-11-13,2026-11-13T16:02:25+05:30,fib_1d,sell,ABCAPITAL.NS,Aditya Birla Capital,short,408.0,,,,,market,46.0,-0.103,no edge,12.3
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,SAREGAMA.NS,Saregama India,long,653.45,671.0,598.54,743.46,815.92,trigger,16.55,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,HBLENGINE.NS,HBL Engineering,long,799.55,799.55,724.91,899.95,971.91,market,13.36,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,ONESOURCE.NS,Onesource Specialty Pharma,long,1610.1,1610.1,1509.52,1725.29,1857.96,market,13.16,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,ZENSARTECH.NS,Zensar Technolgies,long,549.55,549.55,510.0,605.51,629.49,market,13.13,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,TATAELXSI.NS,Tata Elxsi,long,3835.0,3835.0,3658.51,4026.52,4251.15,market,12.12,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,SONACOMS.NS,Sona BLW Precision Forgings,long,919.0,823.75,877.95,877.95,934.13,trigger,11.54,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,EMCURE.NS,Emcure Pharmaceuticals,long,2361.7,2100.7,2138.73,2138.73,2213.71,trigger,11.48,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,LAURUSLABS.NS,Laurus Labs,long,2424.0,2440.86,2279.39,2602.33,2763.8,trigger,9.77,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,PERSISTENT.NS,Persistent Systems,long,6003.0,6003.0,5533.02,6534.0,6942.95,market,9.6,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,MEDANTA.NS,Global Health,long,1454.0,1451.5,1338.8,1564.2,1676.9,trigger,9.49,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,BHARTIHEXA.NS,Bharti Hexacom,long,1665.5,1665.5,1597.76,1759.0,1823.97,market,9.46,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,ENGINERSIN.NS,Engineers India,long,312.45,312.45,285.04,339.86,367.27,market,9.37,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,KFINTECH.NS,Kfin Technologies,long,950.9,903.1,874.43,937.46,969.8,trigger,9.14,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,INFY.NS,Infosys,long,1141.5,1141.5,1098.23,1198.8,1239.17,market,8.82,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,time_cycle,SHYAMMETL.NS,Shyam Metalics and Energy,long,1315.9,1315.9,1233.1,1424.37,1481.5,market,8.58,-0.181,no edge,17.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,tradeable_time,ITCHOTELS.NS,ITC Hotels,long,173.6,174.4,170.49,181.79,187.58,trigger,16.29,-0.242,no edge,13.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,tradeable_time,ZYDUSWELL.NS,Zydus Wellness,short,469.95,456.0,485.54,407.99,389.66,trigger,7.34,-0.242,no edge,13.9
+2026-11-13,2026-11-13T16:02:17+05:30,swing,coiled,SAREGAMA.NS,Saregama India,long,653.45,671.0,598.54,743.46,815.92,trigger,16.55,-0.301,no edge,13.4
+2026-11-13,2026-11-13T16:02:17+05:30,swing,coiled,ITCHOTELS.NS,ITC Hotels,long,173.6,174.4,170.49,181.79,187.58,trigger,16.29,-0.301,no edge,13.4
+2026-11-13,2026-11-13T16:02:17+05:30,swing,coiled,THELEELA.NS,Leela Palaces Hotels & Resorts,long,666.35,706.7,631.24,782.16,857.62,trigger,12.34,-0.301,no edge,13.4
+2026-11-13,2026-11-13T16:02:17+05:30,swing,coiled,DELHIVERY.NS,Delhivery,long,436.3,424.5,411.27,448.07,460.69,trigger,8.3,-0.301,no edge,13.4
+2026-11-13,2026-11-13T16:02:17+05:30,swing,coiled,HINDZINC.NS,Hindustan Zinc,long,554.85,559.85,548.22,578.28,593.61,trigger,7.74,-0.301,no edge,13.4
+2026-11-13,2026-11-13T16:02:17+05:30,swing,coiled,NIACL.NS,The New India Assurance Company,short,158.03,155.0,164.01,140.94,135.44,trigger,7.48,-0.301,no edge,13.4
+2026-11-13,2026-11-13T16:02:17+05:30,swing,coiled,PATANJALI.NS,Patanjali Foods,long,421.0,384.7,388.9,388.9,402.62,trigger,7.38,-0.301,no edge,13.4
+2026-11-13,2026-11-13T16:02:17+05:30,swing,coiled,ZYDUSWELL.NS,Zydus Wellness,short,469.95,456.0,485.54,407.99,389.66,trigger,7.34,-0.301,no edge,13.4
+2026-11-13,2026-11-13T16:02:17+05:30,swing,coiled,HEXT.NS,Hexaware Technologies,short,493.6,493.75,527.7,447.81,410.32,trigger,7.14,-0.301,no edge,13.4
+2026-11-13,2026-11-13T16:02:17+05:30,swing,coiled,ATGL.NS,Adani Total Gas,long,575.4,585.0,562.43,622.98,638.6,trigger,6.97,-0.301,no edge,13.4
+2026-11-13,2026-11-13T16:02:17+05:30,swing,coiled,TATACOMM.NS,Tata Communications,short,1772.9,1684.4,1799.61,1546.08,1426.53,trigger,6.97,-0.301,no edge,13.4
+2026-11-13,2026-11-13T16:02:17+05:30,swing,coiled,CYIENT.NS,Cyient,short,1104.9,1115.56,1165.42,1025.01,980.21,trigger,6.4,-0.301,no edge,13.4
+2026-11-13,2026-11-13T16:02:17+05:30,swing,tradeable,ITCHOTELS.NS,ITC Hotels,long,173.6,174.4,170.49,181.79,187.58,trigger,16.29,-0.304,no edge,12.5
+2026-11-13,2026-11-13T16:02:17+05:30,swing,tradeable,CEMPRO.NS,Cemindia Projects,long,1314.8,1314.8,1215.25,1471.44,1529.71,market,15.37,-0.304,no edge,12.5
+2026-11-13,2026-11-13T16:02:17+05:30,swing,tradeable,NIACL.NS,The New India Assurance Company,short,158.03,155.0,164.01,140.94,135.44,trigger,7.48,-0.304,no edge,12.5
+2026-11-13,2026-11-13T16:02:17+05:30,swing,tradeable,ZYDUSWELL.NS,Zydus Wellness,short,469.95,456.0,485.54,407.99,389.66,trigger,7.34,-0.304,no edge,12.5
+2026-11-13,2026-11-13T16:02:17+05:30,swing,tradeable,SWANCORP.NS,Swan Corp,short,232.49,235.0,249.87,211.41,202.3,trigger,1.67,-0.304,no edge,12.5
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,LTTS.NS,L&T Technology Services,long,4247.2,4247.2,4043.92,4498.42,4770.7,market,20.55,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,CEMPRO.NS,Cemindia Projects,long,1314.8,1314.8,1215.25,1471.44,1529.71,market,15.37,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,ONESOURCE.NS,Onesource Specialty Pharma,long,1610.1,1610.1,1509.52,1725.29,1857.96,market,13.16,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,WIPRO.NS,Wipro,long,194.6,194.6,180.3,212.62,223.26,market,12.29,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,BHARTIHEXA.NS,Bharti Hexacom,long,1665.5,1665.5,1597.76,1759.0,1823.97,market,9.46,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,FSL.NS,Firstsource Solutions,long,291.25,291.25,276.4,306.37,331.89,market,8.28,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,SARDAEN.NS,Sarda Energy and Minerals,short,444.3,444.3,460.44,424.05,411.47,market,7.61,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,ECLERX.NS,eClerx Services,short,1578.3,1578.3,1652.63,1490.0,1373.18,market,7.03,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,JAINREC.NS,Jain Resource Recycling,short,282.4,282.4,301.44,255.18,237.43,market,6.7,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,LUPIN.NS,Lupin,long,1980.3,1980.3,1928.47,2062.1,2103.76,market,6.55,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,BLUESTARCO.NS,Blue Star,long,1587.2,1587.2,1508.52,1673.0,1792.51,market,6.27,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,GILLETTE.NS,Gillette India,long,7247.0,7247.0,6948.73,7600.0,7952.71,market,4.89,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,BALKRISIND.NS,Balkrishna Industries,long,2271.4,2271.4,2035.91,2543.31,2742.39,market,4.79,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,KEC.NS,Kec International,short,333.65,333.65,356.98,299.0,275.56,market,4.55,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:17+05:30,swing,pullback,RAINBOW.NS,Rainbow Childrens Medicare,long,1271.5,1271.5,1217.37,1354.82,1396.63,market,4.51,-0.431,no edge,10.2
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,sell_confirmed,GMRAIRPORT.NS,GMR Airports,short,99.0,,,,,market,-0.772,-0.569,no edge,2.2
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,sell_confirmed,KPITTECH.NS,KPIT Technologies,short,552.0,,,,,market,-0.79,-0.569,no edge,2.2
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,sell_confirmed,POWERGRID.NS,Power Grid Corporation of India,short,257.45,,,,,market,-0.796,-0.569,no edge,2.2
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,sell,NTPC.NS,NTPC,short,319.1,,,,,market,-0.232,-0.626,no edge,3.8
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,sell,CUMMINSIND.NS,Cummins India,short,4369.0,,,,,market,-0.339,-0.626,no edge,3.8
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,sell,M&M.NS,Mahindra & Mahindra,short,3333.0,,,,,market,-0.462,-0.626,no edge,3.8
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,sell,ALKEM.NS,Alkem Laboratories,short,5114.0,,,,,market,-0.771,-0.626,no edge,3.8
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,sell,NHPC.NS,NHPC,short,75.83,,,,,market,-0.782,-0.626,no edge,3.8
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,sell,KPITTECH.NS,KPIT Technologies,short,552.0,,,,,market,-0.79,-0.626,no edge,3.8
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,sell,POWERGRID.NS,Power Grid Corporation of India,short,257.45,,,,,market,-0.796,-0.626,no edge,3.8
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,sell,NESTLEIND.NS,Nestle India,short,1263.2,,,,,market,-0.815,-0.626,no edge,3.8
+2026-11-13,2026-11-13T16:02:29+05:30,gann_fan_1d,sell,INFY.NS,Infosys,short,1141.5,,,,,market,-0.888,-0.626,no edge,3.8
