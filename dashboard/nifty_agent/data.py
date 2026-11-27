@@ -7,8 +7,9 @@ data.py — Yahoo Finance prices for the Nifty 200, cached in state/data/.
   h1.csv.gz      1-hour bars, last ~2 years (backtest only)
 
 Prices are split/dividend adjusted. If an incremental daily refresh disagrees
-with the cached history by more than 2 % (a split or bonus issue), that
-symbol is re-downloaded in full.
+with the cached history by more than ADJ_TOL (0.1 % — any dividend, split or
+bonus re-adjustment), that symbol is re-downloaded in full, so old and new bars
+always share one adjustment basis.
 """
 
 from __future__ import annotations
@@ -23,6 +24,7 @@ from . import config
 
 IST = "Asia/Kolkata"
 COLS = ["Open", "High", "Low", "Close", "Volume"]
+ADJ_TOL = 0.001          # relative close mismatch that counts as a re-adjustment
 
 
 def _yf():
@@ -100,8 +102,34 @@ def _naive_dates(d: pd.DataFrame) -> pd.DataFrame:
     return d[~d.index.duplicated(keep="last")]
 
 
+# Bump when the daily cache must be rebuilt from scratch. 2 = Nov 2026: caches built
+# before then can hold old unadjusted history spliced to re-adjusted recent bars.
+DAILY_BASIS = 2
+
+
+def _basis_path():
+    return os.path.join(config.DATA_DIR, "daily_basis.txt")
+
+
+def _basis() -> int:
+    try:
+        with open(_basis_path()) as f:
+            return int(f.read().strip() or 0)
+    except (FileNotFoundError, ValueError):
+        return 0
+
+
 def daily(symbols: list[str], refresh: bool = True, log=print) -> dict[str, pd.DataFrame]:
     frames = _load("daily", intraday=False)
+    rebuilt = False
+    if refresh and frames and _basis() < DAILY_BASIS:
+        log(f"data: one-time full re-download of {len(frames)} symbols (daily cache basis {_basis()} → {DAILY_BASIS})")
+        got = download(list(frames), log=log, period="max", interval="1d")
+        for s, d in got.items():
+            frames[s] = _naive_dates(d)
+        rebuilt = set(frames) <= set(got)       # only mark done if every symbol came back
+    elif not frames:
+        rebuilt = True                          # a fresh cache is built on one basis anyway
     missing = [s for s in symbols if s not in frames]
     if missing:
         log(f"data: full daily history for {len(missing)} symbols")
@@ -117,16 +145,23 @@ def daily(symbols: list[str], refresh: bool = True, log=print) -> dict[str, pd.D
                 frames[s] = d
                 continue
             common = old.index.intersection(d.index)[:-1]          # last bar may be forming
-            if len(common) and (abs(old.loc[common, "Close"] / d.loc[common, "Close"] - 1) > 0.02).any():
-                redo.append(s)                                       # split / bonus → refetch everything
+            # Prices are auto-adjusted, so a dividend re-scales every bar before its ex-date.
+            # Splicing re-adjusted recent bars onto old unadjusted history leaves a step in the
+            # series (MAZDOCK, Nov 2026: last month x0.9971, ATH untouched → a past signal
+            # vanished). Any re-adjustment — dividend, split or bonus — refetches everything.
+            if len(common) and (abs(old.loc[common, "Close"] / d.loc[common, "Close"] - 1) > ADJ_TOL).any():
+                redo.append(s)
                 continue
             frames[s] = pd.concat([old[old.index < d.index[0]], d])
         if redo:
-            log(f"data: corporate action detected, re-downloading {redo}")
+            log(f"data: price adjustment detected, re-downloading full history for {redo}")
             for s, d in download(redo, log=log, period="max", interval="1d").items():
                 frames[s] = _naive_dates(d)
     frames = {s: d for s, d in frames.items() if s in symbols or s.startswith("^")}
     _save("daily", frames)
+    if rebuilt and frames:
+        with open(_basis_path(), "w") as f:
+            f.write(str(DAILY_BASIS))
     return frames
 
 
