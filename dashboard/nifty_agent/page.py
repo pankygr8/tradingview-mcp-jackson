@@ -25,7 +25,7 @@ th{font-size:12px;color:var(--mute);font-weight:600}td.l,th.l{text-align:left}tr
 .jump a{color:var(--acc);margin-right:12px}details summary{cursor:pointer;color:var(--acc);margin:8px 0}
 """
 NAV = ('<nav><a href="../index.html">Leaderboard</a><a href="../daily.html">Daily results</a>'
-       '<a href="index.html">Nifty 200</a><a href="../crypto/index.html">Crypto</a></nav>')
+       '<a href="index.html">Nifty 200</a><a href="../gannsquare/index.html">Gann Square</a><a href="../crypto/index.html">Crypto</a></nav>')
 
 
 def _f(v, nd=2, signed=False):
