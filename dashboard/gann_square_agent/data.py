@@ -125,9 +125,24 @@ def _write_raw(sym: str, df: pd.DataFrame) -> None:
     df.to_csv(os.path.join(HIST, _fname(sym) + ".csv.gz"), index=False, compression="gzip")
 
 
+def _iso(v) -> str | None:
+    """Any date the server sends (2026-11-27, 27-Nov-2026, 27-11-2026, epoch ms) → 'YYYY-MM-DD'."""
+    if v in (None, ""):
+        return None
+    try:
+        if isinstance(v, (int, float)):
+            return pd.Timestamp(v, unit="ms" if v > 1e11 else "s").strftime("%Y-%m-%d")
+        t = str(v).strip()
+        if len(t) >= 10 and t[4] == "-" and t[7] == "-":
+            return t[:10]
+        return pd.to_datetime(t, dayfirst=True).strftime("%Y-%m-%d")
+    except (ValueError, TypeError, IndexError, OverflowError):
+        return None
+
+
 def _bar(r: dict, sym: str) -> dict | None:
-    d = str(pick(r, "date", "tradeDate", "timestamp", default=""))[:10]
-    if len(d) != 10:
+    d = _iso(pick(r, "date", "tradeDate", "timestamp", default=""))
+    if not d:
         return None
     try:
         return {"date": d, "series": str(pick(r, "series", default="EQ")).upper(),
